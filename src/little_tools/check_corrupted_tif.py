@@ -3,7 +3,7 @@ import rasterio
 import pandas as pd
 from pathlib import Path
 
-data_dir = Path('../data_3')
+data_dir = Path('../../data/full_img_msk/img')
 my_tif_paths = list(data_dir.rglob('*.tif'))
 corrupted_tif_list = []
 for tif_file in my_tif_paths:
@@ -21,4 +21,4 @@ for tif_file in my_tif_paths:
 print(f'Corrupted TIF files: {corrupted_tif_list}')
 # save the corrupted tif files into csv
 corrupted_tif_df = pd.DataFrame(corrupted_tif_list, columns=['corrupted_tif_images'])
-corrupted_tif_df.to_csv('../csv/corrupted_tif_images_data_3.csv', index=False)
+corrupted_tif_df.to_csv('../../csv/corrupted/corrupted_tif_images_26_04.csv', index=False)

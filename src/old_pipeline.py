@@ -11,7 +11,7 @@ patch_size = 64
 print('Variables defined. ')
 
 # DEFINE PATHS
-data_dir = Path('../data/')
+data_dir = Path('../original_data/')
 csv_dir = Path('../csv/')
 shapefile_path = data_dir / 'data_1/HABNAT/HABNATs.shp'
 my_tif_paths = list(data_dir.rglob('*.tif'))
@@ -36,7 +36,7 @@ else:
     polygons_kept_per = round(len(intersect_df['polygon_index'].unique()) * 100 / len(shapefile), 2)
     print(f'{polygons_kept_per}% of the polygons have been kept. ')
 
-'''# Keep only the polygons and images present in the pivot table
+# Keep only the polygons and images present in the pivot table
 filtered_shapefile = shapefile[shapefile['index'].isin(intersect_df['polygon_index'])]
 filtered_shapefile.loc[filtered_shapefile['CDEUNIS_1'] == 'G1131', 'CDEUNIS_1'] = 'G1.131'
 # Correct TXRECOUV_1(covery rate occupied by the first label). We consider it is 100% when it is 0 and CDEUNIS_2 is null
@@ -48,10 +48,14 @@ if add_date_column_to_shp:
     filtered_shapefile = add_date_column(filtered_shapefile, excel_date_path)
     filtered_shapefile['year'] = filtered_shapefile['date_habna'].apply(lambda x: str(x)[:4] if not pd.isnull(x) else x)
     filtered_shapefile['year'] = filtered_shapefile['year'].fillna(0)
-    filtered_shapefile['year'] = filtered_shapefile['year'].apply(lambda x: int(x))'''
+    filtered_shapefile['year'] = filtered_shapefile['year'].apply(lambda x: int(x))
 
 filtered_tif_paths = intersect_df['tif_path'].unique()
 
-# Split the images into patches of size patch_size
-for tif_path in filtered_tif_paths:
-    split_image_into_patches(tif_path, patch_size)
+# SPLIT INTO PATCHES
+# Split the images into patches of size patch_size. 
+
+for tif_path in filtered_tif_paths[0:1]:
+    parents_path = Path(tif_path).parent
+    mask_path = parents_path / f'mask_{Path(tif_path).stem}.tif'
+    split_image_into_patches(tif_path, mask_path, patch_size)

@@ -4,7 +4,7 @@ import pandas as pd
 
 '''This file is dedicated to unzipping the folders zone1.zip, zone2.zip, zone3.zip, etc., which are in data_dir and to save list of corrupted zip files into a csv file'''
 
-data_dir = '../data/'
+data_dir = '../original_data/'
 
 corrupted_zip_list = []
 try:
