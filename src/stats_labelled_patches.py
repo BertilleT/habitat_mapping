@@ -1,115 +1,126 @@
-import geopandas as gpd
-from shapely.geometry import Point
-import sys
 import numpy as np
 import rasterio
-from rasterio import features
 from utils import *
 from pathlib import Path
-from rasterio.plot import show
 import csv
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
-patch_size = 256
+patch_size = 128
 labelled_cover = 0.95
+save_csv = False
+print_stats = True
+
 masks_path = Path(f'../data/patch{patch_size}/msk/l123')
-save_csv = True
-# I want to have nb patches kept in % for each threshold, also in absolute. 
-# I want nb of patches with only 1 classes at level 1, in % and absolute
-# I want nb of patches with 2 classes at level 1, in % and absolute
-# I want nb of patches with 3 classes at level 1, in % and absolute
-# I want nb of patches with 4 classes at level 1, in % and absolute
-# I want nb of patches with 5 classes at level 1, in % and absolute
-# I want nb of patches with 6 classes at level 1, in % and absolute
-# I want nb of patches with 1 classes at level 2, in % and absolute
-# I want nb of patches with 2 classes at level 2, in % and absolute
-# ... 
-# I want nb of patches with 26 classes at level 2, in % and absolute
+csv1_name = f'../csv/coverage_patch/class_count_l1_{patch_size}.csv'
+csv2_name = f'../csv/coverage_patch/class_count_l2_{patch_size}.csv'
 
 def class_value_dict(mask_path, level):
-    # Open the mask at channel 1 if level passed in argument is 1, 2 if level 2, 3 if level 3
     with rasterio.open(mask_path) as src:
         mask = src.read(level)
         unique, counts = np.unique(mask, return_counts=True)
         class_value = {k: v for k, v in zip(unique, counts)}
-        nb_pixels = np.sum(counts)
-    return class_value, nb_pixels
+    return class_value
 
-patches_kept_nb = 0
-patches_kept_l1 = {}
-patches_kept_l2 = {}
-for key in range(1, 7):
-    patches_kept_l1[key] = 0
+if save_csv:
+    my_masks = list(masks_path.rglob('*.tif'))
+    #shuffle
+    np.random.shuffle(my_masks)
+    # select 25% of the patches
+    my_masks = my_masks[:int(len(my_masks)*0.20)]
 
-for key in range(1, 27):
-    patches_kept_l2[key] = 0
+    total_patches = len(my_masks)
+    l1_df = pd.DataFrame(columns=["mask_path", 0, 1, 2, 3, 4, 5, 6])
+    # Set "mask_path" as the index
+    l1_df.set_index('mask_path', inplace=True)
 
-patches_kept_l1_un = patches_kept_l1.copy()
-patches_kept_l2_un = patches_kept_l2.copy()
+    l2_df = pd.DataFrame(columns=["mask_path"] + list(range(1, 27)))
+    l2_df.set_index('mask_path', inplace=True)
 
-total_patches = len(list(masks_path.rglob('*.tif')))
+    counter = 0
 
-counter = 0
-for mask in masks_path.rglob('*.tif'):
-    counter += 1
-    if counter % 100 == 0:
-        print(f'Processing {counter} over {total_patches} patches.')
-    class_value_l1, nb_pixels = class_value_dict(mask, 1)
-    # PATCHES KEPT WHEN MINIMUM LABELLED COVERAGE > THRESHOLD AT LEVEL 1
-    # sum all values with key different from 0
-    labelled_pixels = sum([v for k, v in class_value_l1.items() if k != 0])
-    if labelled_pixels / nb_pixels >= labelled_cover:
-        patches_kept_nb += 1
-    # HETEROGENEITY OF LABELLED PATCHES AT LEVEL 1
-        for key in class_value_l1:
-            if key != 0:
-                patches_kept_l1[len(class_value_l1)] += 1
-    # HETEROGENEITY OF LABELLED PATCHES AT LEVEL 2
-        class_value_l2, nb_pixels = class_value_dict(mask, 2)
-        for key in class_value_l2:
-            if key != 0:
-                patches_kept_l2[len(class_value_l2)] += 1
-    # Remove from class_value_l1 and from class_value_l2 the 0 values
+    print(f'-----------------------------Patch size: {patch_size}')
+    for mask in my_masks:
+        counter += 1
+        if counter % 100 == 0:
+            print(f'Processing {counter} over {total_patches} patches.')
+        
+        # HETEROGENEITY OF LABELLED PATCHES AT LEVEL 1
+        class_value_l1 = class_value_dict(mask, 1)
+        # add class_value_l1 to l1_dict
+        l1_df.loc[mask] = class_value_l1
+        
+        # HETEROGENEITY OF LABELLED PATCHES AT LEVEL 2
+        class_value_l2 = class_value_dict(mask, 2)
+        l2_df.loc[mask] = class_value_l2
 
-        class_value_l1 = {k: v for k, v in class_value_l1.items() if v != 0}
-        class_value_l2 = {k: v for k, v in class_value_l2.items() if v != 0}
+    if save_csv:
+        l1_df.reset_index().to_csv(csv1_name, index=False)
+    if save_csv:
+        l2_df.reset_index().to_csv(csv2_name, index=False)
 
-        patches_kept_l1_un[len(class_value_l1)] += 1
-        patches_kept_l2_un[len(class_value_l2)] += 1
+    print('CSV files saved.')
 
-# patches_kept_l1 and patches_kept_l1 in percentages
-patches_kept_l1_un_per = {k: round((v * 100) / patches_kept_nb) for k, v in patches_kept_l1_un.items()}
-patches_kept_l2_un_per = {k: round((v * 100) / patches_kept_nb) for k, v in patches_kept_l2_un.items()}
+if print_stats:
+    #Load the csv 
+    l1_dict = pd.read_csv(csv1_name)
+    l2_dict = pd.read_csv(csv2_name)
+    total_patches = l1_dict.shape[0]
+    patches_kept_nb = 0
+    l1_by_class = {k: 0 for k in range(1, 7)}
+    l2_by_class = {k: 0 for k in range(1, 27)}
+    count = 0
 
-print('In total, there are ', total_patches, ' patches, there are all labelled because we did not save the unlabelled patches.')
-print(f'--------------------- THRESHOLD {labelled_cover*100} % ---------------------')
-print(f'{patches_kept_nb} patches kept, which is {patches_kept_nb * 100 / total_patches} % of the patches.')
-print('--------------------- LEVEL1 ---------------------')
-print('Heterogeneity of labelled patches at level 1:')
-print(patches_kept_l1_un)
-print('Heterogeneity of labelled patches at level 1 in %:')
-print(patches_kept_l1_un_per)
-print('--------------------- LEVEL2 ---------------------')
-print('Heterogeneity of labelled patches at level 2 :')
-print(patches_kept_l2_un)
-print('Heterogeneity of labelled patches at level 2 in %:')
-print(patches_kept_l2_un_per)
+    # loop on csv1_name column mask_path
+    for mask_path in l1_dict["mask_path"]:
+        count += 1
+        if count % 100 == 0:
+            print(f'Processing {count} over {total_patches} patches.')
+        l1_dict_temp = l1_dict[l1_dict["mask_path"] == mask_path]
+        l2_dict_temp = l2_dict[l2_dict["mask_path"] == mask_path]
 
+        labelled_pixels = l1_dict_temp[[str(i) for i in range(1, 7)]].sum(axis=1).iloc[0]
+        nb_pixels = l1_dict_temp[[str(i) for i in range(0, 7)]].sum(axis=1).iloc[0]
+        
+        if labelled_pixels / nb_pixels >= labelled_cover:
+            patches_kept_nb += 1
+            # remove comumns with 0 and None
+            temp_df_1 = l1_dict_temp[[str(i) for i in range(1, 7)]]
+            temp_df_1 = temp_df_1.loc[:, (temp_df_1 != 0).any() & temp_df_1.notna().any()]
+            # nb of columns remaining in temp_df_1
+            len_df1 = len(temp_df_1.columns)
+            l1_by_class[len_df1] += 1
 
-#save it to csv if save_csv is True
-if save_csv == True:
-    csv1_name = f'../csv/coverage_patch/patches_kept_l1_80p_{patch_size}_{labelled_cover}.csv'
-    csv2_name = f'../csv/coverage_patch/patches_kept_l2_80p_{patch_size}_{labelled_cover}.csv'
-    csv3_name = f'../csv/coverage_patch/patches_kept_nb_80p_{patch_size}_{labelled_cover}.csv'
+            temp_df_2 = l2_dict_temp[[str(i) for i in range(1, 27)]]
+            temp_df_2 = temp_df_2.loc[:, (temp_df_2 != 0).any() & temp_df_2.notna().any()]
+            len_df2 = len(temp_df_2.columns)
+            if len_df2 == 0: 
+                print('It seems that the mask below has no pixel labelled at level 2.')
+                print(mask_path)
+                l1_dict = l1_dict[l1_dict["mask_path"] != mask_path]
+                l2_dict = l2_dict[l2_dict["mask_path"] != mask_path]
+            else: 
+                l2_by_class[len_df2] += 1
+        else:
+            #remove it from the df 
+            l1_dict = l1_dict[l1_dict["mask_path"] != mask_path]
+            l2_dict = l2_dict[l2_dict["mask_path"] != mask_path]
 
-    with open(csv1_name, 'w') as f:
-        for key in patches_kept_l1_un.keys():
-            f.write("%s,%s\n"%(key,patches_kept_l1_un[key]))
+    # patches_kept_l1 and patches_kept_l1 in percentages
+    heterogeneity_l1_per = {k: round((v * 100) / patches_kept_nb) for k, v in l1_by_class.items()}
+    heterogeneity_l2_per = {k: round((v * 100) / patches_kept_nb) for k, v in l2_by_class.items()}
+    print(heterogeneity_l1_per)
 
-    with open(csv2_name, 'w') as f:
-        for key in patches_kept_l2_un.keys():
-            f.write("%s,%s\n"%(key,patches_kept_l2_un[key]))
-
-    with open(csv3_name, 'w') as f:
-        f.write("%s,%s\n"%('patches_kept_nb',patches_kept_nb))
-        f.write("%s,%s\n"%('total_patches',total_patches))
-        f.write("%s,%s\n"%('labelled_cover',labelled_cover))
+    print('In total, there are ', total_patches, ' patches, there are all labelled because we did not save the unlabelled patches.')
+    print(f'--------------------- THRESHOLD {labelled_cover*100} % ---------------------')
+    print(f'{patches_kept_nb} patches kept, which is {patches_kept_nb * 100 / total_patches} % of the patches.')
+    print('--------------------- LEVEL1 ---------------------')
+    print('Heterogeneity of labelled patches at level 1:')
+    print(l1_by_class)
+    print('Heterogeneity of labelled patches at level 1 in %:')
+    print(heterogeneity_l1_per)
+    print('--------------------- LEVEL2 ---------------------')
+    print('Heterogeneity of labelled patches at level 2 :')
+    print(l2_by_class)
+    print('Heterogeneity of labelled patches at level 2 in %:')
+    print(heterogeneity_l2_per)
