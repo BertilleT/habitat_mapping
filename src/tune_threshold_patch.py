@@ -39,7 +39,7 @@ def count_labelled_patches_threshold(per_path):
     return labels_patch_per
 
 thresholds = [1, 0.75, 0.5, 0.25, 0.15, 0.1, 0.05]
-'''for t in thresholds: 
+for t in thresholds: 
     print('---------------------------------------------------------------------------------')
     print(f'For threshold {t}')
     per_path = f'../csv/per_labels_by_patch_{t}.csv'
@@ -51,7 +51,7 @@ thresholds = [1, 0.75, 0.5, 0.25, 0.15, 0.1, 0.05]
     per_l_t_2 = round(len(threshold_labelled_patches) * 100 / len(all_labels_patch_per))
     print(f'{unlabelled_patches_per} % of the patches are unlabelled.')
     print(f'Among the labeled patches, {per_labeled_patches_threshold} % have at least {t*100} % of labelled pixels.')
-    print(f'It represents {per_l_t_2} % of all the patches.')'''
+    print(f'It represents {per_l_t_2} % of all the patches.')
 
 # HETEROGENEITY OF PATCHES 64_64
 t = 1

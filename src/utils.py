@@ -115,17 +115,20 @@ def split_img_msk_into_patches(tif_path, mask_path, patch_size):
     # Function inspired from the script available at 
     # https://github.com/bnsreenu/python_for_microscopists/blob/master/Tips_Tricks_5_extracting_patches_from_large_images_and_masks_for_semantic_segm.py
     
-    patch_img_dir = f'../data/patch64/img/{str(tif_path).split("_")[3]}_{str(tif_path).split("_")[4]}_{str(tif_path).split("_")[5]}'
-    patch_msk_dir = f'../data/patch64/msk/l1/{str(tif_path).split("_")[3]}_{str(tif_path).split("_")[4]}_{str(tif_path).split("_")[5]}'
+    patch_img_dir = f'../data/patch{patch_size}/img/{str(tif_path).split("_")[3]}_{str(tif_path).split("_")[4]}_{str(tif_path).split("_")[5]}'
+    patch_msk_dir = f'../data/patch{patch_size}/msk/l123/{str(tif_path).split("_")[3]}_{str(tif_path).split("_")[4]}_{str(tif_path).split("_")[5]}'
     patch_img_dir = Path(patch_img_dir[:-4])
     patch_msk_dir = Path(patch_msk_dir[:-4])
+    if patch_img_dir.exists() and patch_msk_dir.exists():
+        print(f'Patches for {tif_path} already created.')
+        return None
     patch_img_dir.mkdir(parents=True, exist_ok=True)
     patch_msk_dir.mkdir(parents=True, exist_ok=True)
 
     img = tiff.imread(tif_path)
     msk = tiff.imread(mask_path)
 
-    patches_mask = patchify(msk, (patch_size, patch_size, 1), step=patch_size)  
+    patches_mask = patchify(msk, (patch_size, patch_size, 3), step=patch_size)  
     indexes_do_not_save_empty_patches = []
     for i in range(patches_mask.shape[0]):
         for j in range(patches_mask.shape[1]):
@@ -134,9 +137,9 @@ def split_img_msk_into_patches(tif_path, mask_path, patch_size):
                 continue
             single_patch_mask = patches_mask[i,j,:,:]
             # if the patch is empty, we do not save it
-            if np.sum(single_patch_mask) == 0:
-                indexes_do_not_save_empty_patches.append((i,j))
-                continue # 
+            if np.sum(single_patch_mask[:, :, 0]) == 0:
+                indexes_do_not_save_empty_patches.append((i, j))
+                continue
             tiff.imwrite(mask_path, single_patch_mask)
             #print(f'Mask {mask_path.name} created.')
 
@@ -180,6 +183,30 @@ def plot_tif_image(tif_path):
         # Plot the image
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.imshow(rgb_image, extent=[tif_bounds.left, tif_bounds.right, tif_bounds.bottom, tif_bounds.top])
+    plt.show()
+
+def plot_img_msk(img, msk):
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+    red = img[0]
+    green = img[1]
+    blue = img[2]
+    red_rescaled = rescale_band(red)
+    green_rescaled = rescale_band(green)
+    blue_rescaled = rescale_band(blue)
+    rgb_image = np.dstack((red_rescaled, green_rescaled, blue_rescaled))
+
+    # Plot the image
+    axes[0].imshow(rgb_image)
+    axes[0].set_title('Image')
+    axes[0].axis('off')
+
+    # Plot the mask
+    axes[1].imshow(msk, cmap='viridis')
+    axes[1].set_title('Mask')
+    axes[1].axis('off')
+
+    plt.tight_layout()
     plt.show()
 
 if __name__ == '__main__':
