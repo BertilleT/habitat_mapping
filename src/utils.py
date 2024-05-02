@@ -154,6 +154,7 @@ def split_img_msk_into_patches(tif_path, mask_path, patch_size):
             if patch_path.exists():
                 continue
             if (i, j) in indexes_do_not_save_empty_patches:
+                print(f'Patch {patch_path.name} is empty.')
                 continue
             single_patch_img = patches_img[i,j,:,:]
             tiff.imwrite(patch_path, single_patch_img)

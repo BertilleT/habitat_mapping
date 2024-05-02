@@ -5,6 +5,7 @@ from utils import *
 from pathlib import Path
 from rasterio.plot import show
 import time
+import pandas as pd
 
 # PATHS and DIRECTORIES
 data_dir = Path('../data/')
@@ -20,7 +21,6 @@ level3_dir = msk_dir / 'level3'
 level3_dir.mkdir(exist_ok=True)
 csv_dir = Path('../csv/')
 shapefile_path = data_dir / 'shp/HABNATs.shp'
-threshold = 0.99
 pt_name = 'final_pivot_table.csv'
 pivot_table_path = csv_dir / pt_name
 path_to_un_classes = csv_dir / 'classes_grouped_3l.csv'
@@ -111,7 +111,7 @@ print(f'Number of files in level2: {len(list(level2_dir.rglob("*.tif")))}')
 print(f'Number of files in level3: {len(list(level3_dir.rglob("*.tif")))}')
 for full_img in tif_paths:
     count_rasterized_image += 1
-    if count_rasterized_image in [58, 323, 324]: 
+    if 'zone16_0_0' in str(full_img):
         # Renaming img_blabla to msk_blabla
         split_name = full_img.stem.split('_')
         new_name = '_'.join(split_name[-3:])
@@ -144,11 +144,11 @@ for full_img in tif_paths:
         #print(polygons_one_tif['label_levels123'].unique())
 
         try:
-            '''# RASTERIZE AT LEVEL 1
+            # RASTERIZE AT LEVEL 1
             polygons_one_tif_l1 = polygons_one_tif[['geometry', 'CDEUNIS_1_l1']]
             mask_l1_path = level1_dir / l1_name
             if not mask_l1_path.exists():
-                rasterize(polygons_one_tif_l1, full_img, mask_l1_path)'''
+                rasterize(polygons_one_tif_l1, full_img, mask_l1_path)
 
             # RASTERIZE AT LEVEL 2
             polygons_one_tif_l2 = polygons_one_tif[['geometry', 'CDEUNIS_1_l2', 'index']]
