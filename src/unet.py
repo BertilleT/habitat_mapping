@@ -11,17 +11,18 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 import segmentation_models_pytorch as smp
 
-from src.unet_utils import *
-from src.unet_settings import *
+from unet_utils import *
+from unet_settings import *
 
-
+import warnings
+warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
 print('----------------------- UNet -----------------------')
 print(f'Patch size: {patch_level_param["patch_size"]}')
 print(f'Classification level: {patch_level_param["level"]}')
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f'Using device: {device}')
-
+torch.cuda.empty_cache()
 
 
 ## DATA
@@ -65,8 +66,77 @@ print('Creating optimizer...')
 print('Training settings:')
 print(f'Learning rate: {training_settings["lr"]}')
 print(f'Criterion: {training_settings["criterion"]}')
+if training_settings['criterion'] == 'CrossEntropy':
+    criterion = nn.CrossEntropyLoss()
+else:
+    raise ValueError('Criterion not implemented')
 print(f'Optimizer: {training_settings["optimizer"]}')
-optimizer = training_settings['optimizer'](model.parameters(), lr=training_settings['lr'])
+if training_settings['optimizer'] == 'Adam':
+    optimizer = optim.Adam(model.parameters(), lr=training_settings['lr'])
+
+
+
+## FUNCTION FOR TRAINING, VALIDATION AND TESTING
+def train(model, train_dl, criterion, optimizer, device):
+    print('Training')
+    running_loss = 0.0
+    tr_IoUs = []
+    for i, (img, msk) in enumerate(train_dl):
+        if i % 50 == 0:
+            print( 'Batch:', i, ' over ', len(train_dl))
+        img, msk = img.to(device), msk.to(device)
+        optimizer.zero_grad()
+        out = model(img)
+        msk = msk.long()
+        loss = criterion(out, msk)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+        tr_IoUs.append(IoU(out, msk))
+    tr_IoUs = [x.item() for x in tr_IoUs]
+    mIoU = np.mean(tr_IoUs)
+    return running_loss / len(train_dl), mIoU
+
+
+def valid(model, val_dl, criterion, device):
+    print('Validation')
+    running_loss = 0.0
+    val_IoUs = []
+    for i, (img, msk) in enumerate(val_dl):
+        if i % 50 == 0:
+            print( 'Batch:', i, ' over ', len(val_dl))
+        img, msk = img.to(device), msk.to(device)
+        out = model(img)
+        msk = msk.long()
+        loss = criterion(out, msk)
+        running_loss += loss.item()
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+        val_IoUs.append(IoU(out, msk))
+    val_IoUs = [x.item() for x in val_IoUs]
+    mIoU = np.mean(val_IoUs)
+    return running_loss / len(val_dl), mIoU
+
+def test(model, test_dl, criterion, device):
+    print('Testing')
+    running_loss = 0.0
+    test_IoUs = []
+    for i, (img, msk) in enumerate(test_dl):
+        if i % 50 == 0:
+            print( 'Batch:', i, ' over ', len(test_dl))
+        img, msk = img.to(device), msk.to(device)
+        out = model(img)
+        msk = msk.long()
+        loss = criterion(out, msk)
+        running_loss += loss.item()
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+        test_IoUs.append(IoU(out, msk))
+    test_IoUs = [x.item() for x in test_IoUs]
+    mIoU = np.mean(test_IoUs)
+    return running_loss / len(test_dl), mIoU
 
 
 
@@ -81,13 +151,13 @@ if training_settings['training']:
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}')
         model.to(device)
         model.train()
-        train_loss, train_mIoU = train(model, train_dl, training_settings['criterion'], optimizer, device)
+        train_loss, train_mIoU = train(model, train_dl, criterion, optimizer, device)
         training_losses.append(train_loss)
         training_iou.append(train_mIoU)
 
         model.eval()
         with torch.no_grad():
-            val_loss, val_mIoU = valid(model, val_dl, training_settings['criterion'], device)   
+            val_loss, val_mIoU = valid(model, val_dl, criterion, device)   
             validation_losses.append(val_loss)
             validation_iou.append(val_mIoU)
 
@@ -95,7 +165,7 @@ if training_settings['training']:
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train mIoU {train_mIoU:.4f}, val mIoU {val_mIoU:.4f}')
 
         if epoch % 2 == 0:
-            torch.save(model.state_dict(), f'../models/unet_{epoch}.pt')
+            torch.save(model.state_dict(), model_settings['path_to_intermed_model'] + f'_epoch{epoch+1}.pt')
 
     # save last model state and optim
     torch.save(model.state_dict(), model_settings['path_to_model'])
@@ -105,7 +175,7 @@ if training_settings['training']:
     plt.plot(training_losses, label='train')
     plt.plot(validation_losses, label='val')
     plt.legend()
-    plt.savefig('../figures/losses.png')
+    plt.savefig(plotting_settings['losses_path'])
 
     # get miou on tr and val    
     print(f'Training mIoU: {train_mIoU:.4f}') # after 10 epochs
@@ -121,7 +191,7 @@ else:
 # TESTING
 model.eval()
 with torch.no_grad():
-    test_loss, test_mIoU = test(model, test_dl, training_settings['criterion'], device)
+    test_loss, test_mIoU = test(model, test_dl, criterion, device)
 print(f'Test mIoU: {test_mIoU:.4f}')
 
 

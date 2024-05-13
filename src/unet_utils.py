@@ -5,6 +5,9 @@ import numpy as np
 import rasterio
 import torch
 from torch.utils.data import Dataset
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+
 
 class EcomedDataset(Dataset):
     def __init__(self, msk_paths, img_dir, level=1):
@@ -32,7 +35,7 @@ class EcomedDataset(Dataset):
             img = img.astype(np.float32)
         return img, msk
     
-def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=False, random_seed=42, split=[0.6, 0.2, 0.2]):
+def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=False, random_seed=42, split=[0.6, 0.2, 0.2], **kwargs):
     msk_paths = list(msks_256_fully_labelled['mask_path'])
     msk_paths_ = [Path(p) for p in msk_paths]
     msk_paths = []
@@ -99,67 +102,6 @@ def IoU(pred, target):
     i = torch.sum(pred & target)
     u = torch.sum(pred | target)
     return i/u
-
-def train(model, train_dl, criterion, optimizer, device):
-    print('Training')
-    running_loss = 0.0
-    tr_IoUs = []
-    for i, (img, msk) in enumerate(train_dl):
-        if i % 50 == 0:
-            print( 'Batch:', i, ' over ', len(train_dl))
-        img, msk = img.to(device), msk.to(device)
-        optimizer.zero_grad()
-        out = model(img)
-        msk = msk.long()
-        loss = criterion(out, msk)
-        loss.backward()
-        optimizer.step()
-        running_loss += loss.item()
-        out = torch.argmax(out, dim=1)
-        out = out.int()
-        tr_IoUs.append(IoU(out, msk))
-    tr_IoUs = [x.item() for x in tr_IoUs]
-    mIoU = np.mean(tr_IoUs)
-    return running_loss / len(train_dl), mIoU
-
-
-def valid(model, val_dl, criterion, device):
-    print('Validation')
-    running_loss = 0.0
-    val_IoUs = []
-    for i, (img, msk) in enumerate(val_dl):
-        if i % 50 == 0:
-            print( 'Batch:', i, ' over ', len(val_dl))
-        img, msk = img.to(device), msk.to(device)
-        out = model(img)
-        msk = msk.long()
-        loss = criterion(out, msk)
-        running_loss += loss.item()
-        out = torch.argmax(out, dim=1)
-        out = out.int()
-        val_IoUs.append(IoU(out, msk))
-    val_IoUs = [x.item() for x in val_IoUs]
-    mIoU = np.mean(val_IoUs)
-    return running_loss / len(val_dl), mIoU
-
-def test(model, test_dl, criterion, device):
-    print('Testing')
-    running_loss = 0.0
-    test_IoUs = []
-    for i, (img, msk) in enumerate(test_dl):
-        if i % 50 == 0:
-            print( 'Batch:', i, ' over ', len(test_dl))
-        img, msk = img.to(device), msk.to(device)
-        out = model(img)
-        msk = msk.long()
-        loss = criterion(out, msk)
-        running_loss += loss.item()
-        out = torch.argmax(out, dim=1)
-        out = out.int()
-        test_IoUs.append(IoU(out, msk))
-    test_IoUs = [x.item() for x in test_IoUs]
-    mIoU = np.mean(test_IoUs)
-    return running_loss / len(test_dl), mIoU
 
 def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
     classes_msk = np.unique(msk)
