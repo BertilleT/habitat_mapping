@@ -103,6 +103,70 @@ def IoU(pred, target):
     u = torch.sum(pred | target)
     return i/u
 
+
+## FUNCTION FOR TRAINING, VALIDATION AND TESTING
+def train(model, train_dl, criterion, optimizer, device):
+    print('Training')
+    running_loss = 0.0
+    tr_IoUs = []
+    for i, (img, msk) in enumerate(train_dl):
+        if i % 50 == 0:
+            print( 'Batch:', i, ' over ', len(train_dl))
+        img, msk = img.to(device), msk.to(device)
+        optimizer.zero_grad()
+        out = model(img)
+        msk = msk.long()
+        loss = criterion(out, msk)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+        tr_IoUs.append(IoU(out, msk))
+    tr_IoUs = [x.item() for x in tr_IoUs]
+    mIoU = np.mean(tr_IoUs)
+    return running_loss / len(train_dl), mIoU
+
+
+def valid(model, val_dl, criterion, device):
+    print('Validation')
+    running_loss = 0.0
+    val_IoUs = []
+    for i, (img, msk) in enumerate(val_dl):
+        if i % 50 == 0:
+            print( 'Batch:', i, ' over ', len(val_dl))
+        img, msk = img.to(device), msk.to(device)
+        out = model(img)
+        msk = msk.long()
+        loss = criterion(out, msk)
+        running_loss += loss.item()
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+        val_IoUs.append(IoU(out, msk))
+    val_IoUs = [x.item() for x in val_IoUs]
+    mIoU = np.mean(val_IoUs)
+    return running_loss / len(val_dl), mIoU
+
+def test(model, test_dl, criterion, device):
+    print('Testing')
+    running_loss = 0.0
+    test_IoUs = []
+    for i, (img, msk) in enumerate(test_dl):
+        if i % 50 == 0:
+            print( 'Batch:', i, ' over ', len(test_dl))
+        img, msk = img.to(device), msk.to(device)
+        out = model(img)
+        msk = msk.long()
+        loss = criterion(out, msk)
+        running_loss += loss.item()
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+        test_IoUs.append(IoU(out, msk))
+    test_IoUs = [x.item() for x in test_IoUs]
+    mIoU = np.mean(test_IoUs)
+    return running_loss / len(test_dl), mIoU
+
+
 def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
     classes_msk = np.unique(msk)
     legend_colors_msk = [my_colors_map[c] for c in classes_msk]

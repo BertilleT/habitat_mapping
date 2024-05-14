@@ -1,3 +1,4 @@
 data/
 original_data/
 models/
+unet256_randomshuffling/
