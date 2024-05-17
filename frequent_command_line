@@ -1,0 +1,6 @@
+ssh bertille@172.16.10.242
+cd WORKING_DIR/habitat_mapping/src
+conda activate ecomed_venv
+
+nohup python3 my_script.py
+tail -f nohup.out

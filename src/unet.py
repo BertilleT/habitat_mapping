@@ -8,7 +8,7 @@ import matplotlib.colors as mcolors
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 import segmentation_models_pytorch as smp
 import gc
 
@@ -43,9 +43,9 @@ val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=Fals
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 # Sanity check of the dataloader
-for img, msk in train_dl:
-    print(img.shape, msk.shape)
-    break
+#for img, msk in train_dl:
+#    print(img.shape, msk.shape)
+#    break
 
 
 
@@ -61,8 +61,10 @@ model = smp.Unet(
     in_channels=model_settings['in_channels'], 
     classes=model_settings['classes']
 )
-
-
+if training_settings['restart_training'] is not None:
+    model.load_state_dict(torch.load(model_settings['path_to_intermed_model'] + f'_epoch{training_settings["restart_training"]}.pt'))
+    print('Model from epoch', training_settings['restart_training'], ' loaded')
+model.to(device)
 
 # OPTIMIZER
 print('Creating optimizer...')
@@ -75,9 +77,18 @@ elif training_settings['criterion'] == 'Dice':
     criterion = smp.losses.DiceLoss(mode='multiclass', eps=0.0000001)
 else:
     raise ValueError('Criterion not implemented')
+
 print(f'Optimizer: {training_settings["optimizer"]}')
 if training_settings['optimizer'] == 'Adam':
     optimizer = optim.Adam(model.parameters(), lr=training_settings['lr'])
+
+if training_settings['restart_training'] is not None:
+    torch.cuda.empty_cache()
+    optimizer.load_state_dict(torch.load(model_settings['path_to_intermed_optim'] + f'_epoch{training_settings["restart_training"]}.pt'))
+    #optimizer_to(optimizer,device)
+    #device = next(optimizer.param_groups[0]['params']).device
+    #print("Optimizer is running on:", device)
+    #print('Optimizer from epoch', training_settings['restart_training'], ' loaded')
 
 
 ## TRAINING AND VALIDATION
@@ -88,11 +99,33 @@ if training_settings['training']:
     training_iou = []
     validation_iou = []
     count = 0
+    best_val_loss = np.inf 
+
+    if training_settings['restart_training']:
+        # load losses
+        df = pd.read_csv(training_settings['losses_mious_path'])
+        training_losses = df['training_losses'].tolist()
+        validation_losses = df['validation_losses'].tolist()
+        # load iou
+        df_2 = pd.read_csv(training_settings['iou_path'])
+        training_iou = df_2['training_iou'].tolist()
+        validation_iou = df_2['validation_iou'].tolist()
+
+        best_val_loss = min(validation_losses)
+        print('training_losses: ', training_losses)
+        print('validation_losses: ', validation_losses)
+        print('best_val_loss', best_val_loss)
+        print('Losses and iou loaded')
+
     for epoch in range(training_settings['nb_epochs']):
+        if training_settings['restart_training'] and epoch < training_settings['restart_training']:
+            print(f'Skipping epoch {epoch+1}/{training_settings["nb_epochs"]}')
+            continue
+        
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}')
-        best_val_loss = np.inf 
         model.to(device)
         model.train()
+        
         train_loss, train_mIoU = train(model, train_dl, criterion, optimizer, device)
         training_losses.append(train_loss)
         training_iou.append(train_mIoU)
@@ -115,27 +148,31 @@ if training_settings['training']:
         if training_settings['early_stopping'] and count == training_settings['patience']:
             print(f'Early stopping at epoch {epoch+1}')
             break
-
+            
+        #every 10, save losses values in csv
+        #if (epoch+1) % 5 == 0:
+        df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_iou': training_iou, 'validation_iou': validation_iou})
+        df.to_csv(training_settings['losses_mious_path'])
+            
     # save last model state and optim
-    torch.save(model.state_dict(), model_settings['path_to_model'])
-    torch.save(optimizer.state_dict(), model_settings['path_to_optim'])
+    torch.save(model.state_dict(), model_settings['path_to_last_model'])
+    torch.save(optimizer.state_dict(), model_settings['path_to_last_optim'])
+    # plot losses and iou using csv file and fct plot_losses_ious
+    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['ious_path'])
 
-    # plot losses
-    plt.plot(training_losses, label='train')
-    plt.plot(validation_losses, label='val')
-    plt.legend()
-    plt.savefig(plotting_settings['losses_path'])
-
-    # get miou on tr and val    
-    print(f'Training mIoU: {train_mIoU:.4f}') # after 10 epochs
-    print(f'Validation mIoU: {val_mIoU:.4f}') #after 10 epochs
-else: 
-    model.to(device)
-    model.load_state_dict(torch.load(model_settings['path_to_model']))
+    # load epoch for which best_val
+    model.load_state_dict(torch.load(model_settings['path_to_intermed_model'] + f'_epoch{np.argmin(validation_losses)+1}.pt'))
     for param in model.parameters():
         param.to(device)
 
+else: 
+    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
+    model.to(device)
+    model.load_state_dict(torch.load(model_settings['path_to_best_model']))
+    print('Model ', model_settings['path_to_best_model'], ' loaded')
 
+    for param in model.parameters():
+        param.to(device)
 
 # TESTING
 model.eval()

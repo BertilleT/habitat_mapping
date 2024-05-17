@@ -167,6 +167,24 @@ def test(model, test_dl, criterion, device):
     return running_loss / len(test_dl), mIoU
 
 
+def optimizer_to(optim, device):
+    # get number of values
+    i = 0
+    for param in optim.state.values(): 
+        i += 1
+        print(i)
+        # Not sure there are any global tensors in the state dict
+        if isinstance(param, torch.Tensor):
+            param.data = param.data.to(device)
+            if param._grad is not None:
+                param._grad.data = param._grad.data.to(device)
+        elif isinstance(param, dict):
+            for subparam in param.values():
+                if isinstance(subparam, torch.Tensor):
+                    subparam.data = subparam.data.to(device)
+                    if subparam._grad is not None:
+                        subparam._grad.data = subparam._grad.data.to(device)
+
 def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
     classes_msk = np.unique(msk)
     legend_colors_msk = [my_colors_map[c] for c in classes_msk]
@@ -185,3 +203,38 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
         axs[i, 2].set_title('Prediction')
 
     plt.savefig(pred_plot_path)
+
+def plot_losses_ious(losses_ious_path, losses_plot_path, ious_plot_path):
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(losses_ious_path)
+
+    # Extract the data
+    epochs = df.iloc[:, 0]
+    training_losses = df.iloc[:, 1]
+    validation_losses = df.iloc[:, 2]
+    training_iou = df.iloc[:, 3]
+    validation_iou = df.iloc[:, 4]
+
+    # Plot the losses
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, training_losses, label='Training Losses')
+    plt.plot(epochs, validation_losses, label='Validation Losses')
+    plt.title('Training and Validation Losses Over Epochs')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.grid(True)
+    #savefig 
+    plt.savefig(losses_plot_path)
+
+    # Plot the IoU
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, training_iou, label='Training IoU')
+    plt.plot(epochs, validation_iou, label='Validation IoU')
+    plt.title('Training and Validation IoU Over Epochs')
+    plt.xlabel('Epochs')
+    plt.ylabel('IoU')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    plt.savefig(ious_plot_path)

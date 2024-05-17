@@ -110,6 +110,11 @@ plt.plot(validation_losses, label='val')
 plt.legend()
 plt.savefig(plotting_settings['losses_path'])
 
+plt.plot(training_ious, label='train')
+plt.plot(validation_ious, label='val')
+plt.legend()
+plt.savefig(plotting_settings['ious_path'])
+
 # same with 
 # get miou on tr and val    
 print(f'Training mIoU: {train_mIoU:.4f}') # after 10 epochs
