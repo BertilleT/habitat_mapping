@@ -47,7 +47,7 @@ test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=Fa
 #    print(img.shape, msk.shape)
 #    break
 
-
+'''
 
 ## MODEL
 print('Creating model...')
@@ -197,4 +197,4 @@ if plotting_settings['plot_test']:
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
-    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'])
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'])'''

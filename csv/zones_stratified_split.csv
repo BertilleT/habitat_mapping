@@ -1,0 +1,18 @@
+train_zone_ids: ['zone171' 'zone116' 'zone106' 'zone67' 'zone169' 'zone12' 'zone44'
+ 'zone73' 'zone161' 'zone11' 'zone84' 'zone85' 'zone100' 'zone63'
+ 'zone148' 'zone129' 'zone133' 'zone65' 'zone22' 'zone78' 'zone120'
+ 'zone66' 'zone126' 'zone38' 'zone30' 'zone45' 'zone7' 'zone53' 'zone144'
+ 'zone59' 'zone76' 'zone156' 'zone115' 'zone97' 'zone165' 'zone3' 'zone21'
+ 'zone10' 'zone1' 'zone57' 'zone162' 'zone75' 'zone145' 'zone24' 'zone74'
+ 'zone113' 'zone77' 'zone132' 'zone4' 'zone39' 'zone14' 'zone72' 'zone159'
+ 'zone37' 'zone48' 'zone90' 'zone121' 'zone34' 'zone104' 'zone147'
+ 'zone143' 'zone114' 'zone16' 'zone112' 'zone134' 'zone19' 'zone71'
+ 'zone98' 'zone93' 'zone172' 'zone80']
+
+val_zone_ids: ['zone51' 'zone142' 'zone20' 'zone69' 'zone27' 'zone26' 'zone88' 'zone15'
+ 'zone25' 'zone56' 'zone47' 'zone170' 'zone137' 'zone127' 'zone158'
+ 'zone136' 'zone41' 'zone164' 'zone101' 'zone96' 'zone2' 'zone102'
+ 'zone33' 'zone155']
+
+test_zone_ids: ['zone167' 'zone54' 'zone154' 'zone68' 'zone28' 'zone139' 'zone50'
+ 'zone123' 'zone160' 'zone95' 'zone17']
