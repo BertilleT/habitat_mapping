@@ -1,3 +1,5 @@
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
 ----------------------- UNet -----------------------
 Patch size: 256
 Classification level: 1
@@ -5,40 +7,625 @@ Using device: cuda
 Loading data...
 Data loading settings:
 Splitting data: [0.6, 0.2, 0.2]
-Stratified: False
+Stratified: True
 Batch size: 16
 Creating model...
 Model settings:
 Encoder name: efficientnet-b7
-Pretrained: None
+Pretrained: imagenet
 Classes: 6
 Creating optimizer...
 Training settings:
 Learning rate: 0.0001
 Criterion: Dice
 Optimizer: Adam
+Training...
+Epoch 1/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 1/200: train loss 0.4731, val loss 0.2580
+Epoch 1/200: train mIoU 0.5639, val mIoU 0.6121
+Epoch 2/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 2/200: train loss 0.2921, val loss 0.2458
+Epoch 2/200: train mIoU 0.6999, val mIoU 0.6373
+Epoch 3/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 3/200: train loss 0.2460, val loss 0.2430
+Epoch 3/200: train mIoU 0.7341, val mIoU 0.6529
+Epoch 4/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 4/200: train loss 0.2220, val loss 0.2291
+Epoch 4/200: train mIoU 0.7564, val mIoU 0.6637
+Epoch 5/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 5/200: train loss 0.2076, val loss 0.2323
+Epoch 5/200: train mIoU 0.7686, val mIoU 0.6688
+Epoch 6/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 6/200: train loss 0.1943, val loss 0.2349
+Epoch 6/200: train mIoU 0.7831, val mIoU 0.6549
+Epoch 7/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 7/200: train loss 0.1842, val loss 0.2359
+Epoch 7/200: train mIoU 0.7994, val mIoU 0.6525
+Epoch 8/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 8/200: train loss 0.1699, val loss 0.2415
+Epoch 8/200: train mIoU 0.8197, val mIoU 0.6473
+Epoch 9/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 9/200: train loss 0.1552, val loss 0.2395
+Epoch 9/200: train mIoU 0.8345, val mIoU 0.6534
+Epoch 10/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 10/200: train loss 0.1474, val loss 0.2284
+Epoch 10/200: train mIoU 0.8443, val mIoU 0.6797
+Epoch 11/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 11/200: train loss 0.1385, val loss 0.2466
+Epoch 11/200: train mIoU 0.8511, val mIoU 0.6312
+Epoch 12/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 12/200: train loss 0.1368, val loss 0.2377
+Epoch 12/200: train mIoU 0.8573, val mIoU 0.6406
+Epoch 13/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 13/200: train loss 0.1297, val loss 0.2310
+Epoch 13/200: train mIoU 0.8646, val mIoU 0.6779
+Epoch 14/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 14/200: train loss 0.1235, val loss 0.2408
+Epoch 14/200: train mIoU 0.8729, val mIoU 0.6552
+Epoch 15/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 15/200: train loss 0.1148, val loss 0.2340
+Epoch 15/200: train mIoU 0.8835, val mIoU 0.6578
+Epoch 16/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 16/200: train loss 0.1113, val loss 0.2335
+Epoch 16/200: train mIoU 0.8836, val mIoU 0.6579
+Epoch 17/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 17/200: train loss 0.1071, val loss 0.2404
+Epoch 17/200: train mIoU 0.8902, val mIoU 0.6396
+Epoch 18/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 18/200: train loss 0.1006, val loss 0.2380
+Epoch 18/200: train mIoU 0.8931, val mIoU 0.6689
+Epoch 19/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 19/200: train loss 0.0982, val loss 0.2415
+Epoch 19/200: train mIoU 0.9003, val mIoU 0.6390
+Epoch 20/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 20/200: train loss 0.1033, val loss 0.2391
+Epoch 20/200: train mIoU 0.8936, val mIoU 0.6521
+Epoch 21/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 21/200: train loss 0.0929, val loss 0.2402
+Epoch 21/200: train mIoU 0.9039, val mIoU 0.6422
+Epoch 22/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 22/200: train loss 0.0923, val loss 0.2449
+Epoch 22/200: train mIoU 0.9102, val mIoU 0.6379
+Epoch 23/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 23/200: train loss 0.0908, val loss 0.2402
+Epoch 23/200: train mIoU 0.9118, val mIoU 0.6416
+Epoch 24/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 24/200: train loss 0.0808, val loss 0.2374
+Epoch 24/200: train mIoU 0.9173, val mIoU 0.6637
+Epoch 25/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 25/200: train loss 0.0831, val loss 0.2382
+Epoch 25/200: train mIoU 0.9155, val mIoU 0.6467
+Epoch 26/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 26/200: train loss 0.0784, val loss 0.2403
+Epoch 26/200: train mIoU 0.9247, val mIoU 0.6474
+Epoch 27/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 27/200: train loss 0.0746, val loss 0.2385
+Epoch 27/200: train mIoU 0.9276, val mIoU 0.6493
+Epoch 28/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 28/200: train loss 0.0733, val loss 0.2370
+Epoch 28/200: train mIoU 0.9282, val mIoU 0.6581
+Epoch 29/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 29/200: train loss 0.0728, val loss 0.2385
+Epoch 29/200: train mIoU 0.9318, val mIoU 0.6473
+Epoch 30/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 30/200: train loss 0.0727, val loss 0.2443
+Epoch 30/200: train mIoU 0.9301, val mIoU 0.6462
+Epoch 31/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 31/200: train loss 0.0668, val loss 0.2354
+Epoch 31/200: train mIoU 0.9347, val mIoU 0.6652
+Epoch 32/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 32/200: train loss 0.0648, val loss 0.2395
+Epoch 32/200: train mIoU 0.9382, val mIoU 0.6518
+Epoch 33/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 33/200: train loss 0.0673, val loss 0.2373
+Epoch 33/200: train mIoU 0.9287, val mIoU 0.6623
+Epoch 34/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 34/200: train loss 0.0645, val loss 0.2371
+Epoch 34/200: train mIoU 0.9367, val mIoU 0.6487
+Epoch 35/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 35/200: train loss 0.0675, val loss 0.2425
+Epoch 35/200: train mIoU 0.9348, val mIoU 0.6499
+Epoch 36/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 36/200: train loss 0.0636, val loss 0.2415
+Epoch 36/200: train mIoU 0.9394, val mIoU 0.6400
+Epoch 37/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 37/200: train loss 0.0622, val loss 0.2314
+Epoch 37/200: train mIoU 0.9384, val mIoU 0.6708
+Epoch 38/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 38/200: train loss 0.0647, val loss 0.2352
+Epoch 38/200: train mIoU 0.9402, val mIoU 0.6552
+Epoch 39/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 39/200: train loss 0.0581, val loss 0.2318
+Epoch 39/200: train mIoU 0.9428, val mIoU 0.6713
+Epoch 40/200
+Training
+Batch: 0  over  342
+Batch: 50  over  342
+Batch: 100  over  342
+Batch: 150  over  342
+Batch: 200  over  342
+Batch: 250  over  342
+Batch: 300  over  342
+Validation
+Batch: 0  over  126
+Batch: 50  over  126
+Batch: 100  over  126
+Epoch 40/200: train loss 0.0532, val loss 0.2318
+Epoch 40/200: train mIoU 0.9473, val mIoU 0.6645
+Early stopping at epoch 40
 Traceback (most recent call last):
-  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 169, in <module>
-    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
-  File "/media/DATA/bertille/habitat_mapping/src/unet_utils.py", line 209, in plot_losses_ious
-    df = pd.read_csv(losses_ious_path)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
-    return _read(filepath_or_buffer, kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 620, in _read
-    parser = TextFileReader(filepath_or_buffer, **kwds)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
-    self._engine = self._make_engine(f, self.engine)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
-    self.handles = get_handle(
-                   ^^^^^^^^^^^
-  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/pandas/io/common.py", line 873, in get_handle
-    handle = open(
-             ^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '../unet_256_l1/random_shuffling_pre_trained/losses_mious.csv'
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 161, in <module>
+    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['ious_path'])
+                                                                                               ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+KeyError: 'ious_path'
 ----------------------- UNet -----------------------
 Patch size: 256
 Classification level: 1
@@ -46,21 +633,197 @@ Using device: cuda
 Loading data...
 Data loading settings:
 Splitting data: [0.6, 0.2, 0.2]
-Stratified: False
+Stratified: True
 Batch size: 16
 Creating model...
 Model settings:
 Encoder name: efficientnet-b7
-Pretrained: None
+Pretrained: imagenet
 Classes: 6
 Creating optimizer...
 Training settings:
 Learning rate: 0.0001
 Criterion: Dice
 Optimizer: Adam
-Model  ../unet_256_l1/random_shuffling_pre_trained/models/unet_intermed_epoch35.pt  loaded
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 180, in <module>
+    test_loss, test_mIoU = test(model, test_dl, criterion, device)
+                           ^^^^
+NameError: name 'test' is not defined
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: True
+Batch size: 16
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: imagenet
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
 Testing
-Batch: 0  over  116
-Batch: 50  over  116
-Batch: 100  over  116
-Test mIoU: 0.8009
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 182, in <module>
+    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/DATA/bertille/habitat_mapping/src/unet_utils.py", line 154, in valid_test
+    nb_classes = out.shape[1]
+                 ^^^
+UnboundLocalError: cannot access local variable 'out' where it is not associated with a value
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: True
+Batch size: 16
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: imagenet
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
+Testing
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 182, in <module>
+    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/DATA/bertille/habitat_mapping/src/unet_utils.py", line 154, in valid_test
+    nb_classes = model.out_channels
+                 ^^^^^^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1709, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'Unet' object has no attribute 'out_channels'
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: True
+Batch size: 16
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: imagenet
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
+Testing
+Batch: 0  over  111
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 182, in <module>
+    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/DATA/bertille/habitat_mapping/src/unet_utils.py", line 163, in valid_test
+    IoUs_per_class.append(IoU_per_class(out, msk, model.classes))
+                                                  ^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1709, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'Unet' object has no attribute 'classes'
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: True
+Batch size: 16
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: imagenet
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
+Testing
+Batch: 0  over  111
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 182, in <module>
+    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/DATA/bertille/habitat_mapping/src/unet_utils.py", line 163, in valid_test
+    IoUs_per_class.append(IoU_per_class(out, msk, model._out_channels))
+                                                  ^^^^^^^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1709, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'Unet' object has no attribute '_out_channels'
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: True
+Batch size: 16
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: imagenet
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
+Testing
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet.py", line 182, in <module>
+    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: valid_test() missing 1 required positional argument: 'nb_classes'
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: True
+Batch size: 16
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: imagenet
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Model  ../unet_256_l1/stratified_shuffling_pre_trained/models/unet_intermed_epoch10.pt  loaded
+Testing
+Batch: 0  over  111
+Batch: 50  over  111
+Batch: 100  over  111
+Test mIoU: 0.6410
+Test mIoU per class: [       nan        nan        nan 0.43444879        nan        nan]

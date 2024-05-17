@@ -126,12 +126,13 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, train_mIoU = train(model, train_dl, criterion, optimizer, device)
+        train_loss, train_mIoU = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
         training_losses.append(train_loss)
         training_iou.append(train_mIoU)
         model.eval()
         with torch.no_grad():
-            val_loss, val_mIoU = valid(model, val_dl, criterion, device)   
+            print('Validation')
+            val_loss, val_mIoU, val_mIoU_per_class = valid_test(model, val_dl, criterion, device, model_settings['classes'])  
             validation_losses.append(val_loss)
             validation_iou.append(val_mIoU)
 
@@ -158,7 +159,7 @@ if training_settings['training']:
     torch.save(model.state_dict(), model_settings['path_to_last_model'])
     torch.save(optimizer.state_dict(), model_settings['path_to_last_optim'])
     # plot losses and iou using csv file and fct plot_losses_ious
-    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['ious_path'])
+    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
 
     # load epoch for which best_val
     model.load_state_dict(torch.load(model_settings['path_to_intermed_model'] + f'_epoch{np.argmin(validation_losses)+1}.pt'))
@@ -177,8 +178,10 @@ else:
 # TESTING
 model.eval()
 with torch.no_grad():
-    test_loss, test_mIoU = test(model, test_dl, criterion, device)
+    print('Testing')
+    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device, model_settings['classes'])
 print(f'Test mIoU: {test_mIoU:.4f}')
+print(f'Test mIoU per class: {test_mIoU_per_class}')
 
 
 

@@ -3,3 +3,4 @@ old_models/
 unet_256_l1/random_shuffling/models/
 unet_256_l1/random_shuffling_pre_trained/models/
 unet_256_l1/stratified_shuffling/models/
+unet_256_l1/stratified_shuffling_pre_trained/models/

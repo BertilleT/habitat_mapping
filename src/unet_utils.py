@@ -40,7 +40,7 @@ def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=
     msk_paths_ = [Path(p) for p in msk_paths]
     msk_paths = []
 
-    # KEEP ONLY EXISTING MASKS PATHS (THE ONES WITH INVALID DATES)
+    # KEEP ONLY EXISTING MASKS PATHS (FILTER THE ONES WITH INVALID DATES)
     for msk_path in msk_paths_:
         if msk_path.exists():
             msk_paths.append(msk_path)
@@ -103,12 +103,23 @@ def IoU(pred, target):
     u = torch.sum(pred | target)
     return i/u
 
+def IoU_per_class(pred, target, nb_classes):
+    ious = []
+    for c in range(nb_classes):
+        pred_c = pred == c
+        target_c = target == c
+        i = torch.sum(pred_c & target_c)
+        u = torch.sum(pred_c | target_c)
+        ious.append(i/u)
+    ious = [x.item() for x in ious]
+    return ious
 
 ## FUNCTION FOR TRAINING, VALIDATION AND TESTING
-def train(model, train_dl, criterion, optimizer, device):
+def train(model, train_dl, criterion, optimizer, device, nb_classes):
     print('Training')
     running_loss = 0.0
     tr_IoUs = []
+    tr_IoUs_per_class = []
     for i, (img, msk) in enumerate(train_dl):
         if i % 50 == 0:
             print( 'Batch:', i, ' over ', len(train_dl))
@@ -123,18 +134,24 @@ def train(model, train_dl, criterion, optimizer, device):
         out = torch.argmax(out, dim=1)
         out = out.int()
         tr_IoUs.append(IoU(out, msk))
+        tr_IoUs_per_class.append(IoU_per_class(out, msk, nb_classes))
+
     tr_IoUs = [x.item() for x in tr_IoUs]
+
     mIoU = np.mean(tr_IoUs)
-    return running_loss / len(train_dl), mIoU
+    mIoU_per_class = np.mean(tr_IoUs_per_class, axis=0)
+
+    return running_loss / len(train_dl), mIoU, mIoU_per_class
 
 
-def valid(model, val_dl, criterion, device):
-    print('Validation')
+def valid_test(model, dl, criterion, device, nb_classes):
     running_loss = 0.0
-    val_IoUs = []
-    for i, (img, msk) in enumerate(val_dl):
+    IoUs = []
+    IoUs_per_class = []
+
+    for i, (img, msk) in enumerate(dl):
         if i % 50 == 0:
-            print( 'Batch:', i, ' over ', len(val_dl))
+            print( 'Batch:', i, ' over ', len(dl))
         img, msk = img.to(device), msk.to(device)
         out = model(img)
         msk = msk.long()
@@ -142,30 +159,14 @@ def valid(model, val_dl, criterion, device):
         running_loss += loss.item()
         out = torch.argmax(out, dim=1)
         out = out.int()
-        val_IoUs.append(IoU(out, msk))
-    val_IoUs = [x.item() for x in val_IoUs]
-    mIoU = np.mean(val_IoUs)
-    return running_loss / len(val_dl), mIoU
+        IoUs.append(IoU(out, msk))
+        IoUs_per_class.append(IoU_per_class(out, msk, nb_classes))
 
-def test(model, test_dl, criterion, device):
-    print('Testing')
-    running_loss = 0.0
-    test_IoUs = []
-    for i, (img, msk) in enumerate(test_dl):
-        if i % 50 == 0:
-            print( 'Batch:', i, ' over ', len(test_dl))
-        img, msk = img.to(device), msk.to(device)
-        out = model(img)
-        msk = msk.long()
-        loss = criterion(out, msk)
-        running_loss += loss.item()
-        out = torch.argmax(out, dim=1)
-        out = out.int()
-        test_IoUs.append(IoU(out, msk))
-    test_IoUs = [x.item() for x in test_IoUs]
-    mIoU = np.mean(test_IoUs)
-    return running_loss / len(test_dl), mIoU
-
+    IoUs = [x.item() for x in IoUs]
+    mIoU = np.mean(IoUs)
+    mIoU_per_class = np.mean(IoUs_per_class, axis=0)
+    
+    return running_loss / len(dl), mIoU, mIoU_per_class
 
 def optimizer_to(optim, device):
     # get number of values
