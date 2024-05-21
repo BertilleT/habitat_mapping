@@ -4,6 +4,7 @@ import pandas as pd
 import rasterio
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import sys
 
 import torch
 import torch.nn as nn
@@ -47,7 +48,7 @@ test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=Fa
 #    print(img.shape, msk.shape)
 #    break
 
-'''
+
 
 ## MODEL
 print('Creating model...')
@@ -126,7 +127,7 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, train_mIoU = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
+        train_loss, train_mIoU, mIoU_per_class = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
         training_losses.append(train_loss)
         training_iou.append(train_mIoU)
         model.eval()
@@ -154,6 +155,7 @@ if training_settings['training']:
         #if (epoch+1) % 5 == 0:
         df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_iou': training_iou, 'validation_iou': validation_iou})
         df.to_csv(training_settings['losses_mious_path'])
+        sys.stdout.flush()
             
     # save last model state and optim
     torch.save(model.state_dict(), model_settings['path_to_last_model'])
@@ -197,4 +199,4 @@ if plotting_settings['plot_test']:
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
-    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'])'''
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'])

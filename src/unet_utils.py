@@ -85,11 +85,8 @@ def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=
         np.random.shuffle(zone_ids)
         n = len(zone_ids)
         train_zone_ids = zone_ids[:int(0.67*n)] # there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
-        print('train_zone_ids', train_zone_ids)
         val_zone_ids = zone_ids[int(0.67*n):int(0.9*n)]
-        print('val_zone_ids', val_zone_ids)
         test_zone_ids = zone_ids[int(0.9*n):]
-        print('test_zone_ids', test_zone_ids)
         train_paths = []
         val_paths = []
         test_paths = []
