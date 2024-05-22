@@ -34,7 +34,7 @@ model_settings = {
     'path_to_last_model': f'../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../{config_name}/models/optim_last.pt',
     'path_to_best_model': f'../{config_name}/models/unet_intermed_epoch63.pt',#f'../{config_name}/models/unet_intermed_epoch10.pt',#f'../{config_name}/models/unet_intermed_epoch35.pt',#f'../{config_name}/models/unet_intermed_epoch3.pt',
-}
+    }
 
 training_settings = {
     'training': False,
@@ -49,7 +49,7 @@ training_settings = {
 }
 
 plotting_settings = {
-    'plot_test': True,
+    'plot_test': False,
     'pred_plot_path': f'../{config_name}/figures/test_preds.png',
     'losses_path': f'../{config_name}/figures/losses.png',
     'mious_path': f'../{config_name}/figures/mious.png',

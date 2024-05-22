@@ -44,9 +44,9 @@ val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=Fals
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 # Sanity check of the dataloader
-#for img, msk in train_dl:
-#    print(img.shape, msk.shape)
-#    break
+for img, msk in train_dl:
+    #get unique values of masks 
+    print('Unique values of mask:', torch.unique(msk))
 
 
 
@@ -60,8 +60,9 @@ model = smp.Unet(
     encoder_name=model_settings['encoder_name'],        
     encoder_weights=model_settings['encoder_weights'], 
     in_channels=model_settings['in_channels'], 
-    classes=model_settings['classes']
+    classes=model_settings['classes'], 
 )
+
 if training_settings['restart_training'] is not None:
     model.load_state_dict(torch.load(model_settings['path_to_intermed_model'] + f'_epoch{training_settings["restart_training"]}.pt'))
     print('Model from epoch', training_settings['restart_training'], ' loaded')
@@ -91,6 +92,7 @@ if training_settings['restart_training'] is not None:
     #print("Optimizer is running on:", device)
     #print('Optimizer from epoch', training_settings['restart_training'], ' loaded')
 
+## METRIC
 
 ## TRAINING AND VALIDATION
 if training_settings['training']:
@@ -169,7 +171,7 @@ if training_settings['training']:
         param.to(device)
 
 else: 
-    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
+    #plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
     model.to(device)
     model.load_state_dict(torch.load(model_settings['path_to_best_model']))
     print('Model ', model_settings['path_to_best_model'], ' loaded')

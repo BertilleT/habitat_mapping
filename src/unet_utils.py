@@ -114,6 +114,36 @@ def IoU_per_class(pred, target, nb_classes):
     ious = [x.item() for x in ious]
     return ious
 
+def f1_score(tp_fp_fn_by_class, classes):
+    f1_by_class = {c: 0 for c in range(1, classes+1)}
+    for c in range(1, classes+1):
+        TP = tp_fp_fn_by_class[c][0]
+        FP = tp_fp_fn_by_class[c][1]
+        FN = tp_fp_fn_by_class[c][2]
+        f1_by_class[c] = TP/(TP + 0.5*(FP + FN))
+    return f1_by_class
+        
+def IoUs_v2(tp_fp_fn_by_class, classes):
+    ious_by_class = {c: 0 for c in range(1, classes+1)}
+    for c in range(1, classes+1):
+        TP = tp_fp_fn_by_class[c][0]
+        FP = tp_fp_fn_by_class[c][1]
+        FN = tp_fp_fn_by_class[c][2]
+        i = TP
+        u = TP + FP + FN
+        ious_by_class[c] = i/u
+    return ious_by_class
+
+
+def mean_IoUs_by_class(IoUs_by_class_by_batch):
+    mean_IoUs_by_class = {c: 0 for c in range(1, len(IoUs_by_class_by_batch[0])+1)}
+    for ious_by_class in IoUs_by_class_by_batch:
+        for c in range(1, len(ious_by_class)+1):
+            mean_IoUs_by_class[c] += ious_by_class[c]
+    for c in range(1, len(ious_by_class)+1):
+        mean_IoUs_by_class[c] /= len(IoUs_by_class_by_batch)
+    return mean_IoUs_by_class
+
 ## FUNCTION FOR TRAINING, VALIDATION AND TESTING
 def train(model, train_dl, criterion, optimizer, device, nb_classes):
     print('Training')
@@ -148,7 +178,8 @@ def valid_test(model, dl, criterion, device, nb_classes):
     running_loss = 0.0
     IoUs = []
     IoUs_per_class = []
-
+    IoUs_by_class = []
+    F1_scores = []
     for i, (img, msk) in enumerate(dl):
         if i % 50 == 0:
             print( 'Batch:', i, ' over ', len(dl))
@@ -159,13 +190,38 @@ def valid_test(model, dl, criterion, device, nb_classes):
         running_loss += loss.item()
         out = torch.argmax(out, dim=1)
         out = out.int()
+        # print out, msk 
+        #print('out:', out)
+        #print('msk:', msk)
         IoUs.append(IoU(out, msk))
         IoUs_per_class.append(IoU_per_class(out, msk, nb_classes))
 
+        # IoU_v2
+        tp_fp_fn_by_class = {c: [0, 0, 0] for c in range(1, nb_classes+1)}
+        # loop on images too. Let's suppose we do not need to do it
+        for c in range(1, nb_classes+1):
+            TP = torch.sum((out == c) & (msk == c))
+            FP = torch.sum((out == c) & (msk != c))
+            FN = torch.sum((out != c) & (msk == c))
+            tp_fp_fn_by_class[c][0] += TP
+            tp_fp_fn_by_class[c][1] += FP
+            tp_fp_fn_by_class[c][2] += FN
+
+        IoUs_by_class_one_batch = IoUs_v2(tp_fp_fn_by_class, nb_classes)
+        F1_by_class_one_batch = f1_score(tp_fp_fn_by_class, nb_classes)
+        IoUs_by_class.append(IoUs_by_class_one_batch)
+        F1_scores.append(F1_by_class_one_batch)
+    
     IoUs = [x.item() for x in IoUs]
     mIoU = np.mean(IoUs)
     mIoU_per_class = np.mean(IoUs_per_class, axis=0)
-    
+
+    print('IoUs_by_class: ', IoUs_by_class)
+    mIoUs_by_class = mean_IoUs_by_class(IoUs_by_class)
+    print('mIoUs_by_class: ', mIoUs_by_class)
+    mIoU_v2 = np.mean(list(mIoUs_by_class.values()))
+    print('mIoU_v2: ', mIoU_v2)
+        
     return running_loss / len(dl), mIoU, mIoU_per_class
 
 def optimizer_to(optim, device):

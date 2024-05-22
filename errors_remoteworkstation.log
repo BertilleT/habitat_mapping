@@ -1,0 +1,81 @@
+sudo cat /var/log/syslog
+--> 
+    May 21 00:00:30 2080TI systemd[1]: logrotate.service: Succeeded.
+    May 21 00:00:30 2080TI systemd[1]: Finished Rotate log files.
+    May 21 00:00:30 2080TI systemd[1]: man-db.service: Succeeded.
+    May 21 00:00:30 2080TI systemd[1]: Finished Daily man-db regeneration.
+    May 21 00:17:01 2080TI CRON[13453]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 00:56:45 2080TI systemd[1]: Starting Daily apt download activities...
+    May 21 00:56:46 2080TI systemd[1]: Starting Update APT News...
+    May 21 00:56:46 2080TI systemd[1]: Starting Update the local ESM caches...
+    May 21 00:57:16 2080TI python3[13511]: Failed to fetch ESM Apt Cache item: https://esm.ubuntu.com/apps/ubuntu/dists/focal-apps-security/InRelease
+    May 21 00:57:16 2080TI systemd[1]: apt-news.service: Succeeded.
+    May 21 00:57:16 2080TI systemd[1]: Finished Update APT News.
+    May 21 00:57:46 2080TI python3[13511]: Failed to fetch ESM Apt Cache item: https://esm.ubuntu.com/apps/ubuntu/dists/focal-apps-updates/InRelease
+    May 21 00:57:46 2080TI systemd[1]: esm-cache.service: Succeeded.
+    May 21 00:57:46 2080TI systemd[1]: Finished Update the local ESM caches.
+    May 21 00:58:47 2080TI systemd[1]: apt-daily.service: Succeeded.
+    May 21 00:58:47 2080TI systemd[1]: Finished Daily apt download activities.
+    May 21 01:01:45 2080TI systemd[1]: Starting Message of the Day...
+    May 21 01:01:45 2080TI systemd[1]: motd-news.service: Succeeded.
+    May 21 01:01:45 2080TI systemd[1]: Finished Message of the Day.
+    May 21 01:17:01 2080TI CRON[13562]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 01:48:43 2080TI snapd[11559]: autorefresh.go:645: Cannot prepare auto-refresh change: Post "https://api.snapcraft.io/v2/snaps/refresh": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+    May 21 01:48:43 2080TI snapd[11559]: stateengine.go:149: state ensure error: Post "https://api.snapcraft.io/v2/snaps/refresh": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+    May 21 02:17:01 2080TI CRON[13581]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 02:40:01 2080TI CRON[13590]: (root) CMD (   test -x /etc/cron.daily/popularity-contest && /etc/cron.daily/popularity-contest --crond)
+    May 21 03:10:01 2080TI CRON[13600]: (root) CMD (test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r)
+    May 21 03:17:01 2080TI CRON[13605]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 04:17:01 2080TI CRON[13623]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 04:30:45 2080TI systemd[1]: Starting Refresh fwupd metadata and update motd...
+    May 21 04:30:45 2080TI dbus-daemon[1089]: [system] Activating via systemd: service name='org.freedesktop.fwupd' unit='fwupd.service' requested by ':1.757' (uid=128 pid=13629 comm="/usr/bin/fwupdmgr refresh " label="unconfined")
+    May 21 04:30:45 2080TI systemd[1]: Starting Firmware update daemon...
+    May 21 04:30:45 2080TI fwupd[13634]: 02:30:45:0822 FuEngine             failed to get releases for UEFI dbx: No releases found: Not compatible with org.freedesktop.fwupd version 1.7.9, requires >= 1.9.1
+    May 21 04:30:45 2080TI fwupd[13634]: 02:30:45:0825 FuEngine             failed to get releases for UEFI dbx: No releases found: Not compatible with org.freedesktop.fwupd version 1.7.9, requires >= 1.9.1
+    May 21 04:30:46 2080TI dbus-daemon[1089]: [system] Successfully activated service 'org.freedesktop.fwupd'
+    May 21 04:30:46 2080TI systemd[1]: Started Firmware update daemon.
+    May 21 04:30:46 2080TI fwupdmgr[13629]: Updating lvfs
+    May 21 04:30:46 2080TI fwupdmgr[13629]: Downloading…: 0%
+    May 21 04:31:06 2080TI fwupdmgr[13629]: En attente…: 0%
+    May 21 04:31:06 2080TI systemd[1]: fwupd-refresh.service: Main process exited, code=exited, status=1/FAILURE
+    May 21 04:31:06 2080TI systemd[1]: fwupd-refresh.service: Failed with result 'exit-code'.
+    May 21 04:31:06 2080TI systemd[1]: Failed to start Refresh fwupd metadata and update motd.
+    May 21 05:17:01 2080TI CRON[13660]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 06:17:01 2080TI CRON[13678]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 06:25:01 2080TI CRON[13683]: (root) CMD (test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily ))
+    May 21 06:30:45 2080TI systemd[1]: Starting Daily apt upgrade and clean activities...
+    May 21 06:30:46 2080TI systemd[1]: apt-daily-upgrade.service: Succeeded.
+    May 21 06:30:46 2080TI systemd[1]: Finished Daily apt upgrade and clean activities.
+    May 21 06:30:46 2080TI systemd[1]: fwupd.service: Succeeded.
+    May 21 07:17:01 2080TI CRON[13772]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 07:30:01 2080TI CRON[13779]: (root) CMD ([ -x /etc/init.d/anacron ] && if [ ! -d /run/systemd/system ]; then /usr/sbin/invoke-rc.d anacron start >/dev/null; fi)
+    May 21 07:34:45 2080TI systemd[1]: Started Run anacron jobs.
+    May 21 07:34:45 2080TI anacron[13781]: Anacron 2.3 started on 2024-05-21
+    May 21 07:34:45 2080TI anacron[13781]: Will run job `cron.daily' in 5 min.
+    May 21 07:34:45 2080TI anacron[13781]: Jobs will be executed sequentially
+    May 21 07:39:45 2080TI anacron[13781]: Job `cron.daily' started
+    May 21 07:39:45 2080TI anacron[13788]: Updated timestamp for job `cron.daily' to 2024-05-21
+    May 21 07:39:45 2080TI cracklib: no dictionary update necessary.
+    May 21 07:39:45 2080TI anacron[13781]: Job `cron.daily' terminated
+    May 21 07:39:45 2080TI anacron[13781]: Normal exit (1 job run)
+    May 21 07:39:45 2080TI systemd[1]: anacron.service: Succeeded.
+    May 21 08:17:01 2080TI CRON[13843]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 08:30:01 2080TI CRON[13850]: (root) CMD ([ -x /etc/init.d/anacron ] && if [ ! -d /run/systemd/system ]; then /usr/sbin/invoke-rc.d anacron start >/dev/null; fi)
+    May 21 08:31:45 2080TI systemd[1]: Started Run anacron jobs.
+    May 21 08:31:45 2080TI anacron[13851]: Anacron 2.3 started on 2024-05-21
+    May 21 08:31:45 2080TI anacron[13851]: Normal exit (0 jobs run)
+    May 21 08:31:45 2080TI systemd[1]: anacron.service: Succeeded.
+    May 21 09:17:01 2080TI CRON[13866]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+    May 21 09:25:45 2080TI systemd[1]: Starting Cleanup of Temporary Directories...
+    May 21 09:25:45 2080TI systemd[1]: systemd-tmpfiles-clean.service: Succeeded.
+    May 21 09:25:45 2080TI systemd[1]: Finished Cleanup of Temporary Directories.
+    May 21 09:28:18 2080TI systemd-modules-load[451]: Inserted module 'lp'
+    May 21 09:28:18 2080TI systemd-modules-load[451]: Inserted module 'ppdev'
+    May 21 09:28:18 2080TI systemd-modules-load[451]: Inserted module 'parport_pc'
+
+
+sudo cat /var/log/syslog | grep python
+--> 
+    May 21 00:57:16 2080TI python3[13511]: Failed to fetch ESM Apt Cache item: https://esm.ubuntu.com/apps/ubuntu/dists/focal-apps-security/InRelease
+    May 21 00:57:46 2080TI python3[13511]: Failed to fetch ESM Apt Cache item: https://esm.ubuntu.com/apps/ubuntu/dists/focal-apps-updates/InRelease
+
