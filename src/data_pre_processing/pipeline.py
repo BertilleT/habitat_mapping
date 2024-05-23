@@ -198,13 +198,13 @@ if pre_processing_steps['3_create_patches']:
     tif_paths = list(full_img_dir.rglob('*.tif'))
     #order in alphabetical order
     tif_paths = sorted(tif_paths)
-    print(len(tif_paths))  # 100
+    print(len(tif_paths))  # 375
     #list all directries name in Path('../data/patch64/msk/l123')
-    i = 50
-    total = len(tif_paths)
-    for tif_path in tif_paths[152:250]:
+    down = 300
+    up = len(tif_paths)
+    for tif_path in tif_paths[down:]:
         name = tif_path.stem
         mask_path = Path('../../data/full_img_msk/msk') / f'msk_{name[4:]}.tif'
         split_img_msk_into_patches(tif_path, mask_path, patch_size)
-        print('Processing image number ' + str(i) + ' over ' + str(total) + ' done.')
-        i += 1
+        print('Processing image number ' + str(down) + ' over ' + str(up) + ' done.')
+        down += 1

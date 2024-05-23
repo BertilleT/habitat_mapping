@@ -124,17 +124,7 @@ def split_img_msk_into_patches(tif_path, mask_path, patch_size):
             mask_path = patch_msk_dir / f'msk_{tif_path.stem[4:]}_patch_{i}_{j}.tif'
             if mask_path.exists():
                 continue
-            single_patch_mask = patches_mask[i,j,:,:]
-            # if there is 255 in the patch_mask at level1
-            print(single_patch_mask.shape)
-            #print values avaliaable in single_patch_mask[0]
-            print('Values available in single_patch_mask[0]:')
-            print(np.unique(single_patch_mask[0, :, :, 0]))
-            print('Values available in single_patch_mask[1]:')
-            print(np.unique(single_patch_mask[0, :, :, 1]))
-            print('Values available in single_patch_mask[2]:')
-            print(np.unique(single_patch_mask[0, :, :, 2]))
-            
+            single_patch_mask = patches_mask[i,j,:,:]            
             if 255 in single_patch_mask[0, :, :, 0]:
                 #print(f'Mask {mask_path.name} is not fully labelled.')
                 indexes_do_not_save_empty_patches.append((i, j))
@@ -143,7 +133,6 @@ def split_img_msk_into_patches(tif_path, mask_path, patch_size):
             #print(f'Mask {mask_path.name} created.')
 
     print(f'Masks created for {mask_path}.')
-    print('Unlabelled masks were not saved, there are ', len(indexes_do_not_save_empty_patches), ' of them, over ', patches_mask.shape[0] * patches_mask.shape[1], ' patches.')
 
     patches_img = patchify(img, (patch_size, patch_size, 4), step=patch_size)  
     
@@ -158,9 +147,8 @@ def split_img_msk_into_patches(tif_path, mask_path, patch_size):
             single_patch_img = patches_img[i,j,:,:]
             tiff.imwrite(patch_path, single_patch_img)
             #print(f'Patch {patch_path.name} created.')
-    
-    print(f'Patches created for {patch_path}.')
-    print('Unlabelled patches were not saved, there are ', len(indexes_do_not_save_empty_patches), ' of them, over ', patches_img.shape[0] * patches_img.shape[1], ' patches.')
+    print(f'Patches created for {tif_path}.')
+    print('Uncompletely labelled masks and their corresponding images were not saved, there are ', len(indexes_do_not_save_empty_patches), ' of them, over ', patches_mask.shape[0] * patches_mask.shape[1], ' patches.')
     return None
 
 def rescale_band(band, p_min=2, p_max=98):
