@@ -1,4 +1,5 @@
 data/
+original_data/
 old_models/
 unet_256_l1/random_shuffling_v2/models/
 unet_256_l1/random_shuffling/models/
