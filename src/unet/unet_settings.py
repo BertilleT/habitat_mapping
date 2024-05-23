@@ -6,8 +6,8 @@ import pandas as pd
 ## SETTINGS
 config_name = 'unet_256_l1/random_shuffling_v2'
 
-Path(f'../{config_name}/models').mkdir(parents=True, exist_ok=True)
-Path(f'../{config_name}/figures').mkdir(exist_ok=True)
+Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
+Path(f'../../{config_name}/figures').mkdir(exist_ok=True)
 
 patch_level_param = {
     'patch_size': 256, 
@@ -15,9 +15,9 @@ patch_level_param = {
 }
 
 data_loading_settings = {
-    'img_folder' : Path(f'../data/patch{patch_level_param["patch_size"]}/img/'),
-    'msk_folder' : Path(f'../data/patch{patch_level_param["patch_size"]}/msk/l123/'),
-    'msks_256_fully_labelled' : pd.read_csv('../csv/coverage_patch/p256_100per_labelled.csv'), 
+    'img_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/img/'),
+    'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/l123/'),
+    'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
     'stratified' : False,
     'random_seed' : 42,
     'splitting' : [0.6, 0.2, 0.2],
@@ -29,11 +29,11 @@ model_settings = {
     'encoder_weights': None, #"imagenet" or None
     'in_channels': 4,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
-    'path_to_intermed_model': f'../{config_name}/models/unet_intermed',
-    'path_to_intermed_optim': f'../{config_name}/models/optim_intermed',
-    'path_to_last_model': f'../{config_name}/models/unet_last.pt',
-    'path_to_last_optim': f'../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../{config_name}/models/unet_intermed_epoch63.pt',#f'../{config_name}/models/unet_intermed_epoch10.pt',#f'../{config_name}/models/unet_intermed_epoch35.pt',#f'../{config_name}/models/unet_intermed_epoch3.pt',
+    'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
+    'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
+    'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
+    'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',
     }
 
 training_settings = {
@@ -44,15 +44,15 @@ training_settings = {
     'nb_epochs': 200, 
     'early_stopping': True,
     'patience': 30,
-    'losses_mious_path': f'../{config_name}/losses_mious.csv',
+    'losses_mious_path': f'../../{config_name}/losses_mious.csv',
     'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
 }
 
 plotting_settings = {
     'plot_test': False,
-    'pred_plot_path': f'../{config_name}/figures/test_preds.png',
-    'losses_path': f'../{config_name}/figures/losses.png',
-    'mious_path': f'../{config_name}/figures/mious.png',
+    'pred_plot_path': f'../../{config_name}/figures/test_preds.png',
+    'losses_path': f'../../{config_name}/figures/losses.png',
+    'mious_path': f'../../{config_name}/figures/mious.png',
     'nb_plots': 6,
     'my_colors_map': {1: '#789262', 2: '#ff4500', 3: '#006400', 4: '#00ff00', 5: '#555555', 6: '#8a2be2'},
 }
@@ -84,5 +84,5 @@ settings = {
 for key in settings.keys():
     settings[key] = str(settings[key])
 settings_df = pd.DataFrame(settings, index=[0])
-if not Path(f'../{config_name}/settings.csv').exists():
-    settings_df.to_csv(f'../{config_name}/settings.csv', index=False)
+if not Path(f'../../{config_name}/settings.csv').exists():
+    settings_df.to_csv(f'../../{config_name}/settings.csv', index=False)

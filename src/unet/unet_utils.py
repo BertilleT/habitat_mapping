@@ -7,6 +7,7 @@ import torch
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+from sklearn.metrics import confusion_matrix
 
 
 class EcomedDataset(Dataset):
@@ -37,7 +38,8 @@ class EcomedDataset(Dataset):
     
 def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=False, random_seed=42, split=[0.6, 0.2, 0.2], **kwargs):
     msk_paths = list(msks_256_fully_labelled['mask_path'])
-    msk_paths_ = [Path(p) for p in msk_paths]
+    #add ../ to all paths
+    msk_paths_ = [Path('../') / Path(p) for p in msk_paths]
     msk_paths = []
 
     # KEEP ONLY EXISTING MASKS PATHS (FILTER THE ONES WITH INVALID DATES)
@@ -98,12 +100,12 @@ def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=
             test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
     return train_paths, val_paths, test_paths
   
-def IoU(pred, target):
+def IoU_v1(pred, target):
     i = torch.sum(pred & target)
     u = torch.sum(pred | target)
     return i/u
 
-def IoU_per_class(pred, target, nb_classes):
+def IoU_per_class_v1(pred, target, nb_classes):
     ious = []
     for c in range(nb_classes):
         pred_c = pred == c
@@ -114,13 +116,14 @@ def IoU_per_class(pred, target, nb_classes):
     ious = [x.item() for x in ious]
     return ious
 
-def f1_score(tp_fp_fn_by_class, classes):
+def f1_score_v2(tp_fp_fn_by_class, classes):
     f1_by_class = {c: 0 for c in range(1, classes+1)}
     for c in range(1, classes+1):
         TP = tp_fp_fn_by_class[c][0]
         FP = tp_fp_fn_by_class[c][1]
         FN = tp_fp_fn_by_class[c][2]
         f1_by_class[c] = TP/(TP + 0.5*(FP + FN))
+    f1_by_class = {k: v.item() for k, v in f1_by_class.items()}
     return f1_by_class
         
 def IoUs_v2(tp_fp_fn_by_class, classes):
@@ -132,17 +135,34 @@ def IoUs_v2(tp_fp_fn_by_class, classes):
         i = TP
         u = TP + FP + FN
         ious_by_class[c] = i/u
+    # to cpu
+    ious_by_class = {k: v.item() for k, v in ious_by_class.items()}
     return ious_by_class
 
 
-def mean_IoUs_by_class(IoUs_by_class_by_batch):
+def mean_IoUs_by_class_v2(IoUs_by_class_by_batch):
     mean_IoUs_by_class = {c: 0 for c in range(1, len(IoUs_by_class_by_batch[0])+1)}
     for ious_by_class in IoUs_by_class_by_batch:
         for c in range(1, len(ious_by_class)+1):
             mean_IoUs_by_class[c] += ious_by_class[c]
     for c in range(1, len(ious_by_class)+1):
         mean_IoUs_by_class[c] /= len(IoUs_by_class_by_batch)
+    
+
     return mean_IoUs_by_class
+
+def IoU_F1_from_confmatrix_v3(conf_matrix):
+    ious = {c: 0 for c in range(1, conf_matrix.shape[0]+1)}
+    f1s = {c: 0 for c in range(1, conf_matrix.shape[0]+1)}
+    for c in range(1, conf_matrix.shape[0]+1):
+        TP = conf_matrix[c-1, c-1]
+        FP = np.sum(conf_matrix[:, c-1]) - TP
+        FN = np.sum(conf_matrix[c-1, :]) - TP
+        i = TP
+        u = TP + FP + FN
+        ious[c] = i/u
+        f1s[c] = TP/(TP + 0.5*(FP + FN))
+    return ious, f1s
 
 ## FUNCTION FOR TRAINING, VALIDATION AND TESTING
 def train(model, train_dl, criterion, optimizer, device, nb_classes):
@@ -163,8 +183,8 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
         running_loss += loss.item()
         out = torch.argmax(out, dim=1)
         out = out.int()
-        tr_IoUs.append(IoU(out, msk))
-        tr_IoUs_per_class.append(IoU_per_class(out, msk, nb_classes))
+        tr_IoUs.append(IoU_v1(out, msk))
+        tr_IoUs_per_class.append(IoU_per_class_v1(out, msk, nb_classes))
 
     tr_IoUs = [x.item() for x in tr_IoUs]
 
@@ -173,13 +193,13 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
 
     return running_loss / len(train_dl), mIoU, mIoU_per_class
 
-
 def valid_test(model, dl, criterion, device, nb_classes):
     running_loss = 0.0
-    IoUs = []
-    IoUs_per_class = []
-    IoUs_by_class = []
-    F1_scores = []
+    IoUs_v1 = []
+    IoUs_per_class_v1 = []
+    IoUs_by_class_v2 = []
+    F1_scores_v2 = []
+    patch_confusion_matrices_v3 = []
     for i, (img, msk) in enumerate(dl):
         if i % 50 == 0:
             print( 'Batch:', i, ' over ', len(dl))
@@ -193,8 +213,8 @@ def valid_test(model, dl, criterion, device, nb_classes):
         # print out, msk 
         #print('out:', out)
         #print('msk:', msk)
-        IoUs.append(IoU(out, msk))
-        IoUs_per_class.append(IoU_per_class(out, msk, nb_classes))
+        #IoUs_v1.append(IoU_v1(out, msk))
+        #IoUs_per_class_v1.append(IoU_per_class_v1(out, msk, nb_classes))
 
         # IoU_v2
         tp_fp_fn_by_class = {c: [0, 0, 0] for c in range(1, nb_classes+1)}
@@ -207,22 +227,47 @@ def valid_test(model, dl, criterion, device, nb_classes):
             tp_fp_fn_by_class[c][1] += FP
             tp_fp_fn_by_class[c][2] += FN
 
-        IoUs_by_class_one_batch = IoUs_v2(tp_fp_fn_by_class, nb_classes)
-        F1_by_class_one_batch = f1_score(tp_fp_fn_by_class, nb_classes)
-        IoUs_by_class.append(IoUs_by_class_one_batch)
-        F1_scores.append(F1_by_class_one_batch)
+        IoUs_by_class_one_batch_v2 = IoUs_v2(tp_fp_fn_by_class, nb_classes)
+        F1_by_class_one_batch_v2 = f1_score_v2(tp_fp_fn_by_class, nb_classes)
+        IoUs_by_class_v2.append(IoUs_by_class_one_batch_v2)
+        F1_scores_v2.append(F1_by_class_one_batch_v2)
+        # confusion matrix
+        patch_confusion_matrices_v3.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(1, nb_classes+1)))
     
-    IoUs = [x.item() for x in IoUs]
-    mIoU = np.mean(IoUs)
-    mIoU_per_class = np.mean(IoUs_per_class, axis=0)
+    '''print('----------------- METRIC v1 -----------------')
+    IoUs_v1 = [x.item() for x in IoUs_v1]
+    mIoU_v1 = np.mean(IoUs_v1)
+    mIoU_per_class_v1 = np.mean(IoUs_per_class_v1, axis=0)
+    print('mIoU: ', mIoU_v1)
+    print('mIoU_per_class: ', mIoU_per_class_v1)'''
 
-    print('IoUs_by_class: ', IoUs_by_class)
-    mIoUs_by_class = mean_IoUs_by_class(IoUs_by_class)
-    print('mIoUs_by_class: ', mIoUs_by_class)
-    mIoU_v2 = np.mean(list(mIoUs_by_class.values()))
-    print('mIoU_v2: ', mIoU_v2)
-        
-    return running_loss / len(dl), mIoU, mIoU_per_class
+
+    print('----------------- METRIC v2 -----------------')
+    mIoUs_by_class_v2 = mean_IoUs_by_class_v2(IoUs_by_class_v2)
+    print('mIoUs_by_class: ', mIoUs_by_class_v2)
+    # remove nan
+    mIoUs_by_class_v2 = {k: v for k, v in mIoUs_by_class_v2.items() if not np.isnan(v)}
+    mIoU_v2 = np.mean(list(mIoUs_by_class_v2.values()))
+    print('mIoU: ', mIoU_v2)
+    F1_by_class_v2 = mean_IoUs_by_class_v2(F1_scores_v2)
+    print('F1_by_class: ', F1_by_class_v2)
+    F1_by_class_v2 = {k: v for k, v in F1_by_class_v2.items() if not np.isnan(v)}
+    mF1_v2 = np.mean(list(F1_by_class_v2.values()))
+    print('mF1: ', mF1_v2)
+    
+    print('----------------- METRIC v3 -----------------')
+    sum_confusion_matrix_v3 = np.sum(patch_confusion_matrices_v3, axis=0)
+    print('sum_confusion_matrix: ', sum_confusion_matrix_v3)
+    IoU_by_class_v3, F1_by_class_v3 = IoU_F1_from_confmatrix_v3(sum_confusion_matrix_v3)
+    print('IoU_by_class: ', IoU_by_class_v3)
+    print('F1_by_class: ', F1_by_class_v3)
+    # mean of IoU_by_class for all classes
+    mIoU_v3 = np.mean(list(IoU_by_class_v3.values()))
+    print('mIoU: ', mIoU_v3)
+    # mean of F1_by_class for all classes
+    mF1_v3 = np.mean(list(F1_by_class_v3.values()))
+    print('mF1: ', mF1_v3)       
+    return running_loss / len(dl), mIoU_v1, mIoU_per_class_v1
 
 def optimizer_to(optim, device):
     # get number of values

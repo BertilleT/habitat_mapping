@@ -37,16 +37,17 @@ print(f'Stratified: {data_loading_settings["stratified"]}')
 print(f'Batch size: {data_loading_settings["bs"]}')
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
+print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
 train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
-# Sanity check of the dataloader
+'''# Sanity check of the dataloader
 for img, msk in train_dl:
     #get unique values of masks 
-    print('Unique values of mask:', torch.unique(msk))
+    print('Unique values of mask:', torch.unique(msk))'''
 
 
 
