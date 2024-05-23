@@ -100,8 +100,8 @@ if training_settings['training']:
     print('Training...')
     training_losses = []
     validation_losses = []
-    training_iou = []
-    validation_iou = []
+    training_miou = []
+    validation_miou = []
     count = 0
     best_val_loss = np.inf 
 
@@ -112,8 +112,8 @@ if training_settings['training']:
         validation_losses = df['validation_losses'].tolist()
         # load iou
         df_2 = pd.read_csv(training_settings['iou_path'])
-        training_iou = df_2['training_iou'].tolist()
-        validation_iou = df_2['validation_iou'].tolist()
+        training_miou = df_2['training_miou'].tolist()
+        validation_miou = df_2['validation_miou'].tolist()
 
         best_val_loss = min(validation_losses)
         print('training_losses: ', training_losses)
@@ -130,15 +130,15 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, train_mIoU, mIoU_per_class = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
+        train_loss, tr_miou = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
         training_losses.append(train_loss)
-        training_iou.append(train_mIoU)
+        training_miou.append(tr_miou)
         model.eval()
         with torch.no_grad():
             print('Validation')
-            val_loss, val_mIoU, val_mIoU_per_class = valid_test(model, val_dl, criterion, device, model_settings['classes'])  
+            val_loss, val_mIoU = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'val')
             validation_losses.append(val_loss)
-            validation_iou.append(val_mIoU)
+            validation_miou.append(val_mIoU)
 
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train loss {train_loss:.4f}, val loss {val_loss:.4f}')
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train mIoU {train_mIoU:.4f}, val mIoU {val_mIoU:.4f}')
@@ -156,7 +156,7 @@ if training_settings['training']:
             
         #every 10, save losses values in csv
         #if (epoch+1) % 5 == 0:
-        df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_iou': training_iou, 'validation_iou': validation_iou})
+        df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_miou': training_miou, 'validation_miou': validation_miou})
         df.to_csv(training_settings['losses_mious_path'])
         sys.stdout.flush()
             
@@ -184,11 +184,22 @@ else:
 model.eval()
 with torch.no_grad():
     print('Testing')
-    test_loss, test_mIoU, test_mIoU_per_class = valid_test(model, test_dl, criterion, device, model_settings['classes'])
-print(f'Test mIoU: {test_mIoU:.4f}')
-print(f'Test mIoU per class: {test_mIoU_per_class}')
-
-
+    test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test')
+print(f'Test IoU by class: {metrics["IoU_by_class"]}')
+print(f'Test F1 by class: {metrics["F1_by_class"]}')
+print(f'Test mIoU: {metrics["mIoU"]}')
+print(f'Test mF1: {metrics["mF1"]}')
+#plot confusion matrix and save it
+confusion_matrix = metrics['confusion_matrix']
+confusion_matrix_normalized = confusion_matrix#.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
+sns.set(font_scale=0.8)
+plt.figure(figsize=(10, 10))
+ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
+#ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+plt.xlabel('Predicted labels')
+plt.ylabel('True labels')
+plt.title('Normalized confusion matrix')
+plt.savefig(plotting_settings['confusion_matrix_path'])
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:

@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ## SETTINGS
-config_name = 'unet_256_l1/random_shuffling_v2'
+config_name = 'unet_256_l1/stratified_shuffling_pre_trained'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/figures').mkdir(exist_ok=True)
@@ -18,7 +18,7 @@ data_loading_settings = {
     'img_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/img/'),
     'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/l123/'),
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
-    'stratified' : False,
+    'stratified' : True,
     'random_seed' : 42,
     'splitting' : [0.6, 0.2, 0.2],
     'bs': 16,
@@ -26,14 +26,14 @@ data_loading_settings = {
 
 model_settings = {
     'encoder_name': "efficientnet-b7",
-    'encoder_weights': None, #"imagenet" or None
+    'encoder_weights':'imagenet', #"imagenet" or None
     'in_channels': 4,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     }
 
 training_settings = {
@@ -55,6 +55,7 @@ plotting_settings = {
     'mious_path': f'../../{config_name}/figures/mious.png',
     'nb_plots': 6,
     'my_colors_map': {1: '#789262', 2: '#ff4500', 3: '#006400', 4: '#00ff00', 5: '#555555', 6: '#8a2be2'},
+    'confusion_matrix_path': f'../../{config_name}/figures/confusion_matrix.png',
 }
 
 # Save important settings in a csv file: 
