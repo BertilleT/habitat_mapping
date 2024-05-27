@@ -1,0 +1,142 @@
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:40: RuntimeWarning: invalid value encountered in divide
+  img = (img - p2) / (p98 - p2)
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:40: RuntimeWarning: invalid value encountered in divide
+  img = (img - p2) / (p98 - p2)
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:40: RuntimeWarning: invalid value encountered in divide
+  img = (img - p2) / (p98 - p2)
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:111: RuntimeWarning: invalid value encountered in scalar divide
+  f1s[c] = TP/(TP + 0.5*(FP + FN))
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: image
+Batch size: 8
+Train: 6819 images, Val: 2125 images, Test: 1722 images
+Train: 63.93%, Val: 19.92%, Test: 16.14%
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: None
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Training...
+Epoch 1/200
+Training
+Batch: 0  over  853
+Batch: 50  over  853
+Batch: 100  over  853
+Batch: 150  over  853
+Batch: 200  over  853
+Batch: 250  over  853
+Batch: 300  over  853
+Batch: 350  over  853
+Batch: 400  over  853
+Batch: 450  over  853
+Batch: 500  over  853
+Batch: 550  over  853
+Batch: 600  over  853
+Batch: 650  over  853
+Batch: 700  over  853
+Batch: 750  over  853
+Batch: 800  over  853
+Batch: 850  over  853
+Validation
+Batch: 0  over  266
+Batch: 50  over  266
+Batch: 100  over  266
+Batch: 150  over  266
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet/unet.py", line 162, in <module>
+    val_loss, val_mIoU = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'val')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py", line 183, in valid_test
+    patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(1, nb_classes+1)))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/sklearn/utils/_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py", line 342, in confusion_matrix
+    raise ValueError("At least one label specified must be in y_true")
+ValueError: At least one label specified must be in y_true
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:40: RuntimeWarning: invalid value encountered in divide
+  img = (img - p2) / (p98 - p2)
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:40: RuntimeWarning: invalid value encountered in divide
+  img = (img - p2) / (p98 - p2)
+/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py:40: RuntimeWarning: invalid value encountered in divide
+  img = (img - p2) / (p98 - p2)
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: image
+Batch size: 8
+Train: 6819 images, Val: 2125 images, Test: 1722 images
+Train: 63.93%, Val: 19.92%, Test: 16.14%
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: None
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Training...
+Epoch 1/200
+Training
+Batch: 0  over  853
+Batch: 50  over  853
+Batch: 100  over  853
+Batch: 150  over  853
+Batch: 200  over  853
+Batch: 250  over  853
+Batch: 300  over  853
+Batch: 350  over  853
+Batch: 400  over  853
+Batch: 450  over  853
+Batch: 500  over  853
+Batch: 550  over  853
+Batch: 600  over  853
+Batch: 650  over  853
+Batch: 700  over  853
+Batch: 750  over  853
+Batch: 800  over  853
+Batch: 850  over  853
+Validation
+Batch: 0  over  266
+Batch: 50  over  266
+Batch: 100  over  266
+Batch: 150  over  266
+Traceback (most recent call last):
+  File "/media/DATA/bertille/habitat_mapping/src/unet/unet.py", line 162, in <module>
+    val_loss, val_mIoU = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'val')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/DATA/bertille/habitat_mapping/src/unet/unet_utils.py", line 183, in valid_test
+    patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(1, nb_classes+1)))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/sklearn/utils/_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/sklearn/metrics/_classification.py", line 342, in confusion_matrix
+    raise ValueError("At least one label specified must be in y_true")
+ValueError: At least one label specified must be in y_true

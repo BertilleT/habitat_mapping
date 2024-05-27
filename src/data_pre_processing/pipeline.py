@@ -4,13 +4,16 @@ from classification import *
 # time
 import time
 import warnings
+import torch
 warnings.filterwarnings('ignore')
 
 pre_processing_steps = {
     '0_create_pivot_table': False, 
     '1_create_labels_dict': False,
     '2_create_masks': False,
-    '3_create_patches': True,
+    '3_create_patches': False,
+    '4_rm_nan_img_msk': False,
+    '5_count_pixels_class_by_zone': True,  
 }
 
 original_data_dir = Path('../../original_data/')
@@ -23,6 +26,11 @@ data_dir = Path('../../data/')
 msk_dir = data_dir / 'full_img_msk' / 'msk' 
 full_img_dir = data_dir / 'full_img_msk' / 'img'
 patch_size = 256
+msk_folder = Path('../../data/patch256/msk/')
+img_folder = Path('../../data/patch256/img/')
+l1_nb_pixels_by_zone_path = Path('../../csv/l1_nb_pixels_by_zone.csv')
+l2_nb_pixels_by_zone_path = Path('../../csv/l2_nb_pixels_by_zone.csv')
+l3_nb_pixels_by_zone_path = Path('../../csv/l3_nb_pixels_by_zone.csv')
 
 # ------------------------------STEP 0: CREATE PIVOT TABLE--------------------------------#
 
@@ -208,3 +216,106 @@ if pre_processing_steps['3_create_patches']:
         split_img_msk_into_patches(tif_path, mask_path, patch_size)
         print('Processing image number ' + str(down) + ' over ' + str(up) + ' done.')
         down += 1
+
+# ------------------------------STEP 4: REMOVE IMG,MSK when IMG FULL OF 0--------------------------------#
+if pre_processing_steps['4_rm_nan_img_msk']:
+    # remove the pairs of images when img is full of zero. 
+    msk_paths = list(msk_folder.rglob('*.tif'))
+    print(f'Number of masks: {len(msk_paths)}')
+    # BUILD THE IMG PATHS CORRESPONDING TO THE MASKS PATHS
+    img_paths = [img_folder / msk_path.parts[-2] / msk_path.name.replace('msk', 'img') for msk_path in msk_paths]
+    print(f'Number of images: {len(img_paths)}')
+
+    # CHECK IF THE IMAGES HAVE ZERO VALUES
+    imgs_zero_paths = []
+    for img_path in img_paths:
+        with rasterio.open(img_path) as src:
+            img = src.read()
+        if np.count_nonzero(img) == 0:
+            imgs_zero_paths.append(img_path)
+
+    print(f'Number of images with zero values: {len(imgs_zero_paths)}')
+    # LOOK FOR MASKS MATCHING THE IMAGES WITH ZERO VALUES
+    msks_paths_zero = [msk_folder / img_path.parts[-2] / img_path.name.replace('img', 'msk') for img_path in imgs_zero_paths]
+
+    # drop img and maks with zero values
+    for img_path, msk_path in zip(imgs_zero_paths, msks_paths_zero):
+        img_path.unlink()
+        msk_path.unlink()
+    print('Images with zero values removed')
+
+    msk_paths = list(msk_folder.rglob('*.tif'))
+    print(f'Number of masks: {len(msk_paths)}')
+    # BUILD THE IMG PATHS CORRESPONDING TO THE MASKS PATHS
+    img_paths = [img_folder / msk_path.parts[-2] / msk_path.name.replace('msk', 'img') for msk_path in msk_paths]
+    print(f'Number of images: {len(img_paths)}')
+
+# ------------------------------STEP 5: COUNT PIXELS BY CLASS AND BY ZONE--------------------------------#
+
+if pre_processing_steps['5_count_pixels_class_by_zone']:
+    zones = []
+    for zone in msk_folder.iterdir():
+        zones.append(zone.name.split('_')[0])
+    zones = list(set(zones))
+    #print(zones)
+
+    #load available classes at level 1. Check int column in l1_dict.csv
+    l1_list = pd.read_csv(l1_dict_path)
+    l2_list = pd.read_csv(l2_dict_path)
+    l3_list = pd.read_csv(l3_dict_path)
+    #l1_dict to list from int column
+    l1_list = l1_list['int'].tolist()
+    l2_list = l2_list['int'].tolist()
+    l3_list = l3_list['int'].tolist()
+    #print(l1_list)
+
+    per_l1_cl_by_zone = pd.DataFrame(0, index=range(len(l1_list)), columns=zones)
+    per_l2_cl_by_zone = pd.DataFrame(0, index=range(len(l2_list)), columns=zones)
+    per_l3_cl_by_zone = pd.DataFrame(0, index=range(len(l3_list)), columns=zones)
+    #print(per_l1_cl_by_zone)
+    nb_zones = len(zones)
+    z = 0
+    for zone in zones:
+        print('--------------------------Processing ', zone, '--------------------------')
+        z += 1
+        print('Zone number ', z, ' out of ', nb_zones)
+        #list all masks path from data/patch256/msk which containes the zone name   msk_zone102_0_0_etc.tif
+        masks = list(msk_folder.rglob(f'*_{zone}_*'))
+        masks = [mask for mask in masks if mask.suffix == '.tif']
+        # create an empty dict to store the number of pixels for each class
+        l1_nb_pixels_bycl = {i: 0 for i in l1_list}
+        l2_nb_pixels_bycl = {i: 0 for i in l2_list}
+        l3_nb_pixels_bycl = {i: 0 for i in l3_list}
+
+        #iterate over masks
+        c = 0
+        for mask_path in masks:
+            #print('Processing mask ', c, ' out of ', len(masks))
+            # Open mask
+            with rasterio.open(mask_path) as mask:
+                # Read band 1
+                mask_band1 = mask.read(1)
+                # Iterate over classes in l1_list
+                for i in l1_list:
+                    # Add the number of pixels for each class
+                    l1_nb_pixels_bycl[i] += torch.sum(torch.tensor(mask_band1) == i).item()
+                mask_band2 = mask.read(2)
+                for i in l2_list:
+                    l2_nb_pixels_bycl[i] += torch.sum(torch.tensor(mask_band2) == i).item()
+                mask_band3 = mask.read(3)
+                for i in l3_list:
+                    l3_nb_pixels_bycl[i] += torch.sum(torch.tensor(mask_band3) == i).item()
+            c += 1
+
+        for i in l1_list:
+            per_l1_cl_by_zone.loc[i, zone] = l1_nb_pixels_bycl[i]
+        
+        for i in l2_list:
+            per_l2_cl_by_zone.loc[i, zone] = l2_nb_pixels_bycl[i]
+
+        for i in l3_list:
+            per_l3_cl_by_zone.loc[i, zone] = l3_nb_pixels_bycl[i]
+
+    per_l1_cl_by_zone.to_csv(l1_nb_pixels_by_zone_path)
+    per_l2_cl_by_zone.to_csv(l2_nb_pixels_by_zone_path)
+    per_l3_cl_by_zone.to_csv(l3_nb_pixels_by_zone_path)  

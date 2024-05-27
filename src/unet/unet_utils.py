@@ -26,7 +26,11 @@ class EcomedDataset(Dataset):
         msk_path = self.msks[idx]
         with rasterio.open(msk_path) as src:
             msk = src.read(self.level)
-            # to torch long
+            #get type of values in msk
+            group_under_represented_classes = {0: 5, 1: 5, 2: 5, 3: 0, 4: 1, 5: 2, 6: 5, 7: 3, 8: 4, 9: 5}
+            group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
+            msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
+
         with rasterio.open(img_path) as src:
             img = src.read()
             # turn to values betw 0 and 1 and to float
@@ -35,50 +39,21 @@ class EcomedDataset(Dataset):
             img = np.clip(img, p2, p98)
             img = (img - p2) / (p98 - p2)
             img = img.astype(np.float32)
-        return img, msk
+        return img, msk_mapped
     
-def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=False, random_seed=42, split=[0.6, 0.2, 0.2], **kwargs):
-    msk_paths = list(msks_256_fully_labelled['mask_path'])
-    #add ../ to all paths
-    msk_paths_ = [Path('../') / Path(p) for p in msk_paths]
-    msk_paths = []
-
-    # KEEP ONLY EXISTING MASKS PATHS (FILTER THE ONES WITH INVALID DATES)
-    for msk_path in msk_paths_:
-        if msk_path.exists():
-            msk_paths.append(msk_path)
-
-    # BUILD THE IMG PATHS CORRESPONDING TO THE MASKS PATHS
-    img_paths = [img_folder / msk_path.parts[-2] / msk_path.name.replace('msk', 'img').replace('l123/', '') for msk_path in msk_paths]
-
-    # CHECK IF THE IMAGES HAVE ZERO VALUES
-    imgs_zero_paths = []
-    for img_path in img_paths:
-        with rasterio.open(img_path) as src:
-            img = src.read()
-        if np.count_nonzero(img) == 0:
-            imgs_zero_paths.append(img_path)
-
-    # LOOK FOR MASKS MATCHING THE IMAGES WITH ZERO VALUES
-    msks_paths_zero = [msk_folder / img_path.parts[-2] / img_path.name.replace('img', 'msk') for img_path in imgs_zero_paths]
-
-    final_msk_paths = []
-
-    for msk_path in msk_paths:
-        if msk_path in msks_paths_zero:
-            continue
-        final_msk_paths.append(msk_path)
+def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.6, 0.2, 0.2], **kwargs):
+    msk_paths = list(msk_folder.rglob('*.tif'))
     
-    if not stratified:
+    if stratified == 'random':
         # Shuffle with random_seed fixed and split in 60 20 20
         np.random.seed(random_seed)
-        np.random.shuffle(final_msk_paths)
-        n = len(final_msk_paths)
-        train_paths = final_msk_paths[:int(split[0]*n)]
-        val_paths = final_msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
-        test_paths = final_msk_paths[int((split[0]+split[1])*n):]
-    else:
-        msk_df = pd.DataFrame(final_msk_paths, columns=['mask_path'])
+        np.random.shuffle(msk_paths)
+        n = len(msk_paths)
+        train_paths = msk_paths[:int(split[0]*n)]
+        val_paths = msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
+        test_paths = msk_paths[int((split[0]+split[1])*n):]
+    elif stratified == 'zone':
+        msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
         msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
         # zone_id is zone100_0_0, extract only zone100 using split
         msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
@@ -87,9 +62,9 @@ def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)
         n = len(zone_ids)
-        train_zone_ids = zone_ids[:int(0.67*n)] # there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
-        val_zone_ids = zone_ids[int(0.67*n):int(0.9*n)]
-        test_zone_ids = zone_ids[int(0.9*n):]
+        train_zone_ids = zone_ids[:int(0.55*n)] # there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
+        val_zone_ids = zone_ids[int(0.55*n):int(0.79*n)] # 0.67 0.9
+        test_zone_ids = zone_ids[int(0.79*n):]
         train_paths = []
         val_paths = []
         test_paths = []
@@ -99,20 +74,72 @@ def load_data_paths(img_folder, msk_folder, msks_256_fully_labelled, stratified=
             val_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
         for zone_id in test_zone_ids:
             test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
-    return train_paths, val_paths, test_paths
+    elif stratified == 'image':
+        msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
+        msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
+        zone_ids = msk_df['zone_id'].unique()
+        np.random.seed(random_seed)
+        np.random.shuffle(zone_ids)
+        n = len(zone_ids)
+        train_zone_ids = zone_ids[:int(0.55*n)]
+        val_zone_ids = zone_ids[int(0.55*n):int(0.79*n)] 
+        test_zone_ids = zone_ids[int(0.79*n):]
+        train_paths = []
+        val_paths = []
+        test_paths = []
+        for zone_id in train_zone_ids:
+            train_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
+        for zone_id in val_zone_ids:
+            val_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
+        for zone_id in test_zone_ids:
+            test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
+    return train_paths, val_paths, test_paths, train_zone_ids, val_zone_ids, test_zone_ids
   
 def IoU_F1_from_confmatrix(conf_matrix):
-    ious = {c: 0 for c in range(1, conf_matrix.shape[0]+1)}
-    f1s = {c: 0 for c in range(1, conf_matrix.shape[0]+1)}
-    for c in range(1, conf_matrix.shape[0]+1):
-        TP = conf_matrix[c-1, c-1]
-        FP = np.sum(conf_matrix[:, c-1]) - TP
-        FN = np.sum(conf_matrix[c-1, :]) - TP
+    ious = {c: 0 for c in range(conf_matrix.shape[0])}
+    f1s = {c: 0 for c in range(conf_matrix.shape[0])}
+    for c in range(conf_matrix.shape[0]):
+        TP = conf_matrix[c, c]
+        FP = np.sum(conf_matrix[:, c]) - TP
+        FN = np.sum(conf_matrix[c, :]) - TP
         i = TP
         u = TP + FP + FN
-        ious[c] = i/u
+        if u != 0:
+            ious[c] = i / u
+        else:
+            ious[c] = float('nan')
         f1s[c] = TP/(TP + 0.5*(FP + FN))
+        if (TP + 0.5 * (FP + FN)) != 0: 
+            f1s[c] = TP / (TP + 0.5 * (FP + FN))
+        else:
+            f1s[c] = float('nan') 
     return ious, f1s
+
+def classes_balance(zone_list, path_pixels_by_zone):
+    zones = list(set(zone_list))
+    nb_pix_byz_df = pd.read_csv(path_pixels_by_zone)
+    # keep only the columns corresponding to the zones and the int column
+    nb_pix_byz_df = nb_pix_byz_df[zones + ['int']]
+    # get the nb of pixels by class, sum across columns for one row
+    nb_pix_byz_df['per'] = nb_pix_byz_df.sum(axis=1)
+    # get the total number of pixels
+    total = nb_pix_byz_df['per'].sum()
+    # keep only col int and total
+    nb_pix_byz_df = nb_pix_byz_df[['int', 'per']]
+    # get the proportion of pixels by class
+    nb_pix_byz_df['per'] = round(nb_pix_byz_df['per'] / total, 2)
+    return nb_pix_byz_df
+
+def check_classes_balance(dl):
+    classes = {i: 0 for i in range(6)}
+    len_dl = len(dl)
+    c = 0
+    for img, msk in dl:
+        c += 1
+        print(f'Batch {c}/{len_dl}')
+        for i in range(6):
+            classes[i] += torch.sum(msk == i).item()
+    return classes
 
 ## FUNCTION FOR TRAINING, VALIDATION AND TESTING
 def train(model, train_dl, criterion, optimizer, device, nb_classes):
@@ -131,8 +158,9 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
         optimizer.step()
         running_loss += loss.item()
         out = torch.argmax(out, dim=1)
-        out = out.int()
-        patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(1, nb_classes+1)))
+        out = out.int() #int means int32 on cpu and int64 on gpu
+        print('')
+        patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
 
     sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
     IoU_by_class, _ = IoU_F1_from_confmatrix(sum_confusion_matrix)
@@ -152,8 +180,11 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test):
         loss = criterion(out, msk)
         running_loss += loss.item()
         out = torch.argmax(out, dim=1)
+        # out to uint8
         out = out.int()
-        patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(1, nb_classes+1)))
+        #print("y_true", msk.flatten().cpu().numpy())
+        #print("y_pred", out.flatten().cpu().numpy())
+        patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
         
     sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
     IoU_by_class, F1_by_class = IoU_F1_from_confmatrix(sum_confusion_matrix)
@@ -206,7 +237,7 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
 
     fig, axs = plt.subplots(nb_imgs, 3, figsize=(15, 5*nb_imgs))
     for i in range(nb_imgs):
-        axs[i, 0].imshow(img[i, 0], cmap='gray')
+        axs[i, 0].imshow(img[i, 0], cmap='gray') # change to color! 
         axs[i, 0].set_title('Image')
         axs[i, 1].imshow(msk[i], cmap=custom_cmap_msk)
         axs[i, 1].set_title('Mask')

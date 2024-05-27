@@ -1,8 +1,6 @@
 data/
 original_data/
 old_models/
-unet_256_l1/random_shuffling_v2/models/
-unet_256_l1/random_shuffling/models/
-unet_256_l1/random_shuffling_pre_trained/models/
-unet_256_l1/stratified_shuffling/models/
-unet_256_l1/stratified_shuffling_pre_trained/models/
+old_unet_256_l1
+unet_256_l1/stratified_shuffling_by_image_seed1/models/
+unet_256_l1/stratified_shuffling_by_image_seed3/models/

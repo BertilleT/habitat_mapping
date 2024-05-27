@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ## SETTINGS
-config_name = 'unet_256_l1/stratified_shuffling_pre_trained'
+config_name = 'unet_256_l1/stratified_shuffling_by_image_seed3'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/figures').mkdir(exist_ok=True)
@@ -16,28 +16,29 @@ patch_level_param = {
 
 data_loading_settings = {
     'img_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/img/'),
-    'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/l123/'),
+    'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/'),
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
-    'stratified' : True,
-    'random_seed' : 42,
+    'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
+    'stratified' : 'image', # 'random', 'zone', 'image'
+    'random_seed' : 3,
     'splitting' : [0.6, 0.2, 0.2],
     'bs': 16,
 }
 
 model_settings = {
     'encoder_name': "efficientnet-b7",
-    'encoder_weights':'imagenet', #"imagenet" or None
+    'encoder_weights': None, #"imagenet" or None
     'in_channels': 4,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     }
 
 training_settings = {
-    'training': False,
+    'training': True,
     'lr': 1e-4,
     'criterion': 'Dice', #Dice or CrossEntropy
     'optimizer': 'Adam',
@@ -49,12 +50,12 @@ training_settings = {
 }
 
 plotting_settings = {
-    'plot_test': False,
+    'plot_test': True,
     'pred_plot_path': f'../../{config_name}/figures/test_preds.png',
     'losses_path': f'../../{config_name}/figures/losses.png',
     'mious_path': f'../../{config_name}/figures/mious.png',
     'nb_plots': 6,
-    'my_colors_map': {1: '#789262', 2: '#ff4500', 3: '#006400', 4: '#00ff00', 5: '#555555', 6: '#8a2be2'},
+    'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
     'confusion_matrix_path': f'../../{config_name}/figures/confusion_matrix.png',
 }
 

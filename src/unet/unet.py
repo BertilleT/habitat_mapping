@@ -36,21 +36,45 @@ print(f'Splitting data: {data_loading_settings["splitting"]}')
 print(f'Stratified: {data_loading_settings["stratified"]}')
 print(f'Batch size: {data_loading_settings["bs"]}')
 
-train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
-print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
+train_paths, val_paths, test_paths, train_zones, val_zones, test_zones = load_data_paths(**data_loading_settings)
+#print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
 train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
-'''# Sanity check of the dataloader
-for img, msk in train_dl:
-    #get unique values of masks 
-    print('Unique values of mask:', torch.unique(msk))'''
 
+# print size of train, val and test and proportion it rperesents compared to the total size of the dataset
+print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
+print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
 
+# call classes_balance on train_dl, val_dl and test_dl
+'''train_cl_balance = classes_balance(train_zones, data_loading_settings['path_pixels_by_zone'])
+print('Train classes balance:', train_cl_balance)
+val_cl_balance = classes_balance(val_zones, data_loading_settings['path_pixels_by_zone'])
+print('Validation classes balance:', val_cl_balance)
+test_cl_balance = classes_balance(test_zones, data_loading_settings['path_pixels_by_zone'])
+print('Test classes balance:', test_cl_balance)'''
+sys.stdout.flush()
+print('Checking classes balance of train')
+train_classes = check_classes_balance(train_dl)
+print(train_classes)
+val_classes = check_classes_balance(val_dl)
+print(val_classes)
+test_classes = check_classes_balance(test_dl)
+print(test_classes)
+#sum values from train, val and test for each class
+all_classes = train_classes + val_classes + test_classes
+tot = sum(all_classes)
+all_classes = [x/tot for x in all_classes]
+print("Percentage of each class in the whole dataset: ", all_classes)
+sys.stdout.flush()
 
+class_balance_df = pd.DataFrame({'Train': train_classes, 'Val': val_classes, 'Test': test_classes})
+class_balance_df.sort_index(inplace=True)
+print(class_balance_df)
+sys.stdout.flush()
 ## MODEL
 print('Creating model...')
 print('Model settings:')
@@ -136,12 +160,12 @@ if training_settings['training']:
         model.eval()
         with torch.no_grad():
             print('Validation')
-            val_loss, val_mIoU = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'val')
+            val_loss, val_mIoU = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid')
             validation_losses.append(val_loss)
             validation_miou.append(val_mIoU)
 
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train loss {train_loss:.4f}, val loss {val_loss:.4f}')
-        print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train mIoU {train_mIoU:.4f}, val mIoU {val_mIoU:.4f}')
+        print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train mIoU {tr_miou:.4f}, val mIoU {val_mIoU:.4f}')
         if val_loss < best_val_loss:
             count = 0
             best_val_loss = val_loss
@@ -191,9 +215,10 @@ print(f'Test mIoU: {metrics["mIoU"]}')
 print(f'Test mF1: {metrics["mF1"]}')
 #plot confusion matrix and save it
 confusion_matrix = metrics['confusion_matrix']
-confusion_matrix_normalized = confusion_matrix#.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
-sns.set(font_scale=0.8)
+confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
+#sns.set(font_scale=0.8)
 plt.figure(figsize=(10, 10))
+
 ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
 #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 plt.xlabel('Predicted labels')
