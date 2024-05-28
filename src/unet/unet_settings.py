@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ## SETTINGS
-config_name = 'unet_256_l1/stratified_shuffling_by_image_seed3'
+config_name = 'unet_256_l1/stratified_shuffling_by_image_seed1'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/figures').mkdir(exist_ok=True)
@@ -20,9 +20,11 @@ data_loading_settings = {
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
     'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
     'stratified' : 'image', # 'random', 'zone', 'image'
-    'random_seed' : 3,
+    'random_seed' : 1,
     'splitting' : [0.6, 0.2, 0.2],
     'bs': 16,
+    'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
+    'img_ids_by_set': Path(f'../../{config_name}/img_ids_by_set.csv'),
 }
 
 model_settings = {
@@ -34,11 +36,11 @@ model_settings = {
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch23.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     }
 
 training_settings = {
-    'training': True,
+    'training': False,
     'lr': 1e-4,
     'criterion': 'Dice', #Dice or CrossEntropy
     'optimizer': 'Adam',

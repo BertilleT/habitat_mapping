@@ -81,9 +81,18 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)
         n = len(zone_ids)
-        train_zone_ids = zone_ids[:int(0.55*n)]
-        val_zone_ids = zone_ids[int(0.55*n):int(0.79*n)] 
-        test_zone_ids = zone_ids[int(0.79*n):]
+        train_zone_ids = zone_ids[:int(0.6*n)] #0.55
+        val_zone_ids = zone_ids[int(0.6*n):int(0.8*n)] #0.79
+        test_zone_ids = zone_ids[int(0.8*n):]
+        train_zone_ids_str = ','.join(train_zone_ids)
+        val_zone_ids_str = ','.join(val_zone_ids)
+        test_zone_ids_str = ','.join(test_zone_ids)
+        #save to csv file train_zone_ids = [...], val_zone_ids = [...], test_zone_ids = [...]
+        my_dict = {'train_img_ids': train_zone_ids_str, 'val_img_ids': val_zone_ids_str, 'test_img_ids': test_zone_ids_str}
+        # from dict to df. Each k dict is a riw in df. df with ione single oclumn
+        df = pd.DataFrame(list(my_dict.items()), columns=['set', 'img_ids'])
+        df.to_csv(kwargs['img_ids_by_set'])
+
         train_paths = []
         val_paths = []
         test_paths = []
@@ -93,7 +102,7 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.
             val_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
         for zone_id in test_zone_ids:
             test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
-    return train_paths, val_paths, test_paths, train_zone_ids, val_zone_ids, test_zone_ids
+    return train_paths, val_paths, test_paths
   
 def IoU_F1_from_confmatrix(conf_matrix):
     ious = {c: 0 for c in range(conf_matrix.shape[0])}
@@ -159,7 +168,6 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
         running_loss += loss.item()
         out = torch.argmax(out, dim=1)
         out = out.int() #int means int32 on cpu and int64 on gpu
-        print('')
         patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
 
     sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)

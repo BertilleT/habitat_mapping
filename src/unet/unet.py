@@ -36,7 +36,7 @@ print(f'Splitting data: {data_loading_settings["splitting"]}')
 print(f'Stratified: {data_loading_settings["stratified"]}')
 print(f'Batch size: {data_loading_settings["bs"]}')
 
-train_paths, val_paths, test_paths, train_zones, val_zones, test_zones = load_data_paths(**data_loading_settings)
+train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
 #print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
 train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
@@ -49,14 +49,8 @@ test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=Fa
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
 
-# call classes_balance on train_dl, val_dl and test_dl
-'''train_cl_balance = classes_balance(train_zones, data_loading_settings['path_pixels_by_zone'])
-print('Train classes balance:', train_cl_balance)
-val_cl_balance = classes_balance(val_zones, data_loading_settings['path_pixels_by_zone'])
-print('Validation classes balance:', val_cl_balance)
-test_cl_balance = classes_balance(test_zones, data_loading_settings['path_pixels_by_zone'])
-print('Test classes balance:', test_cl_balance)'''
-sys.stdout.flush()
+# stotre train_imgs_id = [img_id1, img_id2, ...]. Zone_id can be found 
+'''sys.stdout.flush()
 print('Checking classes balance of train')
 train_classes = check_classes_balance(train_dl)
 print(train_classes)
@@ -64,16 +58,20 @@ val_classes = check_classes_balance(val_dl)
 print(val_classes)
 test_classes = check_classes_balance(test_dl)
 print(test_classes)
-#sum values from train, val and test for each class
-all_classes = train_classes + val_classes + test_classes
-tot = sum(all_classes)
-all_classes = [x/tot for x in all_classes]
-print("Percentage of each class in the whole dataset: ", all_classes)
-sys.stdout.flush()
 
-class_balance_df = pd.DataFrame({'Train': train_classes, 'Val': val_classes, 'Test': test_classes})
-class_balance_df.sort_index(inplace=True)
-print(class_balance_df)
+# turn dict to pandas df
+balance_classes = pd.DataFrame(train_classes.items(), columns=['class', 'train'])
+balance_classes['val'] = balance_classes['class'].map(val_classes)
+balance_classes['test'] = balance_classes['class'].map(test_classes)
+balance_classes['total'] = balance_classes['train'] + balance_classes['val'] + balance_classes['test']
+balance_classes = balance_classes.set_index('class')
+
+for col in balance_classes.columns:
+    balance_classes[col] = round(balance_classes[col]*100 / balance_classes[col].sum(), 2)
+print(balance_classes)
+# save df to csv
+balance_classes.to_csv(data_loading_settings['classes_balance'], index=False)'''
+
 sys.stdout.flush()
 ## MODEL
 print('Creating model...')
@@ -134,14 +132,14 @@ if training_settings['training']:
         df = pd.read_csv(training_settings['losses_mious_path'])
         training_losses = df['training_losses'].tolist()
         validation_losses = df['validation_losses'].tolist()
-        # load iou
-        df_2 = pd.read_csv(training_settings['iou_path'])
-        training_miou = df_2['training_miou'].tolist()
-        validation_miou = df_2['validation_miou'].tolist()
+        training_miou = df['training_miou'].tolist()
+        validation_miou = df['validation_miou'].tolist()
 
         best_val_loss = min(validation_losses)
         print('training_losses: ', training_losses)
         print('validation_losses: ', validation_losses)
+        print('training_miou: ', training_miou)
+        print('validation_miou: ', validation_miou)
         print('best_val_loss', best_val_loss)
         print('Losses and iou loaded')
 
@@ -196,7 +194,7 @@ if training_settings['training']:
         param.to(device)
 
 else: 
-    #plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
+    plot_losses_ious(training_settings['losses_mious_path'], plotting_settings['losses_path'], plotting_settings['mious_path'])
     model.to(device)
     model.load_state_dict(torch.load(model_settings['path_to_best_model']))
     print('Model ', model_settings['path_to_best_model'], ' loaded')
