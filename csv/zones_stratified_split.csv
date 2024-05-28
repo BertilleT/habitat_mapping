@@ -1,4 +1,4 @@
-,set,zone_ids
+,set,img_ids
 0, train_zone_ids, ['zone171', 'zone116', 'zone106', 'zone67', 'zone169', 'zone12', 'zone44',
  'zone73', 'zone161', 'zone11', 'zone84', 'zone85', 'zone100', 'zone63',
  'zone148', 'zone129', 'zone133', 'zone65', 'zone22', 'zone78', 'zone120',
