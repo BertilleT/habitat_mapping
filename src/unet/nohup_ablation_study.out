@@ -1,0 +1,266 @@
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2, 0.2]
+Stratified: random
+Batch size: 16
+Train: 6397 images, Val: 2133 images, Test: 2133 images
+Train: 59.99%, Val: 20.00%, Test: 20.00%
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/bertille/miniconda3/envs/ecomed_venv/lib/python3.12/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: None
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Training...
+Epoch 1/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 1/200: train loss 0.6973, val loss 0.8031
+Epoch 1/200: train mIoU 0.2146, val mIoU 0.0694
+Epoch 2/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 2/200: train loss 0.6014, val loss 0.5698
+Epoch 2/200: train mIoU 0.2755, val mIoU 0.3066
+Epoch 3/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 3/200: train loss 0.5627, val loss 0.5308
+Epoch 3/200: train mIoU 0.2992, val mIoU 0.3433
+Epoch 4/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 4/200: train loss 0.5353, val loss 0.5431
+Epoch 4/200: train mIoU 0.3185, val mIoU 0.3286
+Epoch 5/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 5/200: train loss 0.5187, val loss 0.5005
+Epoch 5/200: train mIoU 0.3312, val mIoU 0.3672
+Epoch 6/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 6/200: train loss 0.5115, val loss 0.4937
+Epoch 6/200: train mIoU 0.3387, val mIoU 0.3751
+Epoch 7/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 7/200: train loss 0.4932, val loss 0.5112
+Epoch 7/200: train mIoU 0.3508, val mIoU 0.3656
+Epoch 8/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 8/200: train loss 0.4880, val loss 0.4868
+Epoch 8/200: train mIoU 0.3621, val mIoU 0.3837
+Epoch 9/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 9/200: train loss 0.4761, val loss 0.4696
+Epoch 9/200: train mIoU 0.3748, val mIoU 0.4062
+Epoch 10/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 10/200: train loss 0.4686, val loss 0.5004
+Epoch 10/200: train mIoU 0.3757, val mIoU 0.3771
+Epoch 11/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 11/200: train loss 0.4701, val loss 0.4723
+Epoch 11/200: train mIoU 0.3805, val mIoU 0.3989
+Epoch 12/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 12/200: train loss 0.4631, val loss 0.4683
+Epoch 12/200: train mIoU 0.3837, val mIoU 0.4031
+Epoch 13/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 13/200: train loss 0.4592, val loss 0.4525
+Epoch 13/200: train mIoU 0.3869, val mIoU 0.4313
+Epoch 14/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 14/200: train loss 0.4548, val loss 0.4641
+Epoch 14/200: train mIoU 0.3951, val mIoU 0.4132
+Epoch 15/200
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 15/200: train loss 0.4440, val loss 0.4437
+Epoch 15/200: train mIoU 0.4051, val mIoU 0.4375

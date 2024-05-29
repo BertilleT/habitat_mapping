@@ -12,12 +12,13 @@ import seaborn as sns
 
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
         self.imgs = [self.img_dir / msk_path.parts[-2] / msk_path.name.replace('msk', 'img').replace('l123/', '') for msk_path in self.msks]
-                
+        self.channels = channels
+
     def __len__(self):
         return len(self.imgs)
     
@@ -33,12 +34,15 @@ class EcomedDataset(Dataset):
 
         with rasterio.open(img_path) as src:
             img = src.read()
+            if self.channels == 3:
+                img = img[:3]
             # turn to values betw 0 and 1 and to float
             # linear normalisation with p2 and p98
             p2, p98 = np.percentile(img, (2, 98))
             img = np.clip(img, p2, p98)
             img = (img - p2) / (p98 - p2)
             img = img.astype(np.float32)
+        
         return img, msk_mapped
     
 def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.6, 0.2, 0.2], **kwargs):
@@ -179,7 +183,11 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
 def valid_test(model, dl, criterion, device, nb_classes, valid_or_test):
     running_loss = 0.0
     patch_confusion_matrices = []
+    patch_confusion_matrices_1c = []
+    patch_confusion_matrices_multic = []
     for i, (img, msk) in enumerate(dl):
+        batch_confusion_matrices_1c = []
+        batch_confusion_matrices_multic = []
         if i % 50 == 0:
             print( 'Batch:', i, ' over ', len(dl))
         img, msk = img.to(device), msk.to(device)
@@ -193,16 +201,42 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test):
         #print("y_true", msk.flatten().cpu().numpy())
         #print("y_pred", out.flatten().cpu().numpy())
         patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
+        '''# for each img and mask in the batch, check if the msk is composed of one single class
+        for i in range(len(msk)):
+            if len(np.unique(msk[i].cpu())) == 1:
+                batch_confusion_matrices_1c.append(confusion_matrix(msk[i].flatten().cpu().numpy(), out[i].flatten().cpu().numpy(), labels=range(nb_classes)))
+            else:
+                batch_confusion_matrices_multic.append(confusion_matrix(msk[i].flatten().cpu().numpy(), out[i].flatten().cpu().numpy(), labels=range(nb_classes)))
         
+        sum_batch_confusion_matrices_1c = np.sum(batch_confusion_matrices_1c, axis=0)
+        #print('sum_batch_confusion_matrices_1c: ', sum_batch_confusion_matrices_1c)
+        sum_batch_confusion_matrices_multic = np.sum(batch_confusion_matrices_multic, axis=0)
+        #print('sum_batch_confusion_matrices_multic: ', sum_batch_confusion_matrices_multic)
+
+        patch_confusion_matrices_1c.append(sum_batch_confusion_matrices_1c)
+        patch_confusion_matrices_multic.append(sum_batch_confusion_matrices_multic)'''
     sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
+    '''sum_confusion_matrix_1c = np.sum(patch_confusion_matrices_1c, axis=0)
+    sum_confusion_matrix_multic = np.sum(patch_confusion_matrices_multic, axis=0)'''
+
     IoU_by_class, F1_by_class = IoU_F1_from_confmatrix(sum_confusion_matrix)
+    '''IoU_by_class_1c, F1_by_class_1c = IoU_F1_from_confmatrix(sum_confusion_matrix_1c)
+    IoU_by_class_multic, F1_by_class_multic = IoU_F1_from_confmatrix(sum_confusion_matrix_multic)'''
     # mean of IoU_by_class for all classes
     #remove nan from IoU_by_class and F1_by_class
     IoU_by_class = {k: v for k, v in IoU_by_class.items() if not np.isnan(v)}
+    '''IoU_by_class_1c = {k: v for k, v in IoU_by_class_1c.items() if not np.isnan(v)}
+    IoU_by_class_multic = {k: v for k, v in IoU_by_class_multic.items() if not np.isnan(v)}'''
     F1_by_class = {k: v for k, v in F1_by_class.items() if not np.isnan(v)}
+    '''F1_by_class_1c = {k: v for k, v in F1_by_class_1c.items() if not np.isnan(v)}
+    F1_by_class_multic = {k: v for k, v in F1_by_class_multic.items() if not np.isnan(v)}'''
     
     mIoU = np.mean(list(IoU_by_class.values()))
+    ''' mIoU_1c = np.mean(list(IoU_by_class_1c.values()))
+    mIoU_multic = np.mean(list(IoU_by_class_multic.values()))'''
     mF1 = np.mean(list(F1_by_class.values()))
+    ''' mF1_1c = np.mean(list(F1_by_class_1c.values()))
+    mF1_multic = np.mean(list(F1_by_class_multic.values()))'''
 
     metrics = {
         'confusion_matrix': sum_confusion_matrix,
@@ -212,6 +246,26 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test):
         'mF1': mF1
     }
 
+    '''metrics_1c = {
+        'confusion_matrix': sum_confusion_matrix_1c,
+        'IoU_by_class': IoU_by_class_1c,
+        'F1_by_class': F1_by_class_1c,
+        'mIoU': mIoU_1c,
+        'mF1': mF1_1c
+    }
+
+    metrics_multic = {
+        'confusion_matrix': sum_confusion_matrix_multic,
+        'IoU_by_class': IoU_by_class_multic,
+        'F1_by_class': F1_by_class_multic,
+        'mIoU': mIoU_multic,
+        'mF1': mF1_multic
+    }
+    
+    print('Metrics for single labelled patches')
+    print(metrics_1c)
+    print('Metrics for multi labelled patches')
+    print(metrics_multic)'''
     if valid_or_test == 'valid':
         return running_loss / len(dl), mIoU
     else:

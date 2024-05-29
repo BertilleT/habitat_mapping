@@ -4,3 +4,4 @@ old_models/
 old_unet_256_l1
 unet_256_l1/random_shuffling_seed1/models/
 unet_256_l1/stratified_shuffling_by_image_seed1/models/
+unet_256_l1/random_shuffling_seed1_ablation_IR/models/

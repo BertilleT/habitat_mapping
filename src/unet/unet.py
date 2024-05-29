@@ -38,17 +38,21 @@ print(f'Batch size: {data_loading_settings["bs"]}')
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
 #print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
-train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
+train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
-val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
+val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
-test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'])
+test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
 
+# print shape of images and masks
+print('Shape of images and masks:')
+img, msk = next(iter(train_dl))
+print('Image shape:', img.shape)
 # stotre train_imgs_id = [img_id1, img_id2, ...]. Zone_id can be found 
 '''sys.stdout.flush()
 print('Checking classes balance of train')
