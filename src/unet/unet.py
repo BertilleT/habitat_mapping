@@ -13,6 +13,8 @@ from torch.utils.data import DataLoader
 import segmentation_models_pytorch as smp
 import gc
 
+from datetime import datetime
+
 from unet_utils import *
 from unet_settings import *
 
@@ -153,6 +155,8 @@ if training_settings['training']:
             continue
         
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}')
+        # get time
+        now = datetime.now()
         model.to(device)
         model.train()
         
@@ -185,6 +189,10 @@ if training_settings['training']:
         df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_miou': training_miou, 'validation_miou': validation_miou})
         df.to_csv(training_settings['losses_mious_path'])
         sys.stdout.flush()
+
+        # time
+        # one epoch time
+        print('Time:', datetime.now()-now)
             
     # save last model state and optim
     torch.save(model.state_dict(), model_settings['path_to_last_model'])

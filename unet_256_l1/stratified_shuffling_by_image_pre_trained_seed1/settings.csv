@@ -1,2 +1,0 @@
-patch_size,level,stratified,random_seed,splitting,bs,encoder_name,encoder_weights,in_channels,classes,training,lr,criterion,optimizer,nb_epochs,early_stopping,patience
-256,1,image,1,"[0.6, 0.2, 0.2]",16,efficientnet-b7,imagenet,4,6,True,0.0001,Dice,Adam,200,True,30
