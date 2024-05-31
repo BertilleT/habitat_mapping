@@ -93,8 +93,8 @@ model = smp.Unet(
 )
 
 if training_settings['restart_training'] is not None:
-    model.load_state_dict(torch.load(model_settings['path_to_intermed_model'] + f'_epoch{training_settings["restart_training"]}.pt'))
-    print('Model from epoch', training_settings['restart_training'], ' loaded')
+    model.load_state_dict(torch.load(model_settings['path_to_last_model']))
+    print('Model from last epoch', training_settings['restart_training'], ' loaded')
 model.to(device)
 
 # OPTIMIZER
@@ -115,7 +115,7 @@ if training_settings['optimizer'] == 'Adam':
 
 if training_settings['restart_training'] is not None:
     torch.cuda.empty_cache()
-    optimizer.load_state_dict(torch.load(model_settings['path_to_intermed_optim'] + f'_epoch{training_settings["restart_training"]}.pt'))
+    optimizer.load_state_dict(torch.load(model_settings['path_to_last_optim']))
     #optimizer_to(optimizer,device)
     #device = next(optimizer.param_groups[0]['params']).device
     #print("Optimizer is running on:", device)
@@ -223,6 +223,17 @@ print(f'Test IoU by class: {metrics["IoU_by_class"]}')
 print(f'Test F1 by class: {metrics["F1_by_class"]}')
 print(f'Test mIoU: {metrics["mIoU"]}')
 print(f'Test mF1: {metrics["mF1"]}')
+#save metrics to csv
+# add one key value to metrics IouBy clas called mIoU with the value of mIoU
+metrics['IoU_by_class']['mean'] = metrics['mIoU']
+#same for F1
+metrics['F1_by_class']['mean'] = metrics['mF1']
+# from metrics['IoU_by_class'] and metrics['F1_by_class'] create a df and save it to csv
+iou_df = pd.DataFrame(metrics['IoU_by_class'].items(), columns=['class', 'IoU'])
+iou_df.to_csv(plotting_settings['IoU_path'], index=False)
+f1_df = pd.DataFrame(metrics['F1_by_class'].items(), columns=['class', 'F1'])
+f1_df.to_csv(plotting_settings['F1_path'], index=False)
+
 #plot confusion matrix and save it
 confusion_matrix = metrics['confusion_matrix']
 confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]

@@ -5,4 +5,6 @@ old_unet_256_l1
 unet_256_l1/0_random_shuffling_seed1/models/
 unet_256_l1/1_stratified_shuffling_by_image_seed1/models/
 unet_256_l1/2_stratified_shuffling_by_zone_seed1/models/
+unet_256_l1/4_stratified_shuffling_by_image_seed1_pretrained/models/
+unet_256_l1/5_stratified_shuffling_by_zone_seed1_pretrained/models/
 unet_256_l1/9_random_shuffling_seed1_ablation_IR/models/
