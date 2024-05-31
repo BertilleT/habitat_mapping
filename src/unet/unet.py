@@ -242,6 +242,9 @@ metrics['IoU_by_class']['mean'] = metrics['mIoU']
 #same for F1
 metrics['F1_by_class']['mean'] = metrics['mF1']
 # from metrics['IoU_by_class'] and metrics['F1_by_class'] create a df and save it to csv
+# save only 2 decimals for IoU and F1
+metrics['IoU_by_class'] = {k: round(v, 2) for k, v in metrics['IoU_by_class'].items()}
+metrics['F1_by_class'] = {k: round(v, 2) for k, v in metrics['F1_by_class'].items()}
 iou_df = pd.DataFrame(metrics['IoU_by_class'].items(), columns=['class', 'IoU'])
 iou_df.to_csv(plotting_settings['IoU_path'], index=False)
 f1_df = pd.DataFrame(metrics['F1_by_class'].items(), columns=['class', 'F1'])
