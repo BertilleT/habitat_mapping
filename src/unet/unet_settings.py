@@ -20,7 +20,7 @@ data_loading_settings = {
     'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/'),
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
     'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
-    'stratified' : 'random', # 'random', 'zone', 'image'
+    'stratified' : 'zone', # 'random', 'zone', 'image'
     'random_seed' : 1,
     'splitting' : [0.6, 0.2, 0.2],
     'bs': 16,
@@ -38,7 +38,7 @@ model_settings = {
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch54.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch19.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     }
 
 training_settings = {
