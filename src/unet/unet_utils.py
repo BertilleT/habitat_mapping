@@ -9,15 +9,17 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
-
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1, channels=4):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
         self.imgs = [self.img_dir / msk_path.parts[-2] / msk_path.name.replace('msk', 'img').replace('l123/', '') for msk_path in self.msks]
         self.channels = channels
+        self.transform = transform
 
     def __len__(self):
         return len(self.imgs)
@@ -31,7 +33,6 @@ class EcomedDataset(Dataset):
             group_under_represented_classes = {0: 5, 1: 5, 2: 5, 3: 0, 4: 1, 5: 2, 6: 5, 7: 3, 8: 4, 9: 5}
             group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
             msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
-
         with rasterio.open(img_path) as src:
             img = src.read()
             if self.channels == 3:
@@ -42,7 +43,14 @@ class EcomedDataset(Dataset):
             img = np.clip(img, p2, p98)
             img = (img - p2) / (p98 - p2)
             img = img.astype(np.float32)
-        
+            
+        if self.transform:
+            augmented = self.transform(image=img[0:3].transpose(1, 2, 0), mask=msk_mapped)
+            aug_img = augmented['image']
+            msk_mapped = augmented['mask']
+            # add fourth channel from img to img
+            img = np.concatenate((aug_img, img[3:4]), axis=0)
+
         return img, msk_mapped
     
 def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.6, 0.2, 0.2], **kwargs):
