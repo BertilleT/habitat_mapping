@@ -21,13 +21,122 @@ Training settings:
 Learning rate: 0.0001
 Criterion: Dice
 Optimizer: Adam
-Traceback (most recent call last):
-  File "unet.py", line 224, in <module>
-    model.load_state_dict(torch.load(model_settings['path_to_best_model']))
-  File "/home/bertille/.local/lib/python3.8/site-packages/torch/serialization.py", line 997, in load
-    with _open_file_like(f, 'rb') as opened_file:
-  File "/home/bertille/.local/lib/python3.8/site-packages/torch/serialization.py", line 444, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-  File "/home/bertille/.local/lib/python3.8/site-packages/torch/serialization.py", line 425, in __init__
-    super().__init__(open(name, mode))
-FileNotFoundError: [Errno 2] No such file or directory: '../../unet_256_l1/0_random_shuffling_seed1/models/unet_intermed_epoch54.pt'
+Training...
+Epoch 1/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 1/100: train loss 0.6648, val loss 0.8607
+Epoch 1/100: train mIoU 0.2365, val mIoU 0.0381
+Time: 0:13:16.665864
+Epoch 2/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 2/100: train loss 0.5665, val loss 0.5192
+Epoch 2/100: train mIoU 0.3003, val mIoU 0.3638
+Time: 0:13:13.911003
+Epoch 3/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 3/100: train loss 0.5397, val loss 0.4807
+Epoch 3/100: train mIoU 0.3288, val mIoU 0.3907
+Time: 0:13:12.772597
+Epoch 4/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 4/100: train loss 0.5029, val loss 0.4654
+Epoch 4/100: train mIoU 0.3482, val mIoU 0.4134
+Time: 0:13:14.147264
+Epoch 5/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 5/100: train loss 0.4921, val loss 0.5322
+Epoch 5/100: train mIoU 0.3596, val mIoU 0.3401
+Time: 0:13:12.690492
+Epoch 6/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 6/100: train loss 0.4845, val loss 0.4643
+Epoch 6/100: train mIoU 0.3707, val mIoU 0.4112
+Time: 0:13:12.546838
+Epoch 7/100
+Training
+Batch: 0  over  400
+Batch: 50  over  400
+Batch: 100  over  400
+Batch: 150  over  400
+Batch: 200  over  400
+Batch: 250  over  400
+Batch: 300  over  400
+Batch: 350  over  400
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 7/100: train loss 0.4681, val loss 0.4376
+Epoch 7/100: train mIoU 0.3827, val mIoU 0.4323
