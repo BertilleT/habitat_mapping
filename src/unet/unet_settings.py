@@ -46,9 +46,10 @@ training_settings = {
     'lr': 1e-4,
     'criterion': 'Dice', #Dice or CrossEntropy
     'optimizer': 'Adam',
-    'nb_epochs': 40, 
+    'nb_epochs': 100, 
     'early_stopping': True,
     'patience': 15,
+    'restart_training': 54, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
     'losses_mious_path': f'../../{config_name}/metrics_train_val/losses_mious.csv',
     'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
 }
