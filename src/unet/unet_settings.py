@@ -7,7 +7,8 @@ import pandas as pd
 config_name = 'unet_256_l1/7_stratified_shuffling_by_zone_seed1_data_augmentation'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
-Path(f'../../{config_name}/figures').mkdir(exist_ok=True)
+Path(f'../../{config_name}/metrics_training').mkdir(exist_ok=True)
+Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
 
 patch_level_param = {
     'patch_size': 256, 
@@ -22,7 +23,7 @@ data_loading_settings = {
     'stratified' : 'zone', # 'random', 'zone', 'image'
     'random_seed' : 1,
     'splitting' : [0.6, 0.2, 0.2],
-    'bs': 16,
+    'bs': 8,
     'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
     'img_ids_by_set': Path(f'../../{config_name}/img_ids_by_set.csv'),
     'data_augmentation': True,
@@ -30,14 +31,14 @@ data_loading_settings = {
 
 model_settings = {
     'encoder_name': "efficientnet-b7",
-    'encoder_weights': None, #"imagenet" or None
+    'encoder_weights': "imagenet", #"imagenet" or None
     'in_channels': 4,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch43.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch7.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     }
 
 training_settings = {
@@ -54,12 +55,14 @@ training_settings = {
 
 plotting_settings = {
     'plot_test': True,
-    'pred_plot_path': f'../../{config_name}/figures/test_preds.png',
-    'losses_path': f'../../{config_name}/figures/losses.png',
-    'mious_path': f'../../{config_name}/figures/mious.png',
+    'losses_path': f'../../{config_name}/metrics_train_val/losses.png',
+    'mious_path': f'../../{config_name}/metrics_train_val/mious_train_val.png',
     'nb_plots': 6,
     'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
-    'confusion_matrix_path': f'../../{config_name}/figures/confusion_matrix.png',
+    'confusion_matrix_path': f'../../{config_name}/metrics_test/confusion_matrix.png',
+    'IoU_path': f'../../{config_name}/metrics_test/IoUs.csv',
+    'F1_path': f'../../{config_name}/metrics_test/F1s.csv',
+    'pred_plot_path': f'../../{config_name}/metrics_test/test_preds.png',
 }
 
 # Save important settings in a csv file: 
