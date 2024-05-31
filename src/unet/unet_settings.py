@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ## SETTINGS
-config_name = 'unet_256_l1/stratified_shuffling_by_zone_seed1'
+config_name = 'unet_256_l1/7_stratified_shuffling_by_zone_seed1_data_augmentation'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/figures').mkdir(exist_ok=True)
@@ -25,6 +25,7 @@ data_loading_settings = {
     'bs': 16,
     'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
     'img_ids_by_set': Path(f'../../{config_name}/img_ids_by_set.csv'),
+    'data_augmentation': True,
 }
 
 model_settings = {
@@ -41,12 +42,12 @@ model_settings = {
 
 training_settings = {
     'training': True,
-    'lr': 1e-3,
+    'lr': 1e-4,
     'criterion': 'Dice', #Dice or CrossEntropy
     'optimizer': 'Adam',
-    'nb_epochs': 20, 
+    'nb_epochs': 40, 
     'early_stopping': True,
-    'patience': 10,
+    'patience': 15,
     'losses_mious_path': f'../../{config_name}/losses_mious.csv',
     'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
 }
