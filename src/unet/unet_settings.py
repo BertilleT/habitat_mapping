@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ## SETTINGS
-config_name = 'unet_256_l1/0_random_shuffling_seed1'
+config_name = 'unet_256_l1/3_random_shuffling_pre_trained_seed1'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
@@ -31,7 +31,7 @@ data_loading_settings = {
 
 model_settings = {
     'encoder_name': "efficientnet-b7",
-    'encoder_weights': None, #"imagenet" or None
+    'encoder_weights': "imagenet", #"imagenet" or None
     'in_channels': 4,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
