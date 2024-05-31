@@ -7,8 +7,8 @@ import pandas as pd
 config_name = 'unet_256_l1/0_random_shuffling_seed1'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
-Path(f'../../{config_name}/metrics_training').mkdir(exist_ok=True)
 Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
+Path(f'../../{config_name}/metrics_train_val').mkdir(exist_ok=True)
 
 patch_level_param = {
     'patch_size': 256, 
@@ -42,15 +42,16 @@ model_settings = {
     }
 
 training_settings = {
-    'training': True,
+    'training': False,
     'lr': 1e-4,
     'criterion': 'Dice', #Dice or CrossEntropy
     'optimizer': 'Adam',
     'nb_epochs': 100, 
     'early_stopping': True,
     'patience': 15,
-    'losses_mious_path': f'../../{config_name}/losses_mious.csv',
     'restart_training': 54, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
+    'losses_mious_path': f'../../{config_name}/metrics_train_val/losses_mious.csv',
+    'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
 }
 
 plotting_settings = {
