@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ## SETTINGS
-config_name = 'unet_256_l1/3_random_shuffling_pre_trained_seed1'
+config_name = 'unet_256_l1/8_stratified_shuffling_by_image_seed1_data_augmentation'
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
@@ -20,36 +20,36 @@ data_loading_settings = {
     'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/'),
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
     'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
-    'stratified' : 'zone', # 'random', 'zone', 'image'
+    'stratified' : 'image', # 'random', 'zone', 'image'
     'random_seed' : 1,
     'splitting' : [0.6, 0.2, 0.2],
     'bs': 16,
     'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
     'img_ids_by_set': Path(f'../../{config_name}/img_ids_by_set.csv'),
-    'data_augmentation': False,
+    'data_augmentation': True,
 }
 
 model_settings = {
     'encoder_name': "efficientnet-b7",
-    'encoder_weights': "imagenet", #"imagenet" or None
+    'encoder_weights': None, #"imagenet" or None
     'in_channels': 4,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
-    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch19.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
+    'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch9.pt'#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     }
 
 training_settings = {
-    'training': False,
+    'training': True,
     'lr': 1e-4,
     'criterion': 'Dice', #Dice or CrossEntropy
     'optimizer': 'Adam',
-    'nb_epochs': 100, 
+    'nb_epochs': 80, 
     'early_stopping': True,
     'patience': 15,
-    'restart_training': 54, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
+    'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
     'losses_mious_path': f'../../{config_name}/metrics_train_val/losses_mious.csv',
     'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
 }
