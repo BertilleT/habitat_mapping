@@ -6,19 +6,20 @@ import pandas as pd
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
 
-config_name = 'unet_256_l1/11_stratified_shuffling_by_image_seed3'
-stratified = 'image' # 'random', 'zone', 'image'
+config_name = 'unet_256_l1/12_stratified_shuffling_by_zone_seed3'
+stratified = 'zone' # 'random', 'zone', 'image'
 random_seed = 3
 data_augmentation = False
 encoder_weights = None #"imagenet" or None
 in_channels = 4
 
-training = False
+training = True
 plot_test = True
 
 bs = 16
 nb_epochs = 50
-best_epoch = 14
+patience = 15
+best_epoch = 1
 
 # -------------------------------------------------------------------------------------------
 seeds_splitting = {'zone': [0.68, 0.83], 'image': [0.55, 0.79], 'random': [0.6, 0.2]}
@@ -66,7 +67,7 @@ training_settings = {
     'optimizer': 'Adam',
     'nb_epochs': nb_epochs,
     'early_stopping': True,
-    'patience': 15,
+    'patience': patience, 
     'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
     'losses_mious_path': f'../../{config_name}/metrics_train_val/losses_mious.csv',
 }
@@ -79,10 +80,10 @@ plotting_settings = {
     #'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
     'my_colors_map': {
         0: '#789262',  # Vert olive (différent de F)
-        1: '#ff4500',  # Rouge
+        1: '#555555',  # Rouge
         2: '#006400',  # Vert foncé
         3: '#00ff00',  # Vert vif
-        4: '#555555',  # Vert gris (différent de E)
+        4: '#ff4500',  # Vert gris (différent de E)
         5: '#8a2be2',  # Violet
     }, 
     'confusion_matrix_path': f'../../{config_name}/metrics_test/confusion_matrix.png',
