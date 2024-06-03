@@ -48,6 +48,7 @@ if data_loading_settings['data_augmentation']:
         ToTensorV2(), 
     ])
 else: 
+    print('No data augmentation')
     transform = None
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
@@ -64,10 +65,9 @@ print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(tes
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
 
 # print shape of images and masks
-print('Shape of images and masks:')
-img, msk = next(iter(train_dl))
-print('Image shape:', img.shape)
-# stotre train_imgs_id = [img_id1, img_id2, ...]. Zone_id can be found 
+#print('Shape of images and masks:')
+#img, msk = next(iter(train_dl))
+#print('Image shape:', img.shape)
 
 '''sys.stdout.flush()
 print('Checking classes balance of train')
@@ -111,28 +111,25 @@ if training_settings['restart_training'] is not None:
 model.to(device)
 
 # OPTIMIZER
-print('Creating optimizer...')
-print('Training settings:')
-print(f'Learning rate: {training_settings["lr"]}')
-print(f'Criterion: {training_settings["criterion"]}')
 if training_settings['criterion'] == 'CrossEntropy':
     criterion = nn.CrossEntropyLoss()
 elif training_settings['criterion'] == 'Dice':
     criterion = smp.losses.DiceLoss(mode='multiclass', eps=0.0000001)
 else:
     raise ValueError('Criterion not implemented')
+if training_settings['training']:
+    print('Creating optimizer...')
+    print('Training settings:')
+    print(f'Learning rate: {training_settings["lr"]}')
+    print(f'Criterion: {training_settings["criterion"]}')
+    print(f'Optimizer: {training_settings["optimizer"]}')
 
-print(f'Optimizer: {training_settings["optimizer"]}')
 if training_settings['optimizer'] == 'Adam':
     optimizer = optim.Adam(model.parameters(), lr=training_settings['lr'])
 
 if training_settings['restart_training'] is not None:
     torch.cuda.empty_cache()
     optimizer.load_state_dict(torch.load(model_settings['path_to_last_optim']))
-    #optimizer_to(optimizer,device)
-    #device = next(optimizer.param_groups[0]['params']).device
-    #print("Optimizer is running on:", device)
-    #print('Optimizer from epoch', training_settings['restart_training'], ' loaded')
 
 ## METRIC
 

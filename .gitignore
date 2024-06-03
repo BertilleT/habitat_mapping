@@ -11,3 +11,4 @@ unet_256_l1/5_stratified_shuffling_by_zone_seed1_pretrained/models/
 unet_256_l1/6_random_shuffling_seed1_ablation_IR/models/
 unet_256_l1/7_stratified_shuffling_by_zone_seed1_data_augmentation/models/
 unet_256_l1/9_random_shuffling_seed1_ablation_IR/models/
+unet_256_l1/11_stratified_shuffling_by_image_seed3/models/

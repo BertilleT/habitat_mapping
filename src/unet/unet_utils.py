@@ -64,38 +64,20 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.
         train_paths = msk_paths[:int(split[0]*n)]
         val_paths = msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
         test_paths = msk_paths[int((split[0]+split[1])*n):]
-    elif stratified == 'zone':
+    elif stratified == 'zone' or stratified == 'image':
         msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
         msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
         # zone_id is zone100_0_0, extract only zone100 using split
-        msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
-        #print(msk_df['zone_id'].unique())
+        if stratified == 'zone':
+            msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
         zone_ids = msk_df['zone_id'].unique()
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)
         n = len(zone_ids)
-        train_zone_ids = zone_ids[:int(0.68*n)] # there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
-        val_zone_ids = zone_ids[int(0.68*n):int(0.83*n)] # 0.67 0.9
-        test_zone_ids = zone_ids[int(0.83*n):]
-        train_paths = []
-        val_paths = []
-        test_paths = []
-        for zone_id in train_zone_ids:
-            train_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
-        for zone_id in val_zone_ids:
-            val_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
-        for zone_id in test_zone_ids:
-            test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
-    elif stratified == 'image':
-        msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
-        msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
-        zone_ids = msk_df['zone_id'].unique()
-        np.random.seed(random_seed)
-        np.random.shuffle(zone_ids)
-        n = len(zone_ids)
-        train_zone_ids = zone_ids[:int(0.6*n)] #0.55
-        val_zone_ids = zone_ids[int(0.6*n):int(0.8*n)] #0.79
-        test_zone_ids = zone_ids[int(0.8*n):]
+        train_zone_ids = zone_ids[:int(split[0]*n)]# there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
+        val_zone_ids = zone_ids[int(split[0]*n):int((split[0]+split[1])*n)] # 0.67 0.9
+        test_zone_ids = zone_ids[int((split[0]+split[1])*n):]
+
         train_zone_ids_str = ','.join(train_zone_ids)
         val_zone_ids_str = ','.join(val_zone_ids)
         test_zone_ids_str = ','.join(test_zone_ids)
@@ -104,7 +86,7 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.
         # from dict to df. Each k dict is a riw in df. df with ione single oclumn
         df = pd.DataFrame(list(my_dict.items()), columns=['set', 'img_ids'])
         df.to_csv(kwargs['img_ids_by_set'])
-
+        
         train_paths = []
         val_paths = []
         test_paths = []
