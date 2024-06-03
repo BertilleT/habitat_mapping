@@ -1632,3 +1632,50 @@ Batch: 50  over  138
 Batch: 100  over  138
 Epoch 22/40: train loss 0.4493, val loss 0.4690
 Epoch 22/40: train mIoU 0.4047, val mIoU 0.2749
+Time: 0:13:15.589852
+Epoch 23/40
+Training
+Batch: 0  over  395
+Batch: 50  over  395
+Batch: 100  over  395
+Batch: 150  over  395
+Batch: 200  over  395
+Batch: 250  over  395
+Batch: 300  over  395
+Batch: 350  over  395
+Validation
+Batch: 0  over  138
+Batch: 50  over  138
+Batch: 100  over  138
+Epoch 23/40: train loss 0.4536, val loss 0.4395
+Epoch 23/40: train mIoU 0.4026, val mIoU 0.3111
+/home/bertille/.local/lib/python3.8/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/bertille/.local/lib/python3.8/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Time: 0:13:14.392055
+Epoch 24/40
+Training
+Batch: 0  over  395
+Batch: 50  over  395
+Batch: 100  over  395
+Batch: 150  over  395
+Batch: 200  over  395
+Batch: 250  over  395
+Batch: 300  over  395
+Batch: 350  over  395
+Validation
+Batch: 0  over  138
+Batch: 50  over  138
+Batch: 100  over  138
+Epoch 24/40: train loss 0.4426, val loss 0.4408
+Epoch 24/40: train mIoU 0.4098, val mIoU 0.3587
+Early stopping at epoch 24
+Testing
+Batch: 0  over  135
+Batch: 50  over  135
+Batch: 100  over  135
+Test IoU by class: {0: 0.1752699482942267, 1: 0.05374385133299135, 2: 0.5858901485511759, 3: 0.19629770669868102, 4: 0.4736441439399631, 5: 0.07808255614784437}
+Test F1 by class: {0: 0.298263302909449, 1: 0.10200553249255995, 2: 0.738878602766312, 3: 0.3281753456510199, 4: 0.6428202437986407, 5: 0.14485450247306741}
+Test mIoU: 0.2604880591608138
+Test mF1: 0.37583292168184146
