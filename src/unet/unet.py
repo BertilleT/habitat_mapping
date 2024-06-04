@@ -258,8 +258,8 @@ ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues
 plt.xlabel('Predicted labels')
 plt.ylabel('True labels')
 plt.title('Normalized confusion matrix')
-plt.savefig(plotting_settings['confusion_matrix_path'])
-'''
+plt.savefig(plotting_settings['confusion_matrix_path'])'''
+
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:
     # plot img, original mask and prediction
@@ -272,4 +272,4 @@ if plotting_settings['plot_test']:
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
-    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'])
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'])

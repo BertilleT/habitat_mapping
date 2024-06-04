@@ -87,6 +87,7 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         # from dict to df. Each k dict is a riw in df. df with ione single oclumn
         df = pd.DataFrame(list(my_dict.items()), columns=['set', 'img_ids'])
         df.to_csv(kwargs['img_ids_by_set'])
+        print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
         
         train_paths = []
         val_paths = []
@@ -280,15 +281,7 @@ def optimizer_to(optim, device):
                     if subparam._grad is not None:
                         subparam._grad.data = subparam._grad.data.to(device)
 
-def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
-    habitats_dict = {
-        0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",
-        1: "Landes fourres et toundras",
-        2: "Bois forets et autres habitats boises",
-        3: "Habitats agricoles horticoles et domestiques régulierement \n ou recemment cultives",
-        4: "Zones baties sites industriels et autres habitats artificiels",
-        5: "Autre: Habitats marins, Habitats cotiers, Eaux de surfaces continentales, \n Habitats continentaux sans vegetation ou à vegetation clairsemee, Autres"
-    }
+def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_dict):
     classes_msk = np.unique(msk)
     legend_colors_msk = [my_colors_map[c] for c in classes_msk]
     custom_cmap_msk = mcolors.ListedColormap(legend_colors_msk)

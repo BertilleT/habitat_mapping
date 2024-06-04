@@ -7,7 +7,7 @@ import pandas as pd
 # -------------------------------------------------------------------------------------------
 test_existing_model = True
 if test_existing_model: 
-    name_setting = '4_random_shuffling_seed1_ablation_IR'
+    name_setting = '0_stratified_shuffling_by_image_seed1'
     #laod all variables from csv best_epoch_to_test
     best_epoch = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
     #remov the space before alla values and name columns
@@ -54,7 +54,7 @@ elif stratified == 'image':
 config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.83], 'image1': [0.55, 0.79], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14]}
+seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
@@ -118,6 +118,14 @@ plotting_settings = {
         3: '#00ff00',  # Vert vif
         4: '#ff4500',  # Rouge
         5: '#8a2be2',  # Violet
+    }, 
+    'habitats_dict' : {
+        0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",
+        1: "Landes fourres et toundras",
+        2: "Bois forets et autres habitats boises",
+        3: "Habitats agricoles horticoles et domestiques régulierement \n ou recemment cultives",
+        4: "Zones baties sites industriels et autres habitats artificiels",
+        5: "Autre: Habitats marins, Habitats cotiers, Eaux de surfaces continentales, \n Habitats continentaux sans vegetation ou à vegetation clairsemee, Autres"
     }, 
     'confusion_matrix_path': f'../../{config_name}/metrics_test/confusion_matrix.png',
     'IoU_path': f'../../{config_name}/metrics_test/IoUs.csv',
