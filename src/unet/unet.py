@@ -225,7 +225,7 @@ else:
         param.to(device)
 
 # TESTING
-'''model.eval()
+model.eval()
 with torch.no_grad():
     print('Testing')
     test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test')
@@ -258,7 +258,7 @@ ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues
 plt.xlabel('Predicted labels')
 plt.ylabel('True labels')
 plt.title('Normalized confusion matrix')
-plt.savefig(plotting_settings['confusion_matrix_path'])'''
+plt.savefig(plotting_settings['confusion_matrix_path'])
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:

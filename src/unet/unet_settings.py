@@ -7,13 +7,12 @@ import pandas as pd
 # -------------------------------------------------------------------------------------------
 test_existing_model = True
 if test_existing_model: 
-    name_setting = '0_stratified_shuffling_by_image_seed1'
+    name_setting = '3_stratified_shuffling_by_image_seed3'
     #laod all variables from csv best_epoch_to_test
     best_epoch = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
     #remov the space before alla values and name columns
     best_epoch.columns = best_epoch.columns.str.strip()
     best_epoch = best_epoch.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
-    print(best_epoch.columns)
     # take the row with same name_setting
     best_epoch = best_epoch[best_epoch['name_setting'] == name_setting]
     #turn each column and value into a variable
@@ -54,7 +53,7 @@ elif stratified == 'image':
 config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14]}
+seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
