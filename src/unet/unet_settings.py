@@ -5,32 +5,56 @@ import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
+test_existing_model = True
+if test_existing_model: 
+    name_setting = '4_random_shuffling_seed1_ablation_IR'
+    #laod all variables from csv best_epoch_to_test
+    best_epoch = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
+    #remov the space before alla values and name columns
+    best_epoch.columns = best_epoch.columns.str.strip()
+    best_epoch = best_epoch.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
+    print(best_epoch.columns)
+    # take the row with same name_setting
+    best_epoch = best_epoch[best_epoch['name_setting'] == name_setting]
+    #turn each column and value into a variable
+    for column in best_epoch.columns:
+        if column not in ['name_setting', 'stratified']:
+            exec(f'{column} = {best_epoch[column].values[0]}')
+        else:
+            exec(f'{column} = best_epoch[column].values[0]')
 
-stratified = 'zone' # 'random', 'zone', 'image'
+    # turn random_seed, bs and in_channels into int
+    random_seed = int(random_seed)
+    bs = int(bs)
+    in_channels = int(in_channels)
+    if pre_trained == True:
+        encoder_weights = 'imagenet'
+    else: 
+        encoder_weights = None
+else:
+    stratified = 'zone' # 'random', 'zone', 'image'
+    name_setting = '0_stratified_shuffling_by_zone_seed3'
+    random_seed = 3
+    data_augmentation = False
+    encoder_weights = None #"imagenet" or None
+    in_channels = 4
+    training = True
+    plot_test = True
+    bs = 16
+    nb_epochs = 50
+    patience = 15
+    best_epoch = 1
+
 if stratified == 'random':
     parent = 'random_shuffling/'
 elif stratified == 'zone':
     parent = 'stratified_shuffling_by_zone/'
 elif stratified == 'image':
     parent = 'stratified_shuffling_by_image/'
-
-
-config_name = 'unet_256_l1/' + parent + '0_stratified_shuffling_by_zone_seed3'
-random_seed = 3
-data_augmentation = False
-encoder_weights = None #"imagenet" or None
-in_channels = 4
-
-training = True
-plot_test = True
-
-bs = 16
-nb_epochs = 50
-patience = 15
-best_epoch = 1
+config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.83], 'image1': [0.55, 0.79], 'random': [0.6, 0.2], 'zone3': [0.68, 0.14]}
+seeds_splitting = {'zone1': [0.68, 0.83], 'image1': [0.55, 0.79], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
@@ -88,11 +112,11 @@ plotting_settings = {
     'nb_plots': 6,
     #'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
     'my_colors_map': {
-        0: '#789262',  # Vert olive (différent de F)
-        1: '#555555',  # Rouge
+        0: '#789262',  # Vert olive
+        1: '#555555',  # Gris
         2: '#006400',  # Vert foncé
         3: '#00ff00',  # Vert vif
-        4: '#ff4500',  # Vert gris (différent de E)
+        4: '#ff4500',  # Rouge
         5: '#8a2be2',  # Violet
     }, 
     'confusion_matrix_path': f'../../{config_name}/metrics_test/confusion_matrix.png',

@@ -11,6 +11,7 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
+from matplotlib.patches import Patch
 
 class EcomedDataset(Dataset):
     def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None):
@@ -280,6 +281,14 @@ def optimizer_to(optim, device):
                         subparam._grad.data = subparam._grad.data.to(device)
 
 def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
+    habitats_dict = {
+        0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",
+        1: "Landes fourres et toundras",
+        2: "Bois forets et autres habitats boises",
+        3: "Habitats agricoles horticoles et domestiques régulierement \n ou recemment cultives",
+        4: "Zones baties sites industriels et autres habitats artificiels",
+        5: "Autre: Habitats marins, Habitats cotiers, Eaux de surfaces continentales, \n Habitats continentaux sans vegetation ou à vegetation clairsemee, Autres"
+    }
     classes_msk = np.unique(msk)
     legend_colors_msk = [my_colors_map[c] for c in classes_msk]
     custom_cmap_msk = mcolors.ListedColormap(legend_colors_msk)
@@ -288,6 +297,20 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
     custom_cmap_out = mcolors.ListedColormap(legend_colors_out)
 
     fig, axs = plt.subplots(nb_imgs, 3, figsize=(15, 5*nb_imgs))
+    # conatenate classes from classes_out and classes_msk
+    classes = np.concatenate((classes_msk, classes_out))
+    # get the unique classes
+    classes = np.unique(classes)
+    class_color = {c: my_colors_map[c] for c in classes}
+
+    unique_labels = set()
+    legend_elements = []
+    for l, color in class_color.items():
+        label = habitats_dict[l]
+        legend_elements.append(Patch(facecolor=color, label=label))
+        unique_labels.add(label)
+    
+
     for i in range(nb_imgs):
         axs[i, 0].imshow(img[i, 0], cmap='gray') # change to color! 
         axs[i, 0].set_title('Image')
@@ -296,6 +319,7 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs):
         axs[i, 2].imshow(out[i], cmap=custom_cmap_out)
         axs[i, 2].set_title('Prediction')
 
+    fig.legend(handles=legend_elements, loc='upper center', fontsize=18)#, labelspacing = 1.15)
     plt.savefig(pred_plot_path)
 
 def plot_losses_ious(losses_ious_path, losses_plot_path, ious_plot_path):

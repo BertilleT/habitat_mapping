@@ -1,12 +1,12 @@
-config_name, best_epochs
-0_random_shuffling_seed1,60
-0_stratified_shuffling_by_image_seed1, 34
-0_stratified_shuffling_by_zone_seed1, 19
-1_random_shuffling_pre_trained_seed1, 54
-1_stratified_shuffling_by_image_seed1_pretrained, 19
-1_stratified_shuffling_by_zone_seed1_pretrained, 27
-2_stratified_shuffling_by_zone_seed1_data_augmentation, 9
-2_stratified_shuffling_by_image_seed1_data_augmentation, 22
-4_random_shuffling_seed1_ablation_IR, 43
-3_stratified_shuffling_by_image_seed3, 14
-3_stratified_shuffling_by_zone_seed3, 11
+stratified, name_setting, random_seed, data_augmentation, pre_trained, in_channels, training, plot_test, bs, nb_epochs, patience, best_epoch
+random, 0_random_shuffling_seed1, 1, False, False, 4, False, True, 16, None, None, 60
+image, 0_stratified_shuffling_by_image_seed1, 1, False, False, 4, False, True, 16, None, None, 34
+zone, 0_stratified_shuffling_by_zone_seed1, 1, False, False, 4, False, True, 16, None, None, 19
+random, 1_random_shuffling_pre_trained_seed1, 1, False, True, 4, False, True, 16, None, None, 54
+image, 1_stratified_shuffling_by_image_seed1_pretrained, 1, False, True, 4, False, True, 16, None, None, 19
+zone, 1_stratified_shuffling_by_zone_seed1_pretrained, 1, False, True, 4, False, True, 16, None, None, 27
+zone, 2_stratified_shuffling_by_zone_seed1_data_augmentation, 1, True, False, 4, False, True, 16, None, None, 9
+image, 2_stratified_shuffling_by_image_seed1_data_augmentation, 1, True, False, 4, False, True, 16, None, None, 22
+random, 4_random_shuffling_seed1_ablation_IR, 1, False, False, 3, False, True, 16, None, None, 43
+image, 3_stratified_shuffling_by_image_seed3, 3, False, False, 4, False, True, 16, None, None, 14
+zone, 3_stratified_shuffling_by_zone_seed3, 3, False, False, 4, False, True, 16, None, None, 11
