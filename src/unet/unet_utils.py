@@ -31,9 +31,12 @@ class EcomedDataset(Dataset):
         with rasterio.open(msk_path) as src:
             msk = src.read(self.level)
             #get type of values in msk
-            group_under_represented_classes = {0: 5, 1: 5, 2: 5, 3: 0, 4: 1, 5: 2, 6: 5, 7: 3, 8: 4, 9: 5}
-            group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
-            msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
+            if self.level == 1:
+                group_under_represented_classes = {0: 5, 1: 5, 2: 5, 3: 0, 4: 1, 5: 2, 6: 5, 7: 3, 8: 4, 9: 5}
+                group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
+                msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
+            else:
+                msk_mapped = msk
         with rasterio.open(img_path) as src:
             img = src.read()
             if self.channels == 3:
@@ -86,8 +89,8 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         my_dict = {'train_img_ids': train_zone_ids_str, 'val_img_ids': val_zone_ids_str, 'test_img_ids': test_zone_ids_str}
         # from dict to df. Each k dict is a riw in df. df with ione single oclumn
         df = pd.DataFrame(list(my_dict.items()), columns=['set', 'img_ids'])
-        df.to_csv(kwargs['img_ids_by_set'])
-        print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
+        #df.to_csv(kwargs['img_ids_by_set'])
+        #print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
         
         train_paths = []
         val_paths = []
@@ -135,14 +138,14 @@ def classes_balance(zone_list, path_pixels_by_zone):
     nb_pix_byz_df['per'] = round(nb_pix_byz_df['per'] / total, 2)
     return nb_pix_byz_df
 
-def check_classes_balance(dl):
-    classes = {i: 0 for i in range(6)}
+def check_classes_balance(dl, nb_class):
+    classes = {i: 0 for i in range(nb_class)}
     len_dl = len(dl)
     c = 0
     for img, msk in dl:
         c += 1
         print(f'Batch {c}/{len_dl}')
-        for i in range(6):
+        for i in range(nb_class):
             classes[i] += torch.sum(msk == i).item()
     return classes
 

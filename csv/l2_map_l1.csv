@@ -1,0 +1,38 @@
+code,name,int,l1_int
+A,sédiment intertidal,0,5
+A,habitats pélagiques,1,5
+B,dunes côtières et rivages sableux,2,5
+B,galets côtiers,3,5
+B,falaises corniches et rivages rocheux incluant le supralittoral,4,5
+C,eaux dormantes de surface,5,5
+C,eaux courantes de surface,6,5
+C,zones littorales des eaux de surface continentales,7,5
+E,pelouses sèches,8,0
+E,prairies mésiques,9,0
+E,prairies humides et prairies humides saisonnières,10,0
+E,ourlets clairières forestières et peuplements de grandes herbacées non graminées,11,0
+E,steppes salées continentales,12,0
+F,fourrés tempérés et méditerranéo-montagnards,13,1
+F,landes arbustives tempérées,14,1
+F,maquis matorrals arborescents et fourrés thermo-méditerranéens,15,1
+F,garrigues,16,1
+F,fourrés ripicoles et des bas-marais,17,1
+F,haies,18,1
+F,plantations d arbustes,19,1
+G,forêts de feuillus caducifoliés,20,2
+G,forêts de feuillus sempervirents,21,2
+G,forêts de conifères,22,2
+G,formations mixtes d’espèces caducifoliées et de conifères,23,2
+G,alignements d’arbres petits bois anthropiques boisements récemment abattus stades initiaux de boisements et taillis,24,2
+H,éboulis,25,5
+H,falaises continentales pavements rocheux et affleurements rocheux,26,5
+H,habitats continentaux divers sans végétation ou à végétation clairsemée,27,5
+I,cultures et jardins maraîchers,28,3
+I,zones cultivées des jardins et des parcs,29,3
+J,bâtiments des villes et des villages,30,4
+J,constructions à faible densité,31,4
+J,sites industriels d’extraction,32,4
+J,réseaux de transport et autres zones de construction à surface dure,33,4
+J,plans d’eau construits très artificiels et structures connexes,34,4
+J,dépôts de déchets,35,4
+U,unknown,254,254

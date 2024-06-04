@@ -54,9 +54,9 @@ else:
     transform = None
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
-train_paths = train_paths[:20]
-val_paths = val_paths[:20]
-test_paths = test_paths[:20]
+train_paths = train_paths[:40]
+val_paths = val_paths[:40]
+test_paths = test_paths[:40]
 train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform)
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
@@ -94,6 +94,12 @@ print(balance_classes_total)
 
 print(balance_classes)
 # barplot of classes balance
+#load csv l2_map_l1.csv
+l2_map_l1_path = Path('../../csv/l2_map_l1.csv')
+l2_map_l1 = pd.read_csv(l2_map_l1_path)
+# add column l1_int to balance_classes based ont the mapping of l2_map_l1
+balance_classes['l1_int'] = balance_classes.index.map(l2_map_l1.set_index('int')['inr_l1'])
+print(balance_classes)
 fig, ax = plt.subplots()
 ax.grid(axis='y')
 x = np.arange(len(balance_classes))

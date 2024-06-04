@@ -1,11 +1,11 @@
-code,name,int, int_grouped
-A,Habitats marins,0, 5
-B,Habitats cotiers,1, 5
-C,Eaux de surfaces continentales,2, 5
-E,Prairies terrains domines par des especes non graminoides des mousses ou des lichens,3, 0
-F,Landes fourres et toundras,4, 1
-G,Bois forets et autres habitats boises,5, 2
-H,Habitats continentaux sans vegetation ou à vegetation clairsemee,6, 5
-I,Habitats agricoles horticoles et domestiques régulierement ou recemment cultives,7, 3
-J,Zones baties sites industriels et autres habitats artificiels,8, 4
-Z,Autres,9, 5
+code,name,int,int_grouped
+A,Habitats marins,0,5
+B,Habitats cotiers,1,5
+C,Eaux de surfaces continentales,2,5
+E,Prairies terrains domines par des especes non graminoides des mousses ou des lichens,3,0
+F,Landes fourres et toundras,4,1
+G,Bois forets et autres habitats boises,5,2
+H,Habitats continentaux sans vegetation ou à vegetation clairsemee,6,5
+I,Habitats agricoles horticoles et domestiques régulierement ou recemment cultives,7,3
+J,Zones baties sites industriels et autres habitats artificiels,8,4
+Z,Autres,9,5
