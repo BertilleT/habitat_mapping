@@ -6,8 +6,16 @@ import pandas as pd
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
 
-config_name = 'unet_256_l1/12_stratified_shuffling_by_zone_seed3'
 stratified = 'zone' # 'random', 'zone', 'image'
+if stratified == 'random':
+    parent = 'random_shuffling/'
+elif stratified == 'zone':
+    parent = 'stratified_shuffling_by_zone/'
+elif stratified == 'image':
+    parent = 'stratified_shuffling_by_image/'
+
+
+config_name = 'unet_256_l1/' + parent + '0_stratified_shuffling_by_zone_seed3'
 random_seed = 3
 data_augmentation = False
 encoder_weights = None #"imagenet" or None
@@ -22,8 +30,9 @@ patience = 15
 best_epoch = 1
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone': [0.68, 0.83], 'image': [0.55, 0.79], 'random': [0.6, 0.2]}
-splitting = seeds_splitting[stratified]
+seeds_splitting = {'zone1': [0.68, 0.83], 'image1': [0.55, 0.79], 'random': [0.6, 0.2], 'zone3': [0.68, 0.14]}
+zoneseed = stratified + str(random_seed)
+splitting = seeds_splitting[zoneseed]
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
@@ -39,7 +48,7 @@ data_loading_settings = {
     'msk_folder' : Path(f'../../data/patch{patch_level_param["patch_size"]}/msk/'),
     'stratified' : stratified, # 'random', 'zone', 'image'
     'random_seed' : random_seed, 
-    'splitting' : splitting, 
+    'split' : splitting, 
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
     'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
     'bs': bs,
@@ -93,13 +102,13 @@ plotting_settings = {
 }
 
 # Save important settings in a csv file: 
-'patch_size', 'level', 'stratified', 'random_seed', 'splitting' 'bs' 'encoder_name' 'encoder_weights' 'in_channels' 'classes' 'training' 'lr' 'criterion' 'optimizer' 'nb_epochs' 'early_stopping' 'patience'
+'patch_size', 'level', 'stratified', 'random_seed', 'split' 'bs' 'encoder_name' 'encoder_weights' 'in_channels' 'classes' 'training' 'lr' 'criterion' 'optimizer' 'nb_epochs' 'early_stopping' 'patience'
 settings = {
     'patch_size': patch_level_param['patch_size'],
     'level': patch_level_param['level'],
     'stratified': data_loading_settings['stratified'],
     'random_seed': data_loading_settings['random_seed'],
-    'splitting': data_loading_settings['splitting'],
+    'split': data_loading_settings['split'],
     'bs': data_loading_settings['bs'],
     'encoder_name': model_settings['encoder_name'],
     'encoder_weights': model_settings['encoder_weights'],

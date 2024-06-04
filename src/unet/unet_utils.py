@@ -53,7 +53,7 @@ class EcomedDataset(Dataset):
 
         return img, msk_mapped
     
-def load_data_paths(img_folder, msk_folder, stratified, random_seed=3, split=[0.6, 0.2, 0.2], **kwargs):
+def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
     msk_paths = list(msk_folder.rglob('*.tif'))
     
     if stratified == 'random':

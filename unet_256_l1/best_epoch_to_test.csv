@@ -1,0 +1,12 @@
+config_name, best_epochs
+0_random_shuffling_seed1,60
+0_stratified_shuffling_by_image_seed1, 34
+0_stratified_shuffling_by_zone_seed1, 19
+1_random_shuffling_pre_trained_seed1, 54
+1_stratified_shuffling_by_image_seed1_pretrained, 19
+1_stratified_shuffling_by_zone_seed1_pretrained, 27
+2_stratified_shuffling_by_zone_seed1_data_augmentation, 9
+2_stratified_shuffling_by_image_seed1_data_augmentation, 22
+4_random_shuffling_seed1_ablation_IR, 43
+3_stratified_shuffling_by_image_seed3, 14
+3_stratified_shuffling_by_zone_seed3, 11

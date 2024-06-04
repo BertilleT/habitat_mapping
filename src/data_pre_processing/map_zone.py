@@ -23,8 +23,10 @@ train_img_ids = df.loc[df['set'] == 'train_img_ids', 'img_ids'].values[0].split(
 val_img_ids = df.loc[df['set'] == 'val_img_ids', 'img_ids'].values[0].split(',')
 test_img_ids = df.loc[df['set'] == 'test_img_ids', 'img_ids'].values[0].split(',')
 '''
+path_imgs_id = '../../unet_256_l1/stratified_shuffling_by_zone_seed3/img_ids_by_set.csv'
+df = pd.read_csv(path_imgs_id)
 
-train_img_ids = ['zone171', 'zone116', 'zone106', 'zone67', 'zone169', 'zone12', 'zone44',
+'''train_img_ids = ['zone171', 'zone116', 'zone106', 'zone67', 'zone169', 'zone12', 'zone44',
  'zone73', 'zone161', 'zone11', 'zone84', 'zone85', 'zone100', 'zone63',
  'zone148', 'zone129', 'zone133', 'zone65', 'zone22', 'zone78', 'zone120',
  'zone66', 'zone126', 'zone38', 'zone30', 'zone45', 'zone7', 'zone53', 'zone144',
@@ -39,7 +41,7 @@ val_img_ids = ['zone51', 'zone142', 'zone20', 'zone69', 'zone27', 'zone26', 'zon
  'zone136', 'zone41', 'zone164', 'zone101', 'zone96', 'zone2', 'zone102',
  'zone33', 'zone155']
 test_img_ids = ['zone167', 'zone54', 'zone154', 'zone68', 'zone28', 'zone139', 'zone50',
- 'zone123', 'zone160', 'zone95', 'zone17']
+ 'zone123', 'zone160', 'zone95', 'zone17']'''
 
 path = '../../data/full_img_msk/img'
 tif_files = list(Path(path).rglob('*.tif'))
@@ -112,4 +114,4 @@ legend_html = '''
 # Add the legend to the map
 m.get_root().html.add_child(folium.Element(legend_html))
 # Save the map to an HTML file
-m.save('../../data/train_val_test_maps/stratified_by_zone_seed42.html')
+m.save('../../data/train_val_test_maps/stratified_by_zone_seed3.html')

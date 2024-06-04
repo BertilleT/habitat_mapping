@@ -36,7 +36,7 @@ gc.collect()
 ## DATA
 print('Loading data...')
 print('Data loading settings:')
-print(f'Splitting data: {data_loading_settings["splitting"]}')
+print(f'Splitting data: {data_loading_settings["split"]}')
 print(f'Stratified: {data_loading_settings["stratified"]}')
 print(f'Batch size: {data_loading_settings["bs"]}')
 
