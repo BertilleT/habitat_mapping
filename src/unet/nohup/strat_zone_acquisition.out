@@ -55,3 +55,37 @@ Batch: 50  over  134
 Batch: 100  over  134
 Epoch 2/50: train loss 0.5578, val loss 0.4689
 Epoch 2/50: train mIoU 0.3080, val mIoU 0.3254
+Time: 0:12:58.628070
+Epoch 3/50
+Training
+Batch: 0  over  395
+Batch: 50  over  395
+Batch: 100  over  395
+Batch: 150  over  395
+Batch: 200  over  395
+Batch: 250  over  395
+Batch: 300  over  395
+Batch: 350  over  395
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 3/50: train loss 0.5260, val loss 0.4472
+Epoch 3/50: train mIoU 0.3366, val mIoU 0.3795
+Time: 0:13:07.634242
+Epoch 4/50
+Training
+Batch: 0  over  395
+Batch: 50  over  395
+Batch: 100  over  395
+Batch: 150  over  395
+Batch: 200  over  395
+Batch: 250  over  395
+Batch: 300  over  395
+Batch: 350  over  395
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 4/50: train loss 0.5031, val loss 0.4422
+Epoch 4/50: train mIoU 0.3543, val mIoU 0.3904
