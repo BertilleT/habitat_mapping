@@ -5,7 +5,7 @@ import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
-test_existing_model = True
+test_existing_model = False
 if test_existing_model: 
     name_setting = '3_stratified_shuffling_by_zone_seed3'
     #laod all variables from csv best_epoch_to_test
@@ -31,9 +31,9 @@ if test_existing_model:
     else: 
         encoder_weights = None
 else:
-    stratified = 'zone' # 'random', 'zone', 'image'
-    name_setting = '0_stratified_shuffling_by_zone_seed3'
-    random_seed = 3
+    stratified = 'acquisition' # 'random', 'zone', 'image', 'acquisition'
+    name_setting = '0_stratified_shuffling_acquisition'
+    random_seed = 1
     data_augmentation = False
     encoder_weights = None #"imagenet" or None
     in_channels = 4
@@ -50,10 +50,12 @@ elif stratified == 'zone':
     parent = 'stratified_shuffling_by_zone/'
 elif stratified == 'image':
     parent = 'stratified_shuffling_by_image/'
+elif stratified == 'acquisition':
+    parent = 'stratified_shuffling_acquisition/'
 config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24]}
+seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
@@ -63,7 +65,7 @@ Path(f'../../{config_name}/metrics_train_val').mkdir(exist_ok=True)
 
 patch_level_param = {
     'patch_size': 256, 
-    'level': 2, 
+    'level': 1, 
 }
 
 data_loading_settings = {

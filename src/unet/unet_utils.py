@@ -13,6 +13,8 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from matplotlib.patches import Patch
 
+not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69', 'zone167', 'zone169', 'zone170', 'zone171']
+
 class EcomedDataset(Dataset):
     def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None):
         self.img_dir = img_dir
@@ -69,12 +71,13 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         train_paths = msk_paths[:int(split[0]*n)]
         val_paths = msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
         test_paths = msk_paths[int((split[0]+split[1])*n):]
-    elif stratified == 'zone' or stratified == 'image':
+    elif stratified == 'zone' or stratified == 'image' or stratified == 'zone_mediteranean':
         msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
         msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
         # zone_id is zone100_0_0, extract only zone100 using split
         if stratified == 'zone':
             msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
+            # if zone in not_mediterranean_zones, then remove the path from the df
         zone_ids = msk_df['zone_id'].unique()
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)
@@ -102,6 +105,24 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
             val_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
         for zone_id in test_zone_ids:
             test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
+    elif stratified == 'acquisition':
+        #for each subfolder in msk_folder, set 60% of the patches to train, 20% to val and 20% to test
+        train_paths = []
+        val_paths = []
+        test_paths = []
+        for subfolder in msk_folder.iterdir():
+            msk_paths_subfolder = list(subfolder.rglob('*.tif'))
+            msk_df = pd.DataFrame(msk_paths_subfolder, columns=['mask_path'])
+            msk_df['index_row'] = msk_df['mask_path'].apply(lambda x: x.parts[-1].split('_')[-2]).astype(int)
+            msk_df['index_col'] = msk_df['mask_path'].apply(lambda x: x.parts[-1].split('_')[-1].split('.')[0]).astype(int)
+
+            msk_df = msk_df.sort_values(by=['index_row', 'index_col'])
+            n = len(msk_paths_subfolder)
+            #np.random.seed(random_seed)
+            #np.random.shuffle(msk_paths_subfolder)
+            train_paths += msk_paths_subfolder[:int(split[0]*n)]
+            val_paths += msk_paths_subfolder[int(split[0]*n):int((split[0]+split[1])*n)]
+            test_paths += msk_paths_subfolder[int((split[0]+split[1])*n):]
     return train_paths, val_paths, test_paths
   
 def IoU_F1_from_confmatrix(conf_matrix):

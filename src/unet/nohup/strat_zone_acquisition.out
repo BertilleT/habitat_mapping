@@ -1,0 +1,40 @@
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2]
+Stratified: acquisition
+Batch size: 16
+No data augmentation
+The seed to shuffle the data is  1
+Train: 6308 images, Val: 2130 images, Test: 2225 images
+Train: 59.16%, Val: 19.98%, Test: 20.87%
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: None
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Training...
+Epoch 1/50
+Training
+Batch: 0  over  395
+Batch: 50  over  395
+Batch: 100  over  395
+Batch: 150  over  395
+Batch: 200  over  395
+Batch: 250  over  395
+Batch: 300  over  395
+Batch: 350  over  395
+Validation
+Batch: 0  over  134
+Batch: 50  over  134
+Batch: 100  over  134
+Epoch 1/50: train loss 0.6652, val loss 0.6742
+Epoch 1/50: train mIoU 0.2451, val mIoU 0.0404
