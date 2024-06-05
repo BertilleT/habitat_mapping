@@ -31,8 +31,8 @@ if test_existing_model:
     else: 
         encoder_weights = None
 else:
-    stratified = 'acquisition' # 'random', 'zone', 'image', 'acquisition'
-    name_setting = '0_stratified_shuffling_acquisition'
+    stratified = 'zone_mediteranean' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean'
+    name_setting = '0_stratified_shuffling_zone_mediteranean_seed1'
     random_seed = 1
     data_augmentation = False
     encoder_weights = None #"imagenet" or None
@@ -52,10 +52,12 @@ elif stratified == 'image':
     parent = 'stratified_shuffling_by_image/'
 elif stratified == 'acquisition':
     parent = 'stratified_shuffling_acquisition/'
+elif stratified == 'zone_mediteranean':
+    parent = 'stratified_shuffling_zone_mediteranean/'
 config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2]}
+seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.73, 0.17]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 

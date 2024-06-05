@@ -75,9 +75,13 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
         msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
         # zone_id is zone100_0_0, extract only zone100 using split
-        if stratified == 'zone':
+        if stratified == 'zone' or stratified == 'zone_mediteranean':
             msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
             # if zone in not_mediterranean_zones, then remove the path from the df
+            print(len(msk_df['zone_id'].unique()))
+            if stratified == 'zone_mediteranean':
+                msk_df = msk_df[~msk_df['zone_id'].isin(not_mediterranean_zones)]
+                print(len(msk_df['zone_id'].unique()))
         zone_ids = msk_df['zone_id'].unique()
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)
