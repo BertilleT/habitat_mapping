@@ -9,8 +9,8 @@ import folium
 import pandas as pd
 
 strat = 'zone'
-path_imgs_id = '../../unet_256_l1/stratified_shuffling_by_zone/seed3/img_ids_by_set.csv'
-path_to_map = '../../train_val_test_maps/stratified_by_zone_seed3.html'
+path_imgs_id = '../../unet_256_l1/stratified_shuffling_zone_mediteranean/seed2/img_ids_by_set.csv'
+path_to_map = '../../train_val_test_maps/stratified_by_zone_mediteranean_seed2.html'
 
 df = pd.read_csv(path_imgs_id)
 train_img_ids = df.loc[df['set'] == 'train_img_ids', 'img_ids'].values[0]
