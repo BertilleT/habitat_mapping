@@ -32,8 +32,8 @@ if test_existing_model:
         encoder_weights = None
 else:
     stratified = 'zone_mediteranean' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean'
-    name_setting = '0_stratified_shuffling_zone_mediteranean_seed1'
-    random_seed = 1
+    name_setting = '0_stratified_shuffling_zone_mediteranean_seed2'
+    random_seed = 2
     data_augmentation = False
     encoder_weights = None #"imagenet" or None
     in_channels = 4
@@ -57,7 +57,7 @@ elif stratified == 'zone_mediteranean':
 config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18]}
+seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
@@ -80,7 +80,7 @@ data_loading_settings = {
     'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
     'bs': bs,
     'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
-    'img_ids_by_set': Path(f'../../{config_name}/img_ids_by_set.csv'),
+    'img_ids_by_set': Path(f'../../unet_256_l1/{parent}seed{random_seed}/img_ids_by_set.csv'),
     'data_augmentation': data_augmentation,
 }
 
