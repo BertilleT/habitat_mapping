@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .link {
+            display: block;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .link:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Stratified shuffling maps</div>
+        <a class="link" href="train_val_test_maps/stratified_by_zone_seed1.html">Stratified shuffling by zone, seed1</a>
+        <a class="link" href="train_val_test_maps/stratified_by_zone_seed3.html">Stratified shuffling by zone, seed3</a>
+        <a class="link" href="train_val_test_maps/stratified_by_image_seed1.html">Stratified shuffling by image, seed1</a>
+        <a class="link" href="train_val_test_maps/stratified_by_image_seed3.html">Stratified shuffling by image, seed3</a>
+    </div>
+</body>
+</html>
