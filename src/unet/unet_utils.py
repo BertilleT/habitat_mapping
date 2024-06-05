@@ -13,7 +13,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from matplotlib.patches import Patch
 
-not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69', 'zone167', 'zone169', 'zone170', 'zone171']
+not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
 class EcomedDataset(Dataset):
     def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None):
