@@ -58,6 +58,7 @@ class EcomedDataset(Dataset):
         return img, msk_mapped
     
 def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
+    print('The seed to shuffle the data is ', str(random_seed))
     msk_paths = list(msk_folder.rglob('*.tif'))
     
     if stratified == 'random':
@@ -89,8 +90,8 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         my_dict = {'train_img_ids': train_zone_ids_str, 'val_img_ids': val_zone_ids_str, 'test_img_ids': test_zone_ids_str}
         # from dict to df. Each k dict is a riw in df. df with ione single oclumn
         df = pd.DataFrame(list(my_dict.items()), columns=['set', 'img_ids'])
-        #df.to_csv(kwargs['img_ids_by_set'])
-        #print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
+        df.to_csv(kwargs['img_ids_by_set'])
+        print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
         
         train_paths = []
         val_paths = []

@@ -7,7 +7,7 @@ import pandas as pd
 # -------------------------------------------------------------------------------------------
 test_existing_model = True
 if test_existing_model: 
-    name_setting = '0_stratified_shuffling_by_zone_seed1'
+    name_setting = '3_stratified_shuffling_by_zone_seed3'
     #laod all variables from csv best_epoch_to_test
     best_epoch = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
     #remov the space before alla values and name columns
