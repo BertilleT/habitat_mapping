@@ -32,7 +32,7 @@ if test_existing_model:
         encoder_weights = None
 else:
     stratified = 'zone_mediteranean' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean'
-    name_setting = '0_stratified_shuffling_zone_mediteranean_seed2'
+    name_setting = '1_stratified_shuffling_zone_mediteranean_seed2'
     random_seed = 2
     data_augmentation = False
     encoder_weights = None #"imagenet" or None
