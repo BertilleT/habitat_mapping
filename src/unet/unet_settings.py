@@ -67,7 +67,7 @@ Path(f'../../{config_name}/metrics_train_val').mkdir(exist_ok=True)
 
 patch_level_param = {
     'patch_size': 256, 
-    'level': 1, 
+    'level': 2, 
 }
 
 data_loading_settings = {
