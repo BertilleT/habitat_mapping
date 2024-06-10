@@ -139,13 +139,13 @@ for l1_int in l1_ints:
     # Create class labels with line breaks
     wrapped_class_labels = wrap_labels(class_labels, max_char_width)
     ax.set_xticklabels(wrapped_class_labels, rotation=45, ha="right", fontsize=8)
-    plt.tight_layout()
+    '''plt.tight_layout()
     plt.subplots_adjust(top=0.85)
     ax.legend()
     # add title
     l1_int_name = plotting_settings['habitats_dict'].get(l1_int, 'Unknown')
     ax.set_title(f'Balance of level 2 classes derived from the level 1 class {l1_int} : \n {l1_int_name}')
-    #plt.savefig(f'classes_balance_l2_c{l1_int}_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
+    plt.savefig(f'classes_balance_l2_c{l1_int}_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')'''
     plt.close(fig)
 
 fig, ax = plt.subplots()
@@ -163,7 +163,7 @@ for i, v in enumerate(balance_classes_total['total']):
     #rotation to ahvee text in vertical
     ax.text(i, v + 0.15, f'{v:.1f}%', ha='center', va='bottom', fontsize=8, rotation=90)
 ax.set_xticks(x)
-ax.set_xticklabels(balance_classes_total.index)
+ax.set_xticklabels(balance_classes_total.index, rotation=45, ha='right', fontsize=8)
 #nb of rows in balances_classes_total
 '''classes = balance_classes_total.index
 class_color = {c: plotting_settings['my_colors_map'][c] for c in classes}
