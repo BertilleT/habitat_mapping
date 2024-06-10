@@ -12,6 +12,7 @@ import seaborn as sns
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from matplotlib.patches import Patch
+import torchvision.transforms.functional as F
 
 not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
@@ -45,19 +46,26 @@ class EcomedDataset(Dataset):
                 img = img[:3]
             # turn to values betw 0 and 1 and to float
             # linear normalisation with p2 and p98
-            p2, p98 = np.percentile(img, (2, 98))
-            img = np.clip(img, p2, p98)
-            img = (img - p2) / (p98 - p2)
-            img = img.astype(np.float32)
-            
+            #p2, p98 = np.percentile(img, (2, 98))
+            #img = np.clip(img, p2, p98)
+            #img = (img - p2) / (p98 - p2)
+            #img = img.astype(np.float32)
+            # Normalize each channel separately
+            normalized_img = np.zeros_like(img, dtype=np.float32)
+            for c in range(self.channels):
+                channel = img[c, :, :]
+                p2, p98 = np.percentile(channel, (2, 98))
+                channel = np.clip(channel, p2, p98)
+                channel = (channel - p2) / (p98 - p2)
+                normalized_img[c, :, :] = channel.astype(np.float32)
         if self.transform:
-            augmented = self.transform(image=img[0:3].transpose(1, 2, 0), mask=msk_mapped)
+            augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
             aug_img = augmented['image']
             msk_mapped = augmented['mask']
             # add fourth channel from img to img
-            img = np.concatenate((aug_img, img[3:4]), axis=0)
+            img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)
 
-        return img, msk_mapped
+        return normalized_img, msk_mapped
     
 def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
     print('The seed to shuffle the data is ', str(random_seed))
@@ -332,7 +340,20 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_di
     
 
     for i in range(nb_imgs):
-        axs[i, 0].imshow(img[i, 0], cmap='gray') # change to color! 
+        # get values from img[i]
+        print('img[i].shape', img[i].shape)
+        print(img[i])
+
+        rgb_img = img[i][:3, :, :]
+        #rgb_img[1] *= 0.8
+        # augment the brightness of the image
+        #rgb_img = rgb_img + 0.1
+        # turn to values betw 0 and 1
+        #rgb_img = np.clip(rgb_img, 0, 1)
+
+        rgb_img = rgb_img.transpose(1, 2, 0)
+
+        axs[i, 0].imshow(rgb_img)#/float(5000.0))
         axs[i, 0].set_title('Image')
         axs[i, 1].imshow(msk[i], cmap=custom_cmap_msk)
         axs[i, 1].set_title('Mask')
@@ -341,6 +362,48 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_di
 
     fig.legend(handles=legend_elements, loc='upper center', fontsize=18)#, labelspacing = 1.15)
     plt.savefig(pred_plot_path)
+
+def plot_patch_msk(img, msk, pred_plot_path, my_colors_map, nb_imgs, habitats_dict):
+    classes_msk = np.unique(msk)
+    legend_colors_msk = [my_colors_map[c] for c in classes_msk]
+    custom_cmap_msk = mcolors.ListedColormap(legend_colors_msk)
+
+    fig, axs = plt.subplots(nb_imgs, 2, figsize=(15, 5*nb_imgs))
+    fig.subplots_adjust(top=0.9, bottom=0.02)
+    classes = classes_msk
+    # get the unique classes
+    classes = np.unique(classes)
+    class_color = {c: my_colors_map[c] for c in classes}
+
+    unique_labels = set()
+    legend_elements = []
+    for l, color in class_color.items():
+        label = habitats_dict[l]
+        legend_elements.append(Patch(facecolor=color, label=label))
+        unique_labels.add(label)
+    
+
+    for i in range(nb_imgs):
+        # get values from img[i]
+        print('img[i].shape', img[i].shape)
+        print(img[i])
+
+        rgb_img = img[i][:3, :, :]
+        #rgb_img[1] *= 0.8
+        # augment the brightness of the image
+        #rgb_img = rgb_img + 0.1
+        # turn to values betw 0 and 1
+        #rgb_img = np.clip(rgb_img, 0, 1)
+        print('rgb_img.shape', rgb_img.shape)
+        rgb_img = rgb_img.permute(1, 2, 0)
+
+        axs[i, 0].imshow(rgb_img)#/float(5000.0))
+        axs[i, 0].set_title('Image')
+        axs[i, 1].imshow(msk[i], cmap=custom_cmap_msk)
+        axs[i, 1].set_title('Mask')
+    fig.legend(handles=legend_elements, loc='upper center', fontsize=18)#, labelspacing = 1.15)
+    plt.savefig(pred_plot_path)
+    print('Plot saved at:', pred_plot_path)
 
 def plot_losses_ious(losses_ious_path, losses_plot_path, ious_plot_path):
     # Read the CSV file into a DataFrame

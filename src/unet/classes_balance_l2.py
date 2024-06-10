@@ -145,7 +145,7 @@ for l1_int in l1_ints:
     # add title
     l1_int_name = plotting_settings['habitats_dict'].get(l1_int, 'Unknown')
     ax.set_title(f'Balance of level 2 classes derived from the level 1 class {l1_int} : \n {l1_int_name}')
-    plt.savefig(f'classes_balance_l2_c{l1_int}_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
+    #plt.savefig(f'classes_balance_l2_c{l1_int}_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
     plt.close(fig)
 
 fig, ax = plt.subplots()
@@ -157,7 +157,7 @@ balance_classes_total = balance_classes_total.drop(columns='l1_int')
 # to serie 
 print(balance_classes_total)
 
-ax.bar(x, balance_classes_total['total'], color=color_map)
+ax.bar(x, balance_classes_total['total'], color=color_map, width=0.8)
 # add ercentage on top of bars round to 0 decimals
 for i, v in enumerate(balance_classes_total['total']):
     #rotation to ahvee text in vertical
@@ -179,7 +179,7 @@ plt.tight_layout(rect=[0, 0, 1, 0.6])'''
 #plt.tight_layout(rect=[0, 0, 0.85, 1])
 # title
 ax.set_title('Balance classes at level 2 in the whole dataset')
-plt.savefig(f'classes_balance_l2_total_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
+plt.savefig(f'classes_balance_l2_total_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}_v2.png')
 '''for col in balance_classes.columns:
     balance_classes[col] = round(balance_classes[col]*100 / balance_classes[col].sum(), 2)
 print(balance_classes)'''
