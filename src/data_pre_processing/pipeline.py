@@ -51,7 +51,7 @@ else:
     print('STEP 0, create_pivot_table, skipped.')
     intersect_df = pd.read_csv(pivot_table_path)
 
-# ------------------------------STEP 1: RASTERIZE POLYGONS--------------------------------#
+# ------------------------------STEP 1: CREATE LABELS DICT--------------------------------#
 
 if pre_processing_steps['1_create_labels_dict']: 
     # UNIQUE CLASSES AT 3 LEVELS FOR ALL MY POLYGONS
