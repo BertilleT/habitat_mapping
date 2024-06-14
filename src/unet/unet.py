@@ -39,8 +39,9 @@ print('Data loading settings:')
 print(f'Splitting data: {data_loading_settings["split"]}')
 print(f'Stratified: {data_loading_settings["stratified"]}')
 print(f'Batch size: {data_loading_settings["bs"]}')
-
+print(f'Normalisation: {data_loading_settings["normalisation"]}')
 if data_loading_settings['data_augmentation']: 
+    print('Data augmentation')
     transform = A.Compose([
         A.RandomBrightnessContrast(p=0.5),
         A.HueSaturationValue(p=0.5),
@@ -53,11 +54,11 @@ else:
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
 #print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
-train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform)
+train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform, normalisation = data_loading_settings['normalisation'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
-val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
+val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
-test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
+test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
@@ -193,14 +194,11 @@ if training_settings['training']:
         if training_settings['early_stopping'] and count == training_settings['patience']:
             print(f'Early stopping at epoch {epoch+1}')
             break
-            
-        #every 10, save losses values in csv
-        #if (epoch+1) % 5 == 0:
+
         df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_miou': training_miou, 'validation_miou': validation_miou})
         df.to_csv(training_settings['losses_mious_path'])
         sys.stdout.flush()
 
-        # time
         # one epoch time
         print('Time:', datetime.now()-now)
             
@@ -225,7 +223,7 @@ else:
         param.to(device)
 
 # TESTING
-'''model.eval()
+model.eval()
 with torch.no_grad():
     print('Testing')
     test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test')
@@ -258,7 +256,7 @@ ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues
 plt.xlabel('Predicted labels')
 plt.ylabel('True labels')
 plt.title('Normalized confusion matrix')
-plt.savefig(plotting_settings['confusion_matrix_path'])'''
+plt.savefig(plotting_settings['confusion_matrix_path'])
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:

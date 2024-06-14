@@ -54,9 +54,9 @@ else:
     transform = None
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
-train_paths = train_paths
-val_paths = val_paths
-test_paths = test_paths
+train_paths = train_paths#[:30]
+val_paths = val_paths#[:30]
+test_paths = test_paths#[:30]
 train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform)
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'])
@@ -82,8 +82,8 @@ balance_classes['val'] = balance_classes['class'].map(val_classes)
 balance_classes['test'] = balance_classes['class'].map(test_classes)
 balance_classes['total'] = balance_classes['train'] + balance_classes['val'] + balance_classes['test']
 balance_classes = balance_classes.set_index('class')
-for col in balance_classes.columns:
-    balance_classes[col] = round(balance_classes[col]*100 / balance_classes[col].sum(), 2)
+#for col in balance_classes.columns:
+#    balance_classes[col] = round(balance_classes[col]*100 / balance_classes[col].sum(), 2)
 #drop rows when values from total are 0
 balance_classes = balance_classes[balance_classes['total'] != 0]
 print(balance_classes)
@@ -119,12 +119,18 @@ def wrap_labels(labels, max_width):
         wrapped_labels.append('\n'.join(textwrap.wrap(label, max_width)))
     return wrapped_labels
 
+print(balance_classes)
 for l1_int in l1_ints:
     fig, ax = plt.subplots()
     #keep only rows where l1_int == l1_int
     sub_balance_classes_l1 = balance_classes[balance_classes['l1_int'] == l1_int]
+    print(sub_balance_classes_l1)
     # drop l1_int column
     sub_balance_classes_l1 = sub_balance_classes_l1.drop(columns='l1_int')
+    
+    for col in sub_balance_classes_l1.columns:
+        sub_balance_classes_l1[col] = round(sub_balance_classes_l1[col]*100 / sub_balance_classes_l1[col].sum(), 2)
+    print(sub_balance_classes_l1)
     x = np.arange(len(sub_balance_classes_l1))
 
     for i, col in enumerate(sub_balance_classes_l1.columns):
@@ -139,13 +145,13 @@ for l1_int in l1_ints:
     # Create class labels with line breaks
     wrapped_class_labels = wrap_labels(class_labels, max_char_width)
     ax.set_xticklabels(wrapped_class_labels, rotation=45, ha="right", fontsize=8)
-    '''plt.tight_layout()
+    plt.tight_layout()
     plt.subplots_adjust(top=0.85)
     ax.legend()
     # add title
     l1_int_name = plotting_settings['habitats_dict'].get(l1_int, 'Unknown')
     ax.set_title(f'Balance of level 2 classes derived from the level 1 class {l1_int} : \n {l1_int_name}')
-    plt.savefig(f'classes_balance_l2_c{l1_int}_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')'''
+    plt.savefig(f'classes_balance_l2_c{l1_int}_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
     plt.close(fig)
 
 fig, ax = plt.subplots()
@@ -161,7 +167,7 @@ ax.bar(x, balance_classes_total['total'], color=color_map, width=0.8)
 # add ercentage on top of bars round to 0 decimals
 for i, v in enumerate(balance_classes_total['total']):
     #rotation to ahvee text in vertical
-    ax.text(i, v + 0.15, f'{v:.1f}%', ha='center', va='bottom', fontsize=8, rotation=90)
+    ax.text(i, v + 0.15, f'{v:.1f}', ha='center', va='bottom', fontsize=8, rotation=90)
 ax.set_xticks(x)
 ax.set_xticklabels(balance_classes_total.index, rotation=45, ha='right', fontsize=8)
 #nb of rows in balances_classes_total
@@ -179,7 +185,7 @@ plt.tight_layout(rect=[0, 0, 1, 0.6])'''
 #plt.tight_layout(rect=[0, 0, 0.85, 1])
 # title
 ax.set_title('Balance classes at level 2 in the whole dataset')
-plt.savefig(f'classes_balance_l2_total_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}_v2.png')
+plt.savefig(f'classes_balance_l2_total_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}_not_per_v2.png')
 '''for col in balance_classes.columns:
     balance_classes[col] = round(balance_classes[col]*100 / balance_classes[col].sum(), 2)
 print(balance_classes)'''

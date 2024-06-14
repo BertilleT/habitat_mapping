@@ -5,22 +5,30 @@ import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
-test_existing_model = True
+test_existing_model = False
+
 if test_existing_model: 
-    name_setting = '0_random_shuffling_seed1'
+    name_setting = '0_random_shuffling_heterogen_patches_seed1'
     #laod all variables from csv best_epoch_to_test
-    best_epoch = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
+    best_epoch_to_test = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
     #remov the space before alla values and name columns
-    best_epoch.columns = best_epoch.columns.str.strip()
-    best_epoch = best_epoch.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
+    best_epoch_to_test.columns = best_epoch_to_test.columns.str.strip()
+    best_epoch_to_test = best_epoch_to_test.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
     # take the row with same name_setting
-    best_epoch = best_epoch[best_epoch['name_setting'] == name_setting]
+    best_epoch_to_test = best_epoch_to_test[best_epoch_to_test['name_setting'] == name_setting]
     #turn each column and value into a variable
-    for column in best_epoch.columns:
-        if column not in ['name_setting', 'stratified']:
-            exec(f'{column} = {best_epoch[column].values[0]}')
+    print(best_epoch_to_test)
+    print(type(best_epoch_to_test))
+
+    for column in best_epoch_to_test.columns:
+        print(f"Processing column: {column}")
+        print(f"Type of best_epoch_to_test[{column}]: {type(best_epoch_to_test[column])}")
+        print(f"First value of best_epoch_to_test[{column}]: {best_epoch_to_test[column].values[0]}")
+            
+        if column not in ['name_setting', 'stratified', 'normalisation', 'year']:
+            exec(f'{column} = {best_epoch_to_test[column].values[0]}')
         else:
-            exec(f'{column} = best_epoch[column].values[0]')
+            exec(f'{column} = best_epoch_to_test[column].values[0]')
 
     # turn random_seed, bs and in_channels into int
     random_seed = int(random_seed)
@@ -31,16 +39,18 @@ if test_existing_model:
     else: 
         encoder_weights = None
 else:
-    stratified = 'zone_mediteranean' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean'
-    name_setting = '1_stratified_shuffling_zone_mediteranean_seed2'
-    random_seed = 2
+    stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
+    name_setting = '6_random_shuffling_zone2023'
+    normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
+    random_seed = 1
     data_augmentation = False
     encoder_weights = None #"imagenet" or None
+    year = '2023'# '2023' or 'all'
     in_channels = 4
     training = True
     plot_test = True
     bs = 16
-    nb_epochs = 50
+    nb_epochs = 70
     patience = 15
     best_epoch = 1
 
@@ -54,20 +64,24 @@ elif stratified == 'acquisition':
     parent = 'stratified_shuffling_acquisition/'
 elif stratified == 'zone_mediteranean':
     parent = 'stratified_shuffling_zone_mediteranean/'
+elif stratified == 'zone2023':
+    parent = 'stratified_shuffling_zone2023/'
+
 config_name = 'unet_256_l1/' + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34]}
+seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34], 'zone20231': [0.63, 0.14] }
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
 Path(f'../../{config_name}/metrics_train_val').mkdir(exist_ok=True)
+Path(f'../../unet_256_l1/{parent}/seed{random_seed}').mkdir(exist_ok=True)
 
 patch_level_param = {
     'patch_size': 256, 
-    'level': 2, 
+    'level': 1, 
 }
 
 data_loading_settings = {
@@ -79,9 +93,12 @@ data_loading_settings = {
     'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
     'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
     'bs': bs,
+    'normalisation': normalisation,
     'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
     'img_ids_by_set': Path(f'../../unet_256_l1/{parent}seed{random_seed}/img_ids_by_set.csv'),
     'data_augmentation': data_augmentation,
+    'year': year, 
+    '2023_zones': Path('../../csv/zones_2023.csv'),
 }
 
 model_settings = {
