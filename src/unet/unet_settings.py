@@ -38,9 +38,12 @@ if test_existing_model:
         encoder_weights = 'imagenet'
     else: 
         encoder_weights = None
+
+# ---------------------------------------
+
 else:
     stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = '6_random_shuffling_zone2023'
+    name_setting = 'resnet18_random_gomogene_zone2023_mediterranean'
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
@@ -99,9 +102,12 @@ data_loading_settings = {
     'data_augmentation': data_augmentation,
     'year': year, 
     '2023_zones': Path('../../csv/zones_2023.csv'),
+    'heterogen_patches_path': Path('../../csv/heterogen_patches.csv'),
+    'patches' : 'homogeneous' # 'homogeneous' or 'heterogeneous', 'all'
 }
 
 model_settings = {
+    'model': 'Resnet18', # UNet, Resnet18
     'encoder_name': "efficientnet-b7",
     'encoder_weights': encoder_weights,
     'in_channels': in_channels,
@@ -116,7 +122,7 @@ model_settings = {
 training_settings = {
     'training': training,
     'lr': 1e-4,
-    'criterion': 'Dice', #Dice or CrossEntropy
+    'criterion': 'CrossEntropy', #Dice or CrossEntropy
     'optimizer': 'Adam',
     'nb_epochs': nb_epochs,
     'early_stopping': True,
