@@ -5,4 +5,8 @@ conda activate ecomed_venv
 nohup python3 my_script.py
 tail -f nohup.out
 
-nohup python3 unet.py > nohup/strat_zone_acquisition.out &
+nohup python3 unet.py > nohup/random_shuffling_2023.out &
+
+ps -p 2565469 -f
+
+export CUDA_VISIBLE_DEVICES=2

@@ -17,13 +17,14 @@ import torchvision.transforms.functional as F
 not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None, normalisation = "all_channels_together"):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
         self.imgs = [self.img_dir / msk_path.parts[-2] / msk_path.name.replace('msk', 'img').replace('l123/', '') for msk_path in self.msks]
         self.channels = channels
         self.transform = transform
+        self.normalisation = normalisation
 
     def __len__(self):
         return len(self.imgs)
@@ -46,18 +47,21 @@ class EcomedDataset(Dataset):
                 img = img[:3]
             # turn to values betw 0 and 1 and to float
             # linear normalisation with p2 and p98
-            #p2, p98 = np.percentile(img, (2, 98))
-            #img = np.clip(img, p2, p98)
-            #img = (img - p2) / (p98 - p2)
-            #img = img.astype(np.float32)
+            if self.normalisation == "all_channels_together":
+                p2, p98 = np.percentile(img, (2, 98))
+                img = np.clip(img, p2, p98)
+                img = (img - p2) / (p98 - p2)
+                normalized_img = img.astype(np.float32)
+            elif self.normalisation == "channel_by_channel":
+                #print('Normalisation channel by channel')
             # Normalize each channel separately
-            normalized_img = np.zeros_like(img, dtype=np.float32)
-            for c in range(self.channels):
-                channel = img[c, :, :]
-                p2, p98 = np.percentile(channel, (2, 98))
-                channel = np.clip(channel, p2, p98)
-                channel = (channel - p2) / (p98 - p2)
-                normalized_img[c, :, :] = channel.astype(np.float32)
+                normalized_img = np.zeros_like(img, dtype=np.float32)
+                for c in range(self.channels):
+                    channel = img[c, :, :]
+                    p2, p98 = np.percentile(channel, (2, 98))
+                    channel = np.clip(channel, p2, p98)
+                    channel = (channel - p2) / (p98 - p2)
+                    normalized_img[c, :, :] = channel.astype(np.float32)
         if self.transform:
             augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
             aug_img = augmented['image']
@@ -69,8 +73,22 @@ class EcomedDataset(Dataset):
     
 def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
     print('The seed to shuffle the data is ', str(random_seed))
+    print('The data are from ', kwargs['year'], ' year')
+    #extract unique zones from alltif names
+
     msk_paths = list(msk_folder.rglob('*.tif'))
-    
+    #load the csv file with the list of heterogen masks '../../csv/heterogen_masks.csv'
+    #heterogen_masks = pd.read_csv('../../csv/heterogen_masks.csv')
+    #msk_paths = heterogen_masks['0'].values # get the values of the column 
+    # turn to paths
+    #msk_paths = [Path(msk_path) for msk_path in msk_paths]
+    print(len(msk_paths), ' masks found')
+    if kwargs['year'] == '2023':
+        zones_2023 = pd.read_csv(kwargs['2023_zones'])
+        msk_paths = [msk_path for msk_path in msk_paths if str(msk_path).split('/')[-2].split('_')[0] in zones_2023['zone_AJ'].values]
+        #msk_paths = [msk_path for msk_path in msk_paths if str(msk_path).split('/').parts[-2].split('_')[0] in zones_2023['zone_id'].values]
+        print(len(msk_paths), ' kept masks from 2023 zones')
+        print('The data are from 2023')
     if stratified == 'random':
         # Shuffle with random_seed fixed and split in 60 20 20
         np.random.seed(random_seed)
@@ -79,7 +97,7 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         train_paths = msk_paths[:int(split[0]*n)]
         val_paths = msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
         test_paths = msk_paths[int((split[0]+split[1])*n):]
-    elif stratified == 'zone' or stratified == 'image' or stratified == 'zone_mediteranean':
+    elif stratified == 'zone' or stratified == 'image' or stratified == 'zone_mediteranean' or stratified == 'zone2023':
         msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
         msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
         # zone_id is zone100_0_0, extract only zone100 using split
@@ -92,6 +110,9 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)
         n = len(zone_ids)
+        print(zone_ids)
+        # print unique values of zone_ids
+        print('Nbumber of unique zones:', n)
         train_zone_ids = zone_ids[:int(split[0]*n)]# there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
         val_zone_ids = zone_ids[int(split[0]*n):int((split[0]+split[1])*n)] # 0.67 0.9
         test_zone_ids = zone_ids[int((split[0]+split[1])*n):]
