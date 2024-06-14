@@ -75,14 +75,24 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
     print('The seed to shuffle the data is ', str(random_seed))
     print('The data are from ', kwargs['year'], ' year')
     #extract unique zones from alltif names
+    if kwargs['patches'] == 'heterogeneous':
+        #load the csv file with the list of heterogen masks '../../csv/heterogen_masks.csv'
+        heterogen_masks = pd.read_csv(kwargs['heterogen_patches_path'])
+        msk_paths = heterogen_masks['0'].values # get the values of the column 
+        # turn to paths
+        msk_paths = [Path(msk_path) for msk_path in msk_paths]
+        print(len(msk_paths), ' masks found')
+    elif kwargs['patches'] == 'homogeneous':
+        msk_paths = list(msk_folder.rglob('*.tif'))
+        heterogen_masks = pd.read_csv(kwargs['heterogen_patches_path'])
+        heterogen_masks_ = heterogen_masks['0'].values
+        heterogen_masks_ = [Path(msk_path) for msk_path in heterogen_masks_]
+        msk_paths = [msk_path for msk_path in msk_paths if msk_path not in heterogen_masks_]
+        print(len(msk_paths), ' masks found')
 
-    msk_paths = list(msk_folder.rglob('*.tif'))
-    #load the csv file with the list of heterogen masks '../../csv/heterogen_masks.csv'
-    #heterogen_masks = pd.read_csv('../../csv/heterogen_masks.csv')
-    #msk_paths = heterogen_masks['0'].values # get the values of the column 
-    # turn to paths
-    #msk_paths = [Path(msk_path) for msk_path in msk_paths]
-    print(len(msk_paths), ' masks found')
+    elif kwargs['patches'] == 'all':
+        
+        msk_paths = list(msk_folder.rglob('*.tif'))
     if kwargs['year'] == '2023':
         zones_2023 = pd.read_csv(kwargs['2023_zones'])
         msk_paths = [msk_path for msk_path in msk_paths if str(msk_path).split('/')[-2].split('_')[0] in zones_2023['zone_AJ'].values]
@@ -207,6 +217,9 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
     print('Training')
     running_loss = 0.0
     patch_confusion_matrices = []
+    all_preds = []
+    all_labels = []
+
     for i, (img, msk) in enumerate(train_dl):
         if i % 50 == 0:
             print( 'Batch:', i, ' over ', len(train_dl))
@@ -218,21 +231,36 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes):
         loss.backward()
         optimizer.step()
         running_loss += loss.item()
-        out = torch.argmax(out, dim=1)
-        out = out.int() #int means int32 on cpu and int64 on gpu
-        patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
+        if model_settings['model'] == 'UNet':
+            out = torch.argmax(out, dim=1)
+            out = out.int() #int means int32 on cpu and int64 on gpu
+            patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
+        elif model_settings['model'] == 'Resnet18':
+             _, preds = torch.max(out, 1)
+             # to int
+            preds = preds.int()
 
-    sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
-    IoU_by_class, _ = IoU_F1_from_confmatrix(sum_confusion_matrix)
-    IoU_by_class = {k: v for k, v in IoU_by_class.items() if not np.isnan(v)}
-    mIoU = np.mean(list(IoU_by_class.values()))
-    return running_loss / len(train_dl), mIoU
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(msk.cpu().numpy())
+
+    if model_settings['model'] == 'UNet':
+        sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
+        IoU_by_class, _ = IoU_F1_from_confmatrix(sum_confusion_matrix)
+        IoU_by_class = {k: v for k, v in IoU_by_class.items() if not np.isnan(v)}
+        mIoU = np.mean(list(IoU_by_class.values()))
+        return running_loss / len(train_dl), mIoU
+    elif model = 'Resnet18':
+        F1_by_class = f1_score(all_labels, all_preds, average=None)
+        mF1 = np.mean(F1_by_class)
+        return running_loss / len(train_dl), mF1
 
 def valid_test(model, dl, criterion, device, nb_classes, valid_or_test):
     running_loss = 0.0
     patch_confusion_matrices = []
     patch_confusion_matrices_1c = []
     patch_confusion_matrices_multic = []
+    all_preds = []
+    all_labels = []
     for i, (img, msk) in enumerate(dl):
         batch_confusion_matrices_1c = []
         batch_confusion_matrices_multic = []
@@ -243,79 +271,51 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test):
         msk = msk.long()
         loss = criterion(out, msk)
         running_loss += loss.item()
-        out = torch.argmax(out, dim=1)
-        # out to uint8
-        out = out.int()
-        #print("y_true", msk.flatten().cpu().numpy())
-        #print("y_pred", out.flatten().cpu().numpy())
-        patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
-        '''# for each img and mask in the batch, check if the msk is composed of one single class
-        for i in range(len(msk)):
-            if len(np.unique(msk[i].cpu())) == 1:
-                batch_confusion_matrices_1c.append(confusion_matrix(msk[i].flatten().cpu().numpy(), out[i].flatten().cpu().numpy(), labels=range(nb_classes)))
-            else:
-                batch_confusion_matrices_multic.append(confusion_matrix(msk[i].flatten().cpu().numpy(), out[i].flatten().cpu().numpy(), labels=range(nb_classes)))
-        
-        sum_batch_confusion_matrices_1c = np.sum(batch_confusion_matrices_1c, axis=0)
-        #print('sum_batch_confusion_matrices_1c: ', sum_batch_confusion_matrices_1c)
-        sum_batch_confusion_matrices_multic = np.sum(batch_confusion_matrices_multic, axis=0)
-        #print('sum_batch_confusion_matrices_multic: ', sum_batch_confusion_matrices_multic)
+        if model_settings['model'] == 'UNet':
+            out = torch.argmax(out, dim=1)
+            out = out.int()
+            patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
+        elif model_settings['model'] == 'Resnet18':
+            _, preds = torch.max(out, 1)
+            # to int
+            preds = preds.int()
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(msk.cpu().numpy())
+    if model_settings['model'] == 'UNet':   
+        sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
+        IoU_by_class, F1_by_class = IoU_F1_from_confmatrix(sum_confusion_matrix)
+        IoU_by_class = {k: v for k, v in IoU_by_class.items() if not np.isnan(v)}
+        mIoU = np.mean(list(IoU_by_class.values()))
+        mF1 = np.mean(list(F1_by_class.values()))
+        metrics = {
+            'confusion_matrix': sum_confusion_matrix,
+            'IoU_by_class': IoU_by_class,
+            'F1_by_class': F1_by_class,
+            'mIoU': mIoU,
+            'mF1': mF1
+        }
+    elif model_settings['model'] == 'Resnet18':
+        cm = confusion_matrix(all_labels, all_preds, labels=range(nb_classes))
+        precision = precision_score(all_labels, all_preds)
+        recall = recall_score(all_labels, all_preds)
+        accuracy = accuracy_score(all_labels, all_preds)
+        F1_by_class = f1_score(all_labels, all_preds, average=None)
+        mF1 = np.mean(F1_by_class)
 
-        patch_confusion_matrices_1c.append(sum_batch_confusion_matrices_1c)
-        patch_confusion_matrices_multic.append(sum_batch_confusion_matrices_multic)'''
-    sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
-    '''sum_confusion_matrix_1c = np.sum(patch_confusion_matrices_1c, axis=0)
-    sum_confusion_matrix_multic = np.sum(patch_confusion_matrices_multic, axis=0)'''
+        metrics = {
+            'confusion_matrix': cm,
+            'precision': precision,
+            'recall': recall,
+            'accuracy': accuracy,
+            'F1_by_class': F1_by_class,
+            'mF1': mF1
+        }
 
-    IoU_by_class, F1_by_class = IoU_F1_from_confmatrix(sum_confusion_matrix)
-    '''IoU_by_class_1c, F1_by_class_1c = IoU_F1_from_confmatrix(sum_confusion_matrix_1c)
-    IoU_by_class_multic, F1_by_class_multic = IoU_F1_from_confmatrix(sum_confusion_matrix_multic)'''
-    # mean of IoU_by_class for all classes
-    #remove nan from IoU_by_class and F1_by_class
-    IoU_by_class = {k: v for k, v in IoU_by_class.items() if not np.isnan(v)}
-    '''IoU_by_class_1c = {k: v for k, v in IoU_by_class_1c.items() if not np.isnan(v)}
-    IoU_by_class_multic = {k: v for k, v in IoU_by_class_multic.items() if not np.isnan(v)}'''
-    F1_by_class = {k: v for k, v in F1_by_class.items() if not np.isnan(v)}
-    '''F1_by_class_1c = {k: v for k, v in F1_by_class_1c.items() if not np.isnan(v)}
-    F1_by_class_multic = {k: v for k, v in F1_by_class_multic.items() if not np.isnan(v)}'''
-    
-    mIoU = np.mean(list(IoU_by_class.values()))
-    ''' mIoU_1c = np.mean(list(IoU_by_class_1c.values()))
-    mIoU_multic = np.mean(list(IoU_by_class_multic.values()))'''
-    mF1 = np.mean(list(F1_by_class.values()))
-    ''' mF1_1c = np.mean(list(F1_by_class_1c.values()))
-    mF1_multic = np.mean(list(F1_by_class_multic.values()))'''
-
-    metrics = {
-        'confusion_matrix': sum_confusion_matrix,
-        'IoU_by_class': IoU_by_class,
-        'F1_by_class': F1_by_class,
-        'mIoU': mIoU,
-        'mF1': mF1
-    }
-
-    '''metrics_1c = {
-        'confusion_matrix': sum_confusion_matrix_1c,
-        'IoU_by_class': IoU_by_class_1c,
-        'F1_by_class': F1_by_class_1c,
-        'mIoU': mIoU_1c,
-        'mF1': mF1_1c
-    }
-
-    metrics_multic = {
-        'confusion_matrix': sum_confusion_matrix_multic,
-        'IoU_by_class': IoU_by_class_multic,
-        'F1_by_class': F1_by_class_multic,
-        'mIoU': mIoU_multic,
-        'mF1': mF1_multic
-    }
-    
-    print('Metrics for single labelled patches')
-    print(metrics_1c)
-    print('Metrics for multi labelled patches')
-    print(metrics_multic)'''
     if valid_or_test == 'valid':
-        return running_loss / len(dl), mIoU
+        if model_settings['model'] == 'UNet':
+            return running_loss / len(dl), mIoU
+        else:
+            return running_loss / len(dl), mF1
     else:
         return running_loss / len(dl), metrics
 

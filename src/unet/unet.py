@@ -12,6 +12,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import segmentation_models_pytorch as smp
 import gc
+import torchvision.models as models
 
 from datetime import datetime
 
@@ -38,6 +39,8 @@ print('Loading data...')
 print('Data loading settings:')
 print(f'Splitting data: {data_loading_settings["split"]}')
 print(f'Stratified: {data_loading_settings["stratified"]}')
+print(f'Year: {data_loading_settings["year"]}')
+print(f'Patches: {data_loading_settings["patches"]}')
 print(f'Batch size: {data_loading_settings["bs"]}')
 print(f'Normalisation: {data_loading_settings["normalisation"]}')
 if data_loading_settings['data_augmentation']: 
@@ -99,18 +102,37 @@ print('Model settings:')
 print(f'Encoder name: {model_settings["encoder_name"]}')
 print(f'Pretrained: {model_settings["encoder_weights"]}')
 print(f'Classes: {model_settings["classes"]}')
-model = smp.Unet(
-    encoder_name=model_settings['encoder_name'],        
-    encoder_weights=model_settings['encoder_weights'], 
-    in_channels=model_settings['in_channels'], 
-    classes=model_settings['classes'], 
-)
+if model_settings['model'] == 'Unet':
+    model = smp.Unet(
+        encoder_name=model_settings['encoder_name'],        
+        encoder_weights=model_settings['encoder_weights'], 
+        in_channels=model_settings['in_channels'], 
+        classes=model_settings['classes'], 
+    )
 
+elif model_settings['model'] == 'Resnet18':
+    model = models.resnet18(pretrained=False)
+    num_channels = model_settings['in_channels']
+    # Extract the first conv layer's parameters
+    num_filters = model.conv1.out_channels
+    kernel_size = model.conv1.kernel_size
+    stride = model.conv1.stride
+    padding = model.conv1.padding
+    # Replace the first conv layer with a new one
+    model.conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
+    # Replace the classifier head
+    model.fc = nn.Linear(512, model_settings['classes'])
+    
 if training_settings['restart_training'] is not None:
     model.load_state_dict(torch.load(model_settings['path_to_last_model']))
     print('Model from last epoch', training_settings['restart_training'], ' loaded')
 model.to(device)
 
+# METRIC
+if model_settings['model'] == 'Unet':
+    metric = 'IoU'
+elif model_settings['model'] == 'Resnet18':
+    metric = 'F1'
 # OPTIMIZER
 if training_settings['criterion'] == 'CrossEntropy':
     criterion = nn.CrossEntropyLoss()
@@ -139,8 +161,8 @@ if training_settings['training']:
     print('Training...')
     training_losses = []
     validation_losses = []
-    training_miou = []
-    validation_miou = []
+    training_metric = []
+    validation_metric = []
     count = 0
     best_val_loss = np.inf 
 
@@ -149,14 +171,14 @@ if training_settings['training']:
         df = pd.read_csv(training_settings['losses_mious_path'])
         training_losses = df['training_losses'].tolist()
         validation_losses = df['validation_losses'].tolist()
-        training_miou = df['training_miou'].tolist()
-        validation_miou = df['validation_miou'].tolist()
+        training_metric = df['training_metric'].tolist()
+        validation_metric = df['validation_metric'].tolist()
 
         best_val_loss = min(validation_losses)
         print('training_losses: ', training_losses)
         print('validation_losses: ', validation_losses)
-        print('training_miou: ', training_miou)
-        print('validation_miou: ', validation_miou)
+        print('training_metric: ', training_metric)
+        print('validation_metric: ', validation_metric)
         print('best_val_loss', best_val_loss)
         print('Losses and iou loaded')
 
@@ -171,18 +193,18 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, tr_miou = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
+        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'])
         training_losses.append(train_loss)
-        training_miou.append(tr_miou)
+        training_metric.append(tr_metric)
         model.eval()
         with torch.no_grad():
             print('Validation')
-            val_loss, val_mIoU = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid')
+            val_loss, val_metric = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid')
             validation_losses.append(val_loss)
-            validation_miou.append(val_mIoU)
+            validation_metric.append(val_metric)
 
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train loss {train_loss:.4f}, val loss {val_loss:.4f}')
-        print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train mIoU {tr_miou:.4f}, val mIoU {val_mIoU:.4f}')
+        print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train {metric} {tr_metric:.4f}, val {metric} {val_metric:.4f}')
         if val_loss < best_val_loss:
             count = 0
             best_val_loss = val_loss
@@ -195,7 +217,7 @@ if training_settings['training']:
             print(f'Early stopping at epoch {epoch+1}')
             break
 
-        df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_miou': training_miou, 'validation_miou': validation_miou})
+        df = pd.DataFrame({'training_losses': training_losses, 'validation_losses': validation_losses, 'training_metric': training_metric, 'validation_metric': validation_metric})
         df.to_csv(training_settings['losses_mious_path'])
         sys.stdout.flush()
 
