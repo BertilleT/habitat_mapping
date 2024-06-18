@@ -12,3 +12,5 @@ image, 3_stratified_shuffling_by_image_seed3, 3, False, False, 4, False, True, 1
 zone, 3_stratified_shuffling_by_zone_seed3, 3, False, False, 4, False, True, 16, None, None, 11, all_channels_together, all
 random, 2_random_shuffling_daya_augmentation_seed1, 1, False, False, 4, False, True, 16, None, None, 26, all_channels_together, all
 zone, 4_stratified_shuffling_by_zone_2023_seed1, 1, False, False, 4, False, True, 16, None, None, 42, all_channels_together, 2023
+random, resnet18_random_homogene_zone2023, 1, False, False, 4, False, True, 16, None, None, 10, channel_by_channel, 2023
+random, resnet18_random_homogene, 1, False, False, 4, False, True, 16, None, None, 2, channel_by_channel, all

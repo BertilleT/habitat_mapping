@@ -1,0 +1,12 @@
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.68, 0.14]
+Stratified: zone
+Batch size: 16
+No data augmentation
+Train: 6345 images, Val: 2400 images, Test: 1918 images
+Train: 59.50%, Val: 22.51%, Test: 17.99%

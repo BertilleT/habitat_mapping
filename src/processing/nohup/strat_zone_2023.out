@@ -1,0 +1,987 @@
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.63, 0.14]
+Stratified: zone2023
+Batch size: 16
+No data augmentation
+The seed to shuffle the data is  1
+{'msks_256_fully_labelled':                                               mask_path   0  ...       5   6
+0     ../data/patch256/msk/l123/zone100_0_0/msk_zone... NaN  ...     NaN NaN
+1     ../data/patch256/msk/l123/zone100_0_0/msk_zone... NaN  ...     NaN NaN
+2     ../data/patch256/msk/l123/zone100_0_0/msk_zone... NaN  ...     NaN NaN
+3     ../data/patch256/msk/l123/zone100_0_0/msk_zone... NaN  ...     NaN NaN
+4     ../data/patch256/msk/l123/zone100_0_0/msk_zone... NaN  ...     NaN NaN
+...                                                 ...  ..  ...     ...  ..
+9463  ../data/patch256/msk/l123/zone20_0_0/msk_zone2... NaN  ...  1651.0 NaN
+9464  ../data/patch256/msk/l123/zone20_0_0/msk_zone2... NaN  ...  5438.0 NaN
+9465  ../data/patch256/msk/l123/zone20_0_0/msk_zone2... NaN  ...     NaN NaN
+9466  ../data/patch256/msk/l123/zone20_0_0/msk_zone2... NaN  ...     NaN NaN
+9467  ../data/patch256/msk/l123/zone20_0_0/msk_zone2... NaN  ...     NaN NaN
+
+[9468 rows x 8 columns], 'path_pixels_by_zone': PosixPath('../../csv/l1_nb_pixels_by_zone.csv'), 'bs': 16, 'normalisation': 'all_channels_together', 'classes_balance': PosixPath('../../unet_256_l1/stratified_shuffling_zone2023/4_stratified_shuffling_by_zone_2023_seed1/classes_balance.csv'), 'img_ids_by_set': PosixPath('../../unet_256_l1/stratified_shuffling_zone2023/seed1/img_ids_by_set.csv'), 'data_augmentation': False, 'year': '2023', '2023_zones': PosixPath('../../csv/zones_2023.csv')}
+The data are from  2023  year
+10663  masks found
+6579  kept masks from 2023 zones
+The data are from 2023
+Train, val and test zones saved in csv file at: ../../unet_256_l1/stratified_shuffling_zone2023/seed1/img_ids_by_set.csv
+Train: 3929 images, Val: 1175 images, Test: 1475 images
+Train: 59.72%, Val: 17.86%, Test: 22.42%
+Creating model...
+Model settings:
+Encoder name: efficientnet-b7
+Pretrained: None
+Classes: 6
+Creating optimizer...
+Training settings:
+Learning rate: 0.0001
+Criterion: Dice
+Optimizer: Adam
+Training...
+Epoch 1/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 1/70: train loss 0.7093, val loss 0.4842
+Epoch 1/70: train mIoU 0.2245, val mIoU 0.0164
+Time: 0:08:09.719984
+Epoch 2/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 2/70: train loss 0.5806, val loss 0.4948
+Epoch 2/70: train mIoU 0.3140, val mIoU 0.0487
+Time: 0:08:00.214268
+Epoch 3/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 3/70: train loss 0.5249, val loss 0.3923
+Epoch 3/70: train mIoU 0.3445, val mIoU 0.2078
+Time: 0:08:18.859344
+Epoch 4/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 4/70: train loss 0.5010, val loss 0.3894
+Epoch 4/70: train mIoU 0.3655, val mIoU 0.1895
+Time: 0:08:06.522226
+Epoch 5/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 5/70: train loss 0.4786, val loss 0.3818
+Epoch 5/70: train mIoU 0.3783, val mIoU 0.2134
+Time: 0:07:58.745441
+Epoch 6/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 6/70: train loss 0.4641, val loss 0.3855
+Epoch 6/70: train mIoU 0.3924, val mIoU 0.1983
+Time: 0:08:01.357816
+Epoch 7/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 7/70: train loss 0.4511, val loss 0.3762
+Epoch 7/70: train mIoU 0.4050, val mIoU 0.2057
+Time: 0:08:01.145410
+Epoch 8/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 8/70: train loss 0.4462, val loss 0.3571
+Epoch 8/70: train mIoU 0.4103, val mIoU 0.2423
+Time: 0:07:58.602623
+Epoch 9/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 9/70: train loss 0.4416, val loss 0.3609
+Epoch 9/70: train mIoU 0.4181, val mIoU 0.2398
+Time: 0:08:02.167000
+Epoch 10/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 10/70: train loss 0.4267, val loss 0.3867
+Epoch 10/70: train mIoU 0.4302, val mIoU 0.2035
+Time: 0:08:03.482421
+Epoch 11/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 11/70: train loss 0.4177, val loss 0.3616
+Epoch 11/70: train mIoU 0.4346, val mIoU 0.2405
+Time: 0:08:11.297453
+Epoch 12/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 12/70: train loss 0.4081, val loss 0.3616
+Epoch 12/70: train mIoU 0.4485, val mIoU 0.2349
+Time: 0:08:00.281544
+Epoch 13/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 13/70: train loss 0.4054, val loss 0.3788
+Epoch 13/70: train mIoU 0.4500, val mIoU 0.2199
+Time: 0:08:03.724731
+Epoch 14/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 14/70: train loss 0.4034, val loss 0.3560
+Epoch 14/70: train mIoU 0.4508, val mIoU 0.2566
+Time: 0:08:03.253031
+Epoch 15/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 15/70: train loss 0.3870, val loss 0.3775
+Epoch 15/70: train mIoU 0.4666, val mIoU 0.1942
+Time: 0:08:08.183623
+Epoch 16/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 16/70: train loss 0.3841, val loss 0.3987
+Epoch 16/70: train mIoU 0.4752, val mIoU 0.1680
+Time: 0:07:59.731995
+Epoch 17/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 17/70: train loss 0.3843, val loss 0.3753
+Epoch 17/70: train mIoU 0.4729, val mIoU 0.2213
+Time: 0:08:05.038501
+Epoch 18/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 18/70: train loss 0.3781, val loss 0.3989
+Epoch 18/70: train mIoU 0.4816, val mIoU 0.1740
+Time: 0:08:03.343503
+Epoch 19/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 19/70: train loss 0.3729, val loss 0.3895
+Epoch 19/70: train mIoU 0.4845, val mIoU 0.1889
+Time: 0:08:01.522885
+Epoch 20/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 20/70: train loss 0.3643, val loss 0.3568
+Epoch 20/70: train mIoU 0.5028, val mIoU 0.2498
+Time: 0:08:02.609069
+Epoch 21/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 21/70: train loss 0.3652, val loss 0.3716
+Epoch 21/70: train mIoU 0.4940, val mIoU 0.2315
+Time: 0:07:59.190428
+Epoch 22/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 22/70: train loss 0.3603, val loss 0.3533
+Epoch 22/70: train mIoU 0.4969, val mIoU 0.2524
+Time: 0:08:26.134159
+Epoch 23/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 23/70: train loss 0.3555, val loss 0.3602
+Epoch 23/70: train mIoU 0.5040, val mIoU 0.2387
+Time: 0:08:17.501549
+Epoch 24/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 24/70: train loss 0.3509, val loss 0.3783
+Epoch 24/70: train mIoU 0.5143, val mIoU 0.2160
+Time: 0:08:00.980142
+Epoch 25/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 25/70: train loss 0.3611, val loss 0.3686
+Epoch 25/70: train mIoU 0.5065, val mIoU 0.2291
+Time: 0:07:59.877364
+Epoch 26/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 26/70: train loss 0.3492, val loss 0.3700
+Epoch 26/70: train mIoU 0.5148, val mIoU 0.2219
+Time: 0:07:59.452928
+Epoch 27/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 27/70: train loss 0.3517, val loss 0.3817
+Epoch 27/70: train mIoU 0.5138, val mIoU 0.2120
+Time: 0:08:00.175386
+Epoch 28/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 28/70: train loss 0.3335, val loss 0.3511
+Epoch 28/70: train mIoU 0.5326, val mIoU 0.2514
+Time: 0:08:00.373418
+Epoch 29/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 29/70: train loss 0.3425, val loss 0.3709
+Epoch 29/70: train mIoU 0.5248, val mIoU 0.2261
+Time: 0:07:59.491013
+Epoch 30/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 30/70: train loss 0.3342, val loss 0.3621
+Epoch 30/70: train mIoU 0.5353, val mIoU 0.2310
+Time: 0:08:00.439794
+Epoch 31/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 31/70: train loss 0.3398, val loss 0.3615
+Epoch 31/70: train mIoU 0.5294, val mIoU 0.2323
+Time: 0:07:59.795167
+Epoch 32/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 32/70: train loss 0.3248, val loss 0.3872
+Epoch 32/70: train mIoU 0.5389, val mIoU 0.1966
+Time: 0:08:00.065485
+Epoch 33/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 33/70: train loss 0.3279, val loss 0.3552
+Epoch 33/70: train mIoU 0.5397, val mIoU 0.2453
+Time: 0:07:59.552053
+Epoch 34/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 34/70: train loss 0.3288, val loss 0.3709
+Epoch 34/70: train mIoU 0.5443, val mIoU 0.2066
+Time: 0:07:59.681589
+Epoch 35/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 35/70: train loss 0.3100, val loss 0.3683
+Epoch 35/70: train mIoU 0.5628, val mIoU 0.1989
+Time: 0:08:00.679459
+Epoch 36/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 36/70: train loss 0.3099, val loss 0.3683
+Epoch 36/70: train mIoU 0.5685, val mIoU 0.2128
+Time: 0:07:59.534596
+Epoch 37/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 37/70: train loss 0.3091, val loss 0.4044
+Epoch 37/70: train mIoU 0.5609, val mIoU 0.1828
+Time: 0:07:59.481771
+Epoch 38/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 38/70: train loss 0.3079, val loss 0.3604
+Epoch 38/70: train mIoU 0.5639, val mIoU 0.2313
+Time: 0:08:00.346143
+Epoch 39/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 39/70: train loss 0.3081, val loss 0.3726
+Epoch 39/70: train mIoU 0.5641, val mIoU 0.2223
+Time: 0:08:00.729145
+Epoch 40/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 40/70: train loss 0.3137, val loss 0.3680
+Epoch 40/70: train mIoU 0.5549, val mIoU 0.2276
+Time: 0:08:00.351390
+Epoch 41/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 41/70: train loss 0.3055, val loss 0.3588
+Epoch 41/70: train mIoU 0.5778, val mIoU 0.2327
+Time: 0:08:01.637380
+Epoch 42/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 42/70: train loss 0.2913, val loss 0.3428
+Epoch 42/70: train mIoU 0.5897, val mIoU 0.2639
+Time: 0:08:02.222210
+Epoch 43/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 43/70: train loss 0.2863, val loss 0.3791
+Epoch 43/70: train mIoU 0.5919, val mIoU 0.2012
+Time: 0:08:01.118970
+Epoch 44/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 44/70: train loss 0.2840, val loss 0.3684
+Epoch 44/70: train mIoU 0.5915, val mIoU 0.2179
+Time: 0:08:00.448672
+Epoch 45/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 45/70: train loss 0.2703, val loss 0.3564
+Epoch 45/70: train mIoU 0.6068, val mIoU 0.2484
+Time: 0:08:00.012057
+Epoch 46/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 46/70: train loss 0.2909, val loss 0.3651
+Epoch 46/70: train mIoU 0.5923, val mIoU 0.2345
+Time: 0:08:00.572022
+Epoch 47/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 47/70: train loss 0.2713, val loss 0.3743
+Epoch 47/70: train mIoU 0.6180, val mIoU 0.2096
+Time: 0:07:59.615796
+Epoch 48/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 48/70: train loss 0.2708, val loss 0.3611
+Epoch 48/70: train mIoU 0.6186, val mIoU 0.2361
+Time: 0:08:00.211215
+Epoch 49/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 49/70: train loss 0.2730, val loss 0.3522
+Epoch 49/70: train mIoU 0.6172, val mIoU 0.2485
+Time: 0:08:00.217957
+Epoch 50/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 50/70: train loss 0.2731, val loss 0.3690
+Epoch 50/70: train mIoU 0.6185, val mIoU 0.2276
+Time: 0:08:00.738566
+Epoch 51/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 51/70: train loss 0.2688, val loss 0.3638
+Epoch 51/70: train mIoU 0.6261, val mIoU 0.2334
+Time: 0:08:04.850294
+Epoch 52/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 52/70: train loss 0.2755, val loss 0.3488
+Epoch 52/70: train mIoU 0.6125, val mIoU 0.2486
+Time: 0:07:58.937662
+Epoch 53/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 53/70: train loss 0.2753, val loss 0.4053
+Epoch 53/70: train mIoU 0.6160, val mIoU 0.1689
+Time: 0:08:00.009550
+Epoch 54/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 54/70: train loss 0.2856, val loss 0.3777
+Epoch 54/70: train mIoU 0.6071, val mIoU 0.2149
+Time: 0:08:00.504559
+Epoch 55/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 55/70: train loss 0.2772, val loss 0.3774
+Epoch 55/70: train mIoU 0.6139, val mIoU 0.2183
+Time: 0:08:00.363533
+Epoch 56/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 56/70: train loss 0.2571, val loss 0.3520
+Epoch 56/70: train mIoU 0.6342, val mIoU 0.2440
+Time: 0:08:00.583529
+Epoch 57/70
+Training
+Batch: 0  over  246
+Batch: 50  over  246
+Batch: 100  over  246
+Batch: 150  over  246
+Batch: 200  over  246
+Validation
+Batch: 0  over  74
+Batch: 50  over  74
+Epoch 57/70: train loss 0.2533, val loss 0.3702
+Epoch 57/70: train mIoU 0.6512, val mIoU 0.2240
+Early stopping at epoch 57
+Testing
+Batch: 0  over  93
+Batch: 50  over  93
+Test IoU by class: {0: 0.3531485025666282, 1: 0.1986778679496906, 2: 0.5198265499802998, 3: 0.16269948927867417, 4: 0.3496926130549897, 5: 0.11251365320108941}
+Test F1 by class: {0: 0.5219656259409553, 1: 0.3314950134009303, 2: 0.6840603620025427, 3: 0.27986507395752125, 4: 0.518181117200413, 5: 0.2022692537342772}
+Test mIoU: 0.28275977933856206
+Test mF1: 0.42297274103944
+img[i].shape (4, 256, 256)
+[[[0.09712116 0.13698196 0.17336287 ... 0.1724138  0.16830117 0.14995255]
+  [0.12717494 0.1724138  0.19993673 ... 0.17621006 0.16134135 0.14077823]
+  [0.17083201 0.18506801 0.19614047 ... 0.1588105  0.1480544  0.14520721]
+  ...
+  [0.09617209 0.07940525 0.07434356 ... 0.06991459 0.06928188 0.05567858]
+  [0.09300854 0.07244543 0.06643467 ... 0.06105663 0.06453654 0.0654856 ]
+  [0.09680481 0.09237583 0.08857957 ... 0.06675103 0.06485289 0.06896552]]
+
+ [[0.11705156 0.1724138  0.25466624 ... 0.25782982 0.24549194 0.22239797]
+  [0.16608669 0.2435938  0.31540653 ... 0.25846252 0.23979753 0.21670358]
+  [0.24169567 0.29104713 0.34451124 ... 0.24517557 0.22840872 0.2208162 ]
+  ...
+  [0.15185069 0.13128756 0.1161025  ... 0.11104081 0.10692818 0.09300854]
+  [0.15469788 0.12559317 0.10914268 ... 0.09680481 0.10281556 0.10060108]
+  [0.15627965 0.14647263 0.13128756 ... 0.10439734 0.10724454 0.10787725]]
+
+ [[0.02214489 0.04618791 0.10503005 ... 0.13413477 0.12148055 0.09996837]
+  [0.05441316 0.09585574 0.14520721 ... 0.12875672 0.11293894 0.09585574]
+  [0.10882632 0.12369503 0.16323948 ... 0.1217969  0.10503005 0.10249921]
+  ...
+  [0.03385005 0.02309396 0.02182854 ... 0.01613414 0.01613414 0.01043973]
+  [0.0398608  0.02214489 0.01518507 ... 0.00695982 0.01518507 0.01170516]
+  [0.04460614 0.04017716 0.03258463 ... 0.01486871 0.01929769 0.01898134]]
+
+ [[0.217969   0.3631762  0.5330592  ... 0.30528313 0.28661817 0.27396393]
+  [0.28978172 0.42581463 0.5678583  ... 0.29579246 0.27934197 0.27554572]
+  [0.36222714 0.47801328 0.57007277 ... 0.2828219  0.26826954 0.27174944]
+  ...
+  [0.421702   0.34862384 0.25941157 ... 0.43024358 0.41062954 0.37709585]
+  [0.46978804 0.3774122  0.2777602  ... 0.42581463 0.44606137 0.42676368]
+  [0.5055362  0.43182537 0.33596963 ... 0.45998102 0.49667826 0.45333755]]]
+img[i].shape (4, 256, 256)
+[[[0.28735632 0.3045977  0.28735632 ... 0.1773399  0.18801314 0.18555008]
+  [0.25287357 0.2914614  0.32840723 ... 0.19293925 0.1912972  0.17898194]
+  [0.22003284 0.227422   0.24630542 ... 0.19458129 0.18144499 0.17569786]
+  ...
+  [0.136289   0.1272578  0.13382594 ... 0.43431854 0.46141216 0.46715927]
+  [0.13464697 0.13300492 0.14367816 ... 0.42939246 0.41707718 0.40558293]
+  [0.13300492 0.13875206 0.14778325 ... 0.43842363 0.42036125 0.38341543]]
+
+ [[0.4408867  0.46223316 0.4499179  ... 0.21756978 0.21510673 0.19376026]
+  [0.40558293 0.43760264 0.47126436 ... 0.24220033 0.22577997 0.1954023 ]
+  [0.3275862  0.33908045 0.35303777 ... 0.23973727 0.21756978 0.19376026]
+  ...
+  [0.11494253 0.10837439 0.11083744 ... 0.67569786 0.7052545  0.7118227 ]
+  [0.10673235 0.10509031 0.11494253 ... 0.63793105 0.6247947  0.61576355]
+  [0.10755336 0.11083744 0.11986864 ... 0.635468   0.59770113 0.5689655 ]]
+
+ [[0.17405583 0.19950739 0.19622332 ... 0.02545156 0.02463054 0.02052545]
+  [0.1592775  0.18883416 0.2224959  ... 0.04844007 0.03366174 0.0180624 ]
+  [0.1091954  0.12397373 0.13875206 ... 0.05254516 0.03940887 0.02627258]
+  ...
+  [0.         0.         0.         ... 0.36288998 0.40558293 0.41050902]
+  [0.         0.         0.         ... 0.33087027 0.32101807 0.3128079 ]
+  [0.         0.         0.         ... 0.33333334 0.30131364 0.27422002]]
+
+ [[0.7093596  0.7454844  0.74794745 ... 0.41050902 0.34400657 0.31527093]
+  [0.68472904 0.78571427 0.8226601  ... 0.52463055 0.44417077 0.3678161 ]
+  [0.5796388  0.6313629  0.66502464 ... 0.58949095 0.48357964 0.37931034]
+  ...
+  [0.04269294 0.03448276 0.02873563 ... 0.7676519  0.77011496 0.78243023]
+  [0.04515599 0.03776683 0.03284072 ... 0.72577995 0.681445   0.67898196]
+  [0.04844007 0.04269294 0.03776683 ... 0.72577995 0.66502464 0.63875204]]]
+img[i].shape (4, 256, 256)
+[[[0.1715585  0.16866474 0.16659777 ... 0.27532038 0.23522116 0.19512194]
+  [0.17610583 0.17445226 0.15708971 ... 0.26498553 0.22075237 0.19677553]
+  [0.17403886 0.16990492 0.16081025 ... 0.24472922 0.21620505 0.20793717]
+  ...
+  [0.10582885 0.09756097 0.0959074  ... 0.14882183 0.15419595 0.15543613]
+  [0.10872261 0.10004134 0.09425382 ... 0.1504754  0.14468789 0.15419595]
+  [0.10541546 0.09384043 0.09466722 ... 0.15460934 0.15130219 0.1579165 ]]
+
+ [[0.30425796 0.29723027 0.2939231  ... 0.44191813 0.40140554 0.35303846]
+  [0.3096321  0.30260438 0.28193468 ... 0.42703596 0.3782555  0.34766433]
+  [0.31293923 0.30467135 0.29268292 ... 0.40471268 0.36833403 0.35427862]
+  ...
+  [0.14799504 0.13435304 0.12649855 ... 0.2331542  0.23852831 0.2463828 ]
+  [0.1575031  0.13476643 0.11533692 ... 0.24266225 0.23150063 0.24844977]
+  [0.14220752 0.11492352 0.10210831 ... 0.24762298 0.24431583 0.2525837 ]]
+
+ [[0.09136007 0.08722613 0.09053328 ... 0.21372467 0.18189335 0.14014055]
+  [0.09838776 0.09260025 0.07771806 ... 0.21041752 0.16701116 0.14138074]
+  [0.10128152 0.09425382 0.08433237 ... 0.19512194 0.15998347 0.14592807]
+  ...
+  [0.02645721 0.01281521 0.00413394 ... 0.06490285 0.06448946 0.07151715]
+  [0.03307152 0.02190988 0.00785448 ... 0.07234395 0.05622158 0.07275734]
+  [0.02273667 0.00496073 0.         ... 0.07399752 0.07193055 0.07730467]]
+
+ [[0.93592393 0.92393553 0.9177346  ... 0.77180654 0.8201736  0.83629596]
+  [0.92062837 0.91277385 0.9115337  ... 0.77676725 0.8379496  0.8276147 ]
+  [0.9222819  0.9173212  0.92765605 ... 0.77552706 0.82430756 0.8114923 ]
+  ...
+  [0.259198   0.23852831 0.23852831 ... 0.7966102  0.7891691  0.7879289 ]
+  [0.24596941 0.22860686 0.22199255 ... 0.8077718  0.80487806 0.79619676]
+  [0.23026043 0.2054568  0.19470856 ... 0.809012   0.80611825 0.79619676]]]
+img[i].shape (4, 256, 256)
+[[[1.         0.97765905 0.703254   ... 0.15201554 0.14715882 0.15007286]
+  [1.         0.9902865  0.75424963 ... 0.16658573 0.14278775 0.14278775]
+  [1.         1.         0.77027684 ... 0.16027197 0.16610005 0.16367169]
+  ...
+  [0.10879067 0.09907722 0.09907722 ... 0.24186498 0.26857698 0.27149102]
+  [0.108305   0.0995629  0.09664886 ... 0.2185527  0.23895095 0.2578922 ]
+  [0.10490529 0.09567751 0.09616318 ... 0.21369597 0.23749393 0.23700826]]
+
+ [[1.         1.         1.         ... 0.2501214  0.2486644  0.2554638 ]
+  [1.         1.         1.         ... 0.25692084 0.23215152 0.23652259]
+  [1.         1.         1.         ... 0.26372024 0.26517728 0.2612919 ]
+  ...
+  [0.16610005 0.13890238 0.13258864 ... 0.46576008 0.47644487 0.49344343]
+  [0.16221467 0.14084508 0.13210297 ... 0.41767848 0.43953374 0.47013113]
+  [0.1544439  0.13793103 0.13210297 ... 0.39485186 0.42010686 0.4351627 ]]
+
+ [[0.94026226 0.81787276 0.56386596 ... 0.07770763 0.06993686 0.0728509 ]
+  [0.81787276 0.8081593  0.56969404 ... 0.07722195 0.05099563 0.06265178]
+  [0.81253034 0.8222438  0.59640604 ... 0.07479359 0.07527926 0.07965031]
+  ...
+  [0.02379796 0.00922778 0.01019913 ... 0.17435649 0.19378339 0.21806702]
+  [0.0213696  0.01165614 0.0106848  ... 0.14910151 0.16949975 0.19038369]
+  [0.01505585 0.00825644 0.00679942 ... 0.14618747 0.17192812 0.17387082]]
+
+ [[1.         0.94220495 0.7799903  ... 0.55706656 0.5730937  0.62068963]
+  [1.         0.9543468  0.8003885  ... 0.5327829  0.5463817  0.59057796]
+  [1.         0.99854296 0.8135017  ... 0.58717823 0.60029143 0.59543467]
+  ...
+  [0.5692083  0.5041282  0.4618747  ... 0.9339485  0.96163183 0.96211755]
+  [0.57649344 0.5031569  0.4579893  ... 0.87275374 0.91743565 0.9553181 ]
+  [0.5701797  0.49684313 0.4550753  ... 0.8416707  0.8644973  0.863526  ]]]
+img[i].shape (4, 256, 256)
+/home/bertille/.local/lib/python3.8/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/bertille/.local/lib/python3.8/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at ../aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[[[0.14342158 0.16475701 0.14895298 ... 0.08613196 0.08020546 0.08494666]
+  [0.13314895 0.15092848 0.14895298 ... 0.08297116 0.07981035 0.08257606]
+  [0.14184117 0.16673252 0.14697748 ... 0.08020546 0.07783484 0.07704464]
+  ...
+  [0.08613196 0.08731727 0.08613196 ... 0.1039115  0.12998815 0.14342158]
+  [0.09442908 0.08692217 0.09324378 ... 0.09284867 0.08534176 0.12287633]
+  [0.1086527  0.105887   0.105887   ... 0.09245358 0.09442908 0.1062821 ]]
+
+ [[0.22046621 0.24891347 0.23824576 ... 0.08257606 0.07585935 0.08257606]
+  [0.20742789 0.22757803 0.23627025 ... 0.08257606 0.07941525 0.08336626]
+  [0.2121691  0.23231924 0.21532992 ... 0.08178586 0.07981035 0.07664955]
+  ...
+  [0.08415646 0.08652706 0.08494666 ... 0.15132359 0.20466219 0.23864086]
+  [0.09205847 0.08534176 0.08889767 ... 0.11932043 0.13947056 0.20466219]
+  [0.1066772  0.1027262  0.10075069 ... 0.11220861 0.12722245 0.17028843]]
+
+ [[0.09047807 0.11892533 0.10904781 ... 0.         0.         0.0019755 ]
+  [0.08494666 0.10075069 0.11102331 ... 0.         0.         0.00632161]
+  [0.09640458 0.09640458 0.07230344 ... 0.         0.0011853  0.0007902 ]
+  ...
+  [0.00355591 0.00592651 0.         ... 0.03634927 0.07111814 0.08336626]
+  [0.00948242 0.0007902  0.0007902  ... 0.01501383 0.02923745 0.07032793]
+  [0.01619913 0.01540893 0.00869222 ... 0.00829712 0.01935994 0.05017779]]
+
+ [[0.5171869  0.51916236 0.49901226 ... 0.1639668  0.1548795  0.1521138 ]
+  [0.49190044 0.49032003 0.48952982 ... 0.16673252 0.15566969 0.14776768]
+  [0.44369814 0.46858948 0.5013828  ... 0.16554722 0.1532991  0.14144607]
+  ...
+  [0.11655472 0.12287633 0.12090083 ... 0.55669695 0.6408534  0.71039116]
+  [0.09838009 0.10154089 0.1039115  ... 0.41683128 0.50809956 0.65389174]
+  [0.08613196 0.08257606 0.08652706 ... 0.35480046 0.44132754 0.58040303]]]
+img[i].shape (4, 256, 256)
+[[[0.08813263 0.09205934 0.09031413 ... 0.09249564 0.10078534 0.09860384]
+  [0.07897033 0.08987784 0.08900524 ... 0.10427574 0.11300175 0.10296684]
+  [0.07678883 0.08726004 0.08376963 ... 0.12958115 0.12609075 0.09380454]
+  ...
+  [0.17102967 0.16317627 0.12434555 ... 0.20724258 0.20942408 0.22643979]
+  [0.16579406 0.16535777 0.13874346 ... 0.13481675 0.14179756 0.19982548]
+  [0.14616056 0.16012217 0.14659686 ... 0.13525306 0.08595113 0.13612565]]
+
+ [[0.08769634 0.08507854 0.08420593 ... 0.09773124 0.10034904 0.09860384]
+  [0.07678883 0.08289703 0.08376963 ... 0.10732985 0.11256544 0.10078534]
+  [0.07198953 0.07897033 0.07809773 ... 0.13525306 0.12739965 0.09075043]
+  ...
+  [0.2809773  0.27094242 0.20244329 ... 0.35253054 0.33944154 0.35165793]
+  [0.2779232  0.2722513  0.21771379 ... 0.2399651  0.23298429 0.3027923 ]
+  [0.2447644  0.2591623  0.236911   ... 0.21509598 0.16361256 0.21945898]]
+
+ [[0.0030541  0.         0.         ... 0.         0.0021815  0.0056719 ]
+  [0.         0.         0.         ... 0.0074171  0.0095986  0.0026178 ]
+  [0.         0.         0.         ... 0.03752182 0.02486911 0.        ]
+  ...
+  [0.09162304 0.10078534 0.06020942 ... 0.14048865 0.14136125 0.14659686]
+  [0.11169285 0.09991274 0.05191972 ... 0.06020942 0.04493892 0.10296684]
+  [0.09554974 0.09947644 0.08289703 ... 0.05279232 0.01352531 0.05279232]]
+
+ [[0.16143106 0.15619546 0.14703315 ... 0.14877836 0.14659686 0.12739965]
+  [0.15270506 0.14834206 0.13787085 ... 0.10994764 0.10602094 0.09598604]
+  [0.14048865 0.13656196 0.13132635 ... 0.09424084 0.08987784 0.07897033]
+  ...
+  [0.83115184 0.7364747  0.60645723 ... 0.8115183  0.85689354 0.89572424]
+  [0.81806284 0.7591623  0.66404885 ... 0.61692846 0.5702443  0.7006981 ]
+  [0.7046248  0.71684116 0.65532285 ... 0.60427576 0.5126527  0.58595115]]]
