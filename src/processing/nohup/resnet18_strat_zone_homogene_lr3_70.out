@@ -1,0 +1,84 @@
+INFO:albumentations.check_version:A new version of Albumentations is available: 1.4.9 (you have 1.4.8). Upgrade using: pip install --upgrade albumentations
+----------------------- UNet -----------------------
+Patch size: 128
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.7, 0.2]
+Stratified: zone
+Year: all
+Patches: homogeneous
+Batch size: 16
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+30111 homogeneous masks found
+['zone72' 'zone120' 'zone50' 'zone7' 'zone112' 'zone159' 'zone171'
+ 'zone65' 'zone93' 'zone161' 'zone143' 'zone148' 'zone127' 'zone157'
+ 'zone56' 'zone106' 'zone37' 'zone101' 'zone162' 'zone24' 'zone12'
+ 'zone113' 'zone71' 'zone144' 'zone30' 'zone155' 'zone14' 'zone33'
+ 'zone47' 'zone80' 'zone85' 'zone145' 'zone158' 'zone34' 'zone54' 'zone16'
+ 'zone68' 'zone154' 'zone4' 'zone67' 'zone96' 'zone38' 'zone134' 'zone98'
+ 'zone11' 'zone15' 'zone48' 'zone25' 'zone10' 'zone121' 'zone22' 'zone17'
+ 'zone126' 'zone78' 'zone69' 'zone123' 'zone165' 'zone160' 'zone26'
+ 'zone44' 'zone164' 'zone39' 'zone95' 'zone74' 'zone5' 'zone41' 'zone104'
+ 'zone21' 'zone59' 'zone45' 'zone3' 'zone19' 'zone167' 'zone66' 'zone84'
+ 'zone142' 'zone114' 'zone75' 'zone76' 'zone129' 'zone63' 'zone90'
+ 'zone20' 'zone51' 'zone139' 'zone2' 'zone133' 'zone77' 'zone1' 'zone172'
+ 'zone137' 'zone88' 'zone147' 'zone57' 'zone115' 'zone100' 'zone170'
+ 'zone132' 'zone28' 'zone6' 'zone136' 'zone116' 'zone97' 'zone73' 'zone27'
+ 'zone53' 'zone102' 'zone156']
+Nbumber of unique zones: 108
+Train, val and test zones saved in csv file at: ../../results/resnet18_128_l1/stratified_shuffling_by_zone/seed1/img_ids_by_set.csv
+Train: 18005 images, Val: 6558 images, Test: 5548 images
+Train: 59.80%, Val: 21.78%, Test: 18.43%
+Creating model...
+Model settings:
+Pretrained: None
+Classes: 6
+The model is Resnet18
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: CrossEntropy
+Optimizer: Adam
+Training...
+Epoch 1/70
+Training
+Batch: 0  over  1126
+Batch: 50  over  1126
+Batch: 100  over  1126
+Batch: 150  over  1126
+Batch: 200  over  1126
+Batch: 250  over  1126
+Batch: 300  over  1126
+Batch: 350  over  1126
+Batch: 400  over  1126
+Batch: 450  over  1126
+Batch: 500  over  1126
+Batch: 550  over  1126
+Batch: 600  over  1126
+Batch: 650  over  1126
+Batch: 700  over  1126
+Batch: 750  over  1126
+Batch: 800  over  1126
+Batch: 850  over  1126
+Batch: 900  over  1126
+Batch: 950  over  1126
+Batch: 1000  over  1126
+Batch: 1050  over  1126
+Batch: 1100  over  1126
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 1/70: train loss nan, val loss nan
+Epoch 1/70: train mF1 0.0665, val mF1 0.0672

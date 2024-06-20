@@ -22,7 +22,7 @@ from sklearn.metrics import accuracy_score
 not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None, normalisation = "all_channels_together", task = "pixel_classif"):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None, normalisation = "all_channels_together", task = "pixel_classif", my_set = "train"):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
@@ -31,6 +31,7 @@ class EcomedDataset(Dataset):
         self.transform = transform
         self.normalisation = normalisation
         self.task = task
+        self.set = my_set
 
     def __len__(self):
         return len(self.imgs)
@@ -78,7 +79,7 @@ class EcomedDataset(Dataset):
                     channel = np.clip(channel, p2, p98)
                     channel = (channel - p2) / (p98 - p2)
                     normalized_img[c, :, :] = channel.astype(np.float32)
-        if self.transform:
+        if self.transform and self.set == 'train':
             if self.task == "pixel_classif":
                 augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
                 aug_img = augmented['image']
@@ -86,12 +87,15 @@ class EcomedDataset(Dataset):
                 # add fourth channel from img to img
                 img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)
             elif self.task == "image_classif":
-                augmented = self.transform(image=normalized_img.transpose(1, 2, 0))
-                img = augmented['image']
+                augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0))
+                aug_img = augmented['image']
+                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)
+        else: 
+            img = normalized_img
         if self.task == "pixel_classif":
-            return normalized_img, msk_mapped
+            return img, msk_mapped
         elif self.task == "image_classif":
-            return normalized_img, img_label_mapped
+            return img, img_label_mapped
 
 
 class EcomedDataset_to_plot(Dataset):
@@ -190,6 +194,13 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         train_paths = msk_paths[:int(split[0]*n)]
         val_paths = msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
         test_paths = msk_paths[int((split[0]+split[1])*n):]
+        if kwargs['location'] == 'mediteranean':   
+            msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
+            msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2]) 
+            msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
+            msk_df = msk_df[~msk_df['zone_id'].isin(not_mediterranean_zones)]
+            print('Only mediterranean zones kept')
+            print('Number of masks:', len(msk_df))
     elif stratified == 'zone' or stratified == 'image':
         msk_df = pd.DataFrame(msk_paths, columns=['mask_path'])
         msk_df['zone_id'] = msk_df['mask_path'].apply(lambda x: x.parts[-2])
@@ -197,8 +208,11 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         if stratified == 'zone':
             msk_df['zone_id'] = msk_df['zone_id'].apply(lambda x: x.split('_')[0])
             # if zone in not_mediterranean_zones, then remove the path from the df
-            if location == 'mediteranean':
-                msk_df = msk_df[~msk_df['zone_id'].isin(not_mediterranean_zones)]
+        if kwargs['location'] == 'mediteranean':            
+            msk_df = msk_df[~msk_df['zone_id'].isin(not_mediterranean_zones)]
+            print('Only mediterranean zones kept')
+            print('Number of masks:', len(msk_df))
+
         zone_ids = msk_df['zone_id'].unique()
         np.random.seed(random_seed)
         np.random.shuffle(zone_ids)

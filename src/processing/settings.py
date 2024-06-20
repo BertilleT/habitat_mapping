@@ -6,11 +6,13 @@ import pandas as pd
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
 test_existing_model = True
+patch_size = 256
+model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 
 if test_existing_model: 
-    name_setting = 'resnet18_random_homogene'
+    name_setting = 'resnet18_strat_zone1_homogene_lr3'
     #laod all variables from csv best_epoch_to_test
-    best_epoch_to_test = pd.read_csv(f'../../unet_256_l1/best_epoch_to_test.csv')
+    best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
     #remov the space before alla values and name columns
     best_epoch_to_test.columns = best_epoch_to_test.columns.str.strip()
     best_epoch_to_test = best_epoch_to_test.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
@@ -40,14 +42,16 @@ if test_existing_model:
         encoder_weights = None
 
     task = "image_classif"
-    hetero = 'homogeneous'
-    location = 'all'
+    heterogeneity = 'homogeneous'
+    lr = 1e-3
+    bs = 16
+    optimizer = 'Adam'
 
 # ---------------------------------------
 
 else:
     stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_random_homogene'
+    name_setting = 'resnet18_random_homogene_70epochs' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
@@ -58,11 +62,13 @@ else:
     plot_test = True
     bs = 16
     nb_epochs = 70
-    patience = 15
+    patience = 70
     best_epoch = 1
     task = "image_classif"
-    hetero = 'homogeneous'
-    location = 'all'
+    heterogeneity = 'homogeneous'
+    location ='all' # 'mediteranean' or 'all'
+    lr = 1e-4
+    optimizer = 'Adam' # 'Adam' or 'AdamW'
 
 if stratified == 'random':
     parent = 'random_shuffling/'
@@ -75,20 +81,29 @@ elif stratified == 'acquisition':
 elif stratified == 'zone2023':
     parent = 'stratified_shuffling_zone2023/'
 
-config_name = 'unet_256_l1/' + parent + name_setting
+config_name = 'results/'  + model_type + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
-seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34], 'zone20231': [0.63, 0.14] }
+if heterogeneity != 'homogeneous':
+    seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34], 'zone20231': [0.63, 0.14] }
+else: 
+    if location != 'mediteranean':
+        seeds_splitting = {'zone1': [0.7, 0.2], 'random1': [0.6, 0.2]}
+    else:
+        if year == '2023':
+            seeds_splitting = {'zone1': [0.71, 0.14], 'random1': [0.6, 0.2]}
+        else: 
+            seeds_splitting = {'zone1': [0.64, 0.19], 'random1': [0.6, 0.2]}
 zoneseed = stratified + str(random_seed)
 splitting = seeds_splitting[zoneseed]
 
 Path(f'../../{config_name}/models').mkdir(parents=True, exist_ok=True)
 Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
 Path(f'../../{config_name}/metrics_train_val').mkdir(exist_ok=True)
-Path(f'../../unet_256_l1/{parent}/seed{random_seed}').mkdir(exist_ok=True)
+Path(f'../../results/{model_type}{parent}/seed{random_seed}').mkdir(exist_ok=True)
 
 patch_level_param = {
-    'patch_size': 256, 
+    'patch_size': patch_size, 
     'level': 1, 
 }
 
@@ -98,17 +113,16 @@ data_loading_settings = {
     'stratified' : stratified, # 'random', 'zone', 'image'
     'random_seed' : random_seed, 
     'split' : splitting, 
-    'msks_256_fully_labelled' : pd.read_csv('../../csv/coverage_patch/p256_100per_labelled.csv'), 
-    'path_pixels_by_zone': Path(f'../../csv/l{patch_level_param["level"]}_nb_pixels_by_zone.csv'),
     'bs': bs,
     'normalisation': normalisation,
     'classes_balance': Path(f'../../{config_name}/classes_balance.csv'),
-    'img_ids_by_set': Path(f'../../unet_256_l1/{parent}seed{random_seed}/img_ids_by_set.csv'),
+    'img_ids_by_set': Path(f'../../results/{model_type}{parent}seed{random_seed}/img_ids_by_set.csv'),
     'data_augmentation': data_augmentation,
     'year': year, 
     '2023_zones': Path('../../csv/zones_2023.csv'),
-    'heterogen_patches_path': Path('../../csv/heterogen_masks.csv'),
-    'patches' : hetero # 'homogeneous' or 'heterogeneous', 'all'
+    'heterogen_patches_path': Path(f'../../csv/heterogen_masks_{patch_size}.csv'),
+    'patches' : heterogeneity, # 'homogeneous' or 'heterogeneous', 'all', 
+    'location': location # 'mediteranean' or 'all'
 }
 
 model_settings = {
@@ -127,9 +141,9 @@ model_settings = {
 
 training_settings = {
     'training': training,
-    'lr': 1e-4,
+    'lr': lr,
     'criterion': 'CrossEntropy', #Dice or CrossEntropy
-    'optimizer': 'Adam',
+    'optimizer': optimizer,
     'nb_epochs': nb_epochs,
     'early_stopping': True,
     'patience': patience, 

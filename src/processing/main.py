@@ -50,8 +50,13 @@ if data_loading_settings['data_augmentation']:
         A.RandomBrightnessContrast(p=0.5),
         A.HueSaturationValue(p=0.5),
         A.GaussNoise(p=0.5),
-        ToTensorV2(), 
+        A.VerticalFlip(p=0.5),
+        A.HorizontalFlip(p=0.5),
+        A.Rotate(limit=45, p=0.5),  # Ajout de la rotation avec une limite de 45 degrés et une probabilité de 50%
+        A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0), ratio=(0.75, 1.33), p=0.5),  # Ajout du recadrage aléatoire avec des paramètres définis
+        ToTensorV2(),
     ])
+
 else: 
     print('No data augmentation')
     transform = None
@@ -59,21 +64,24 @@ else:
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
 #print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
-'''train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform, normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
+
+train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform, normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
+# check size of one img and masks, and value of masks at level 1
+img, msk = next(iter(train_dl))
+print(f'Image shape: {img.shape}, Mask shape: {msk.shape}')
+print(f"Image: min: {img.min()}, max: {img.max()}, dtype: {img.dtype}")
+print(f"Mask: {np.unique(msk[0])}, dtype: {msk.dtype}")
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
-'''
+
 
 #train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
-# plot 
 #plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
-
-val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
-# plot
-plot_patch_class_by_class(val_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'validation set')
+#val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
+#plot_patch_class_by_class(val_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'validation set')
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
@@ -135,6 +143,12 @@ if training_settings['training']:
 
 if training_settings['optimizer'] == 'Adam':
     optimizer = optim.Adam(model.parameters(), lr=training_settings['lr'])
+if training_settings['optimizer'] == 'AdamW':
+    print('Using AdamW optimizer')
+    optimizer = optim.AdamW(model.parameters(), lr=training_settings['lr'])
+if training_settings['optimizer'] == 'SGD':
+    optimizer = optim.SGD(model.parameters(), lr=training_settings['lr'], momentum=0.9)
+
 
 if training_settings['restart_training'] is not None:
     torch.cuda.empty_cache()
@@ -232,7 +246,7 @@ else:
 
 # TESTING
 model.eval()
-'''with torch.no_grad():
+with torch.no_grad():
     print('Testing')
     test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test', model_settings['model'])
 if model_settings['model'] == 'Unet':
@@ -263,7 +277,7 @@ ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues
 plt.xlabel('Predicted labels')
 plt.ylabel('True labels')
 plt.title('Normalized confusion matrix')
-plt.savefig(plotting_settings['confusion_matrix_path'])'''
+plt.savefig(plotting_settings['confusion_matrix_path'])
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:

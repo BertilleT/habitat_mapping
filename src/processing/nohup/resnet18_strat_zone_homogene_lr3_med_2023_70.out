@@ -1,0 +1,88 @@
+INFO:albumentations.check_version:A new version of Albumentations is available: 1.4.9 (you have 1.4.8). Upgrade using: pip install --upgrade albumentations
+----------------------- UNet -----------------------
+Patch size: 128
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.64, 0.19]
+Stratified: zone
+Year: 2023
+Patches: homogeneous
+Batch size: 16
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  2023  year
+30111 homogeneous masks found
+18156  kept masks from 2023 zones
+The data are from 2023
+Only mediterranean zones kept
+Number of masks: 16307
+['zone137' 'zone113' 'zone104' 'zone148' 'zone134' 'zone120' 'zone154'
+ 'zone33' 'zone73' 'zone139' 'zone162' 'zone161' 'zone39' 'zone129'
+ 'zone160' 'zone112' 'zone38' 'zone45' 'zone44' 'zone101' 'zone6' 'zone26'
+ 'zone30' 'zone71' 'zone20' 'zone77' 'zone114' 'zone50' 'zone4' 'zone84'
+ 'zone41' 'zone144' 'zone126' 'zone59' 'zone145' 'zone159' 'zone57'
+ 'zone96' 'zone123' 'zone17' 'zone115' 'zone93' 'zone19' 'zone53'
+ 'zone157' 'zone116' 'zone34' 'zone37' 'zone155' 'zone95' 'zone27'
+ 'zone132' 'zone158' 'zone24' 'zone28' 'zone1' 'zone142' 'zone164'
+ 'zone100' 'zone12' 'zone133' 'zone51' 'zone16' 'zone15' 'zone63']
+Nbumber of unique zones: 65
+Train, val and test zones saved in csv file at: ../../results/resnet18_128_l1/stratified_shuffling_by_zone/seed1/img_ids_by_set.csv
+Train: 8832 images, Val: 2771 images, Test: 4704 images
+Train: 54.16%, Val: 16.99%, Test: 28.85%
+Creating model...
+Model settings:
+Pretrained: None
+Classes: 6
+The model is Resnet18
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: CrossEntropy
+Optimizer: Adam
+Training...
+Epoch 1/70
+Training
+Batch: 0  over  552
+Batch: 50  over  552
+Batch: 100  over  552
+Batch: 150  over  552
+Batch: 200  over  552
+Batch: 250  over  552
+Batch: 300  over  552
+Batch: 350  over  552
+Batch: 400  over  552
+Batch: 450  over  552
+Batch: 500  over  552
+Batch: 550  over  552
+Validation
+Batch: 0  over  174
+Batch: 50  over  174
+Batch: 100  over  174
+Batch: 150  over  174
+Epoch 1/70: train loss nan, val loss nan
+Epoch 1/70: train mF1 0.0679, val mF1 0.0502
+Time: 0:00:50.500110
+Epoch 2/70
+Training
+Batch: 0  over  552
+Batch: 50  over  552
+Batch: 100  over  552
+Batch: 150  over  552
+Batch: 200  over  552
+Batch: 250  over  552
+Batch: 300  over  552
+Batch: 350  over  552
+Batch: 400  over  552
+Batch: 450  over  552
+Batch: 500  over  552
+Batch: 550  over  552
+Validation
+Batch: 0  over  174
+Batch: 50  over  174
+Batch: 100  over  174
+Batch: 150  over  174
+Epoch 2/70: train loss nan, val loss nan
+Epoch 2/70: train mF1 0.0370, val mF1 0.0502
