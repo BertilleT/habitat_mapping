@@ -1,4 +1,0 @@
-,set,img_ids
-0,train_img_ids,"zone171,zone95,zone159,zone116,zone139,zone26,zone106,zone75,zone10,zone156,zone136,zone7,zone148,zone157,zone112,zone44,zone22,zone169,zone144,zone123,zone170,zone6,zone73,zone85,zone11,zone34,zone161,zone19,zone160,zone137,zone3,zone65,zone143,zone158,zone47,zone53,zone88,zone37,zone164,zone155,zone167,zone145,zone96,zone48,zone72,zone67,zone134,zone129,zone4,zone76,zone30,zone20,zone2,zone17,zone121,zone133,zone69,zone98,zone57,zone33,zone114,zone165,zone115,zone39,zone101,zone25,zone41,zone132,zone93,zone147,zone45,zone77,zone14,zone120"
-1,val_img_ids,"zone66,zone71,zone142,zone113,zone56,zone59,zone84,zone162,zone90,zone126,zone51,zone74,zone50,zone117,zone1,zone68,zone172"
-2,test_img_ids,"zone38,zone12,zone16,zone21,zone5,zone100,zone80,zone15,zone28,zone78,zone63,zone104,zone97,zone54,zone27,zone127,zone102,zone24,zone154"

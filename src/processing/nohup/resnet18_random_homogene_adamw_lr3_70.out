@@ -1,0 +1,948 @@
+----------------------- UNet -----------------------
+Patch size: 256
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2]
+Stratified: random
+Year: all
+Patches: homogeneous
+Batch size: 16
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+5716 homogeneous masks found
+Train: 3429 images, Val: 1143 images, Test: 1144 images
+Train: 59.99%, Val: 20.00%, Test: 20.01%
+Creating model...
+Model settings:
+Pretrained: None
+Classes: 6
+The model is Resnet18
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: CrossEntropy
+Optimizer: AdamW
+Using AdamW optimizer
+Training...
+Epoch 1/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 1/70: train loss 1.3214, val loss 1.1664
+Epoch 1/70: train mF1 0.3840, val mF1 0.3692
+Time: 0:00:33.889200
+Epoch 2/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 2/70: train loss 1.1132, val loss 1.3602
+Epoch 2/70: train mF1 0.4507, val mF1 0.3726
+Time: 0:00:36.248837
+Epoch 3/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 3/70: train loss 1.0444, val loss 1.1344
+Epoch 3/70: train mF1 0.4804, val mF1 0.4728
+Time: 0:00:33.982254
+Epoch 4/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 4/70: train loss 0.9943, val loss 1.1078
+Epoch 4/70: train mF1 0.5211, val mF1 0.4465
+Time: 0:00:33.528871
+Epoch 5/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 5/70: train loss 0.9457, val loss 1.0360
+Epoch 5/70: train mF1 0.5459, val mF1 0.5231
+Time: 0:00:35.348262
+Epoch 6/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 6/70: train loss 0.9376, val loss 1.3414
+Epoch 6/70: train mF1 0.5745, val mF1 0.4435
+Time: 0:00:33.438374
+Epoch 7/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 7/70: train loss 0.8674, val loss 1.0209
+Epoch 7/70: train mF1 0.5968, val mF1 0.5845
+Time: 0:00:35.217735
+Epoch 8/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 8/70: train loss 0.8107, val loss 1.3403
+Epoch 8/70: train mF1 0.6346, val mF1 0.5097
+Time: 0:00:34.726451
+Epoch 9/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 9/70: train loss 0.8165, val loss 1.0313
+Epoch 9/70: train mF1 0.6398, val mF1 0.5808
+Time: 0:00:33.315677
+Epoch 10/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 10/70: train loss 0.7741, val loss 0.7440
+Epoch 10/70: train mF1 0.6549, val mF1 0.6607
+Time: 0:00:35.277050
+Epoch 11/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 11/70: train loss 0.7529, val loss 0.9978
+Epoch 11/70: train mF1 0.6621, val mF1 0.5519
+Time: 0:00:34.074578
+Epoch 12/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 12/70: train loss 0.7138, val loss 0.9411
+Epoch 12/70: train mF1 0.6720, val mF1 0.6452
+Time: 0:00:34.652160
+Epoch 13/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 13/70: train loss 0.7184, val loss 1.3698
+Epoch 13/70: train mF1 0.6742, val mF1 0.5171
+Time: 0:00:35.738532
+Epoch 14/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 14/70: train loss 0.6822, val loss 1.0107
+Epoch 14/70: train mF1 0.6992, val mF1 0.6205
+Time: 0:00:32.751019
+Epoch 15/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 15/70: train loss 0.6583, val loss 0.7727
+Epoch 15/70: train mF1 0.7085, val mF1 0.6499
+Time: 0:00:32.681666
+Epoch 16/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 16/70: train loss 0.6243, val loss 1.5314
+Epoch 16/70: train mF1 0.7148, val mF1 0.5184
+Time: 0:00:34.593045
+Epoch 17/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 17/70: train loss 0.5789, val loss 0.7684
+Epoch 17/70: train mF1 0.7453, val mF1 0.6528
+Time: 0:00:32.896641
+Epoch 18/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 18/70: train loss 0.5877, val loss 0.7057
+Epoch 18/70: train mF1 0.7388, val mF1 0.7161
+Time: 0:00:32.859555
+Epoch 19/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 19/70: train loss 0.5230, val loss 0.7560
+Epoch 19/70: train mF1 0.7627, val mF1 0.6885
+Time: 0:00:35.147115
+Epoch 20/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 20/70: train loss 0.5017, val loss 0.8043
+Epoch 20/70: train mF1 0.7746, val mF1 0.6914
+Time: 0:00:33.047058
+Epoch 21/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 21/70: train loss 0.4690, val loss 0.7090
+Epoch 21/70: train mF1 0.7909, val mF1 0.7164
+Time: 0:00:34.055663
+Epoch 22/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 22/70: train loss 0.4339, val loss 0.7185
+Epoch 22/70: train mF1 0.7940, val mF1 0.6755
+Time: 0:00:34.103789
+Epoch 23/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 23/70: train loss 0.4366, val loss 2.7458
+Epoch 23/70: train mF1 0.8081, val mF1 0.4680
+Time: 0:00:33.201388
+Epoch 24/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 24/70: train loss 0.3796, val loss 1.1094
+Epoch 24/70: train mF1 0.8243, val mF1 0.6059
+Time: 0:00:34.660149
+Epoch 25/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 25/70: train loss 0.3262, val loss 1.5424
+Epoch 25/70: train mF1 0.8467, val mF1 0.5298
+Time: 0:00:33.335511
+Epoch 26/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 26/70: train loss 0.3280, val loss 0.8010
+Epoch 26/70: train mF1 0.8565, val mF1 0.6946
+Time: 0:00:32.704070
+Epoch 27/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 27/70: train loss 0.2610, val loss 0.9196
+Epoch 27/70: train mF1 0.8816, val mF1 0.7099
+Time: 0:00:34.343128
+Epoch 28/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 28/70: train loss 0.2357, val loss 2.1379
+Epoch 28/70: train mF1 0.8898, val mF1 0.5759
+Time: 0:00:33.415243
+Epoch 29/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 29/70: train loss 0.2182, val loss 1.0627
+Epoch 29/70: train mF1 0.9085, val mF1 0.6833
+Time: 0:00:32.878238
+Epoch 30/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 30/70: train loss 0.1696, val loss 1.4906
+Epoch 30/70: train mF1 0.9269, val mF1 0.6002
+Time: 0:00:35.054248
+Epoch 31/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 31/70: train loss 0.1688, val loss 1.7535
+Epoch 31/70: train mF1 0.9297, val mF1 0.5788
+Time: 0:00:32.887249
+Epoch 32/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 32/70: train loss 0.1539, val loss 1.2659
+Epoch 32/70: train mF1 0.9395, val mF1 0.6410
+Time: 0:00:32.533607
+Epoch 33/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 33/70: train loss 0.1240, val loss 3.5020
+Epoch 33/70: train mF1 0.9485, val mF1 0.5185
+Time: 0:00:34.468148
+Epoch 34/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 34/70: train loss 0.1289, val loss 1.5062
+Epoch 34/70: train mF1 0.9447, val mF1 0.6486
+Time: 0:00:32.567368
+Epoch 35/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 35/70: train loss 0.0753, val loss 1.3945
+Epoch 35/70: train mF1 0.9746, val mF1 0.6848
+Time: 0:00:32.842039
+Epoch 36/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 36/70: train loss 0.1364, val loss 1.5975
+Epoch 36/70: train mF1 0.9445, val mF1 0.6010
+Time: 0:00:34.845431
+Epoch 37/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 37/70: train loss 0.0902, val loss 1.4332
+Epoch 37/70: train mF1 0.9634, val mF1 0.6571
+Time: 0:00:32.640813
+Epoch 38/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 38/70: train loss 0.0724, val loss 1.4861
+Epoch 38/70: train mF1 0.9766, val mF1 0.6587
+Time: 0:00:32.549982
+Epoch 39/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 39/70: train loss 0.0705, val loss 1.3836
+Epoch 39/70: train mF1 0.9715, val mF1 0.6673
+Time: 0:00:34.346963
+Epoch 40/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 40/70: train loss 0.0984, val loss 1.2144
+Epoch 40/70: train mF1 0.9567, val mF1 0.6983
+Time: 0:00:32.346430
+Epoch 41/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 41/70: train loss 0.0604, val loss 1.3368
+Epoch 41/70: train mF1 0.9752, val mF1 0.7007
+Time: 0:00:34.414313
+Epoch 42/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 42/70: train loss 0.0892, val loss 3.0888
+Epoch 42/70: train mF1 0.9661, val mF1 0.4935
+Time: 0:00:33.936934
+Epoch 43/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 43/70: train loss 0.0655, val loss 1.5773
+Epoch 43/70: train mF1 0.9772, val mF1 0.6535
+Time: 0:00:32.660132
+Epoch 44/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 44/70: train loss 0.0594, val loss 1.3271
+Epoch 44/70: train mF1 0.9825, val mF1 0.6693
+Time: 0:00:33.983464
+Epoch 45/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 45/70: train loss 0.0509, val loss 1.6049
+Epoch 45/70: train mF1 0.9827, val mF1 0.6430
+Time: 0:00:33.146164
+Epoch 46/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 46/70: train loss 0.0703, val loss 1.4650
+Epoch 46/70: train mF1 0.9666, val mF1 0.6891
+Time: 0:00:32.407798
+Epoch 47/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 47/70: train loss 0.0802, val loss 1.3816
+Epoch 47/70: train mF1 0.9670, val mF1 0.6880
+Time: 0:00:34.633467
+Epoch 48/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 48/70: train loss 0.0432, val loss 1.3635
+Epoch 48/70: train mF1 0.9826, val mF1 0.7108
+Time: 0:00:32.780057
+Epoch 49/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 49/70: train loss 0.0644, val loss 1.2967
+Epoch 49/70: train mF1 0.9756, val mF1 0.6919
+Time: 0:00:32.293327
+Epoch 50/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 50/70: train loss 0.0332, val loss 1.3166
+Epoch 50/70: train mF1 0.9893, val mF1 0.7049
+Time: 0:00:34.048722
+Epoch 51/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 51/70: train loss 0.0336, val loss 1.5265
+Epoch 51/70: train mF1 0.9905, val mF1 0.6623
+Time: 0:00:32.470683
+Epoch 52/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 52/70: train loss 0.0585, val loss 1.4938
+Epoch 52/70: train mF1 0.9770, val mF1 0.7012
+Time: 0:00:33.097670
+Epoch 53/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 53/70: train loss 0.0634, val loss 1.3193
+Epoch 53/70: train mF1 0.9767, val mF1 0.7002
+Time: 0:00:35.945822
+Epoch 54/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 54/70: train loss 0.0404, val loss 1.2952
+Epoch 54/70: train mF1 0.9868, val mF1 0.7028
+Time: 0:00:33.365719
+Epoch 55/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 55/70: train loss 0.0151, val loss 1.3468
+Epoch 55/70: train mF1 0.9961, val mF1 0.7386
+Time: 0:00:34.477151
+Epoch 56/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 56/70: train loss 0.0635, val loss 1.3436
+Epoch 56/70: train mF1 0.9771, val mF1 0.6909
+Time: 0:00:33.758283
+Epoch 57/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 57/70: train loss 0.0709, val loss 1.6430
+Epoch 57/70: train mF1 0.9763, val mF1 0.6640
+Time: 0:00:33.329664
+Epoch 58/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 58/70: train loss 0.0832, val loss 1.2029
+Epoch 58/70: train mF1 0.9705, val mF1 0.7171
+Time: 0:00:34.936686
+Epoch 59/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 59/70: train loss 0.0431, val loss 1.6765
+Epoch 59/70: train mF1 0.9866, val mF1 0.6736
+Time: 0:00:33.842489
+Epoch 60/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 60/70: train loss 0.0620, val loss 1.5048
+Epoch 60/70: train mF1 0.9791, val mF1 0.7013
+Time: 0:00:33.016867
+Epoch 61/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 61/70: train loss 0.0374, val loss 1.6412
+Epoch 61/70: train mF1 0.9872, val mF1 0.6528
+Time: 0:00:34.662168
+Epoch 62/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 62/70: train loss 0.0219, val loss 1.4152
+Epoch 62/70: train mF1 0.9921, val mF1 0.7163
+Time: 0:00:33.355013
+Epoch 63/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 63/70: train loss 0.0093, val loss 1.4467
+Epoch 63/70: train mF1 0.9971, val mF1 0.7164
+Time: 0:00:32.879222
+Epoch 64/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 64/70: train loss 0.0305, val loss 2.2064
+Epoch 64/70: train mF1 0.9904, val mF1 0.6545
+Time: 0:00:35.306905
+Epoch 65/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 65/70: train loss 0.0751, val loss 1.5059
+Epoch 65/70: train mF1 0.9731, val mF1 0.6912
+Time: 0:00:33.114406
+Epoch 66/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 66/70: train loss 0.0223, val loss 2.1802
+Epoch 66/70: train mF1 0.9915, val mF1 0.6293
+Time: 0:00:32.748974
+Epoch 67/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 67/70: train loss 0.0375, val loss 1.4311
+Epoch 67/70: train mF1 0.9867, val mF1 0.7006
+Time: 0:00:34.501602
+Epoch 68/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 68/70: train loss 0.0353, val loss 1.5570
+Epoch 68/70: train mF1 0.9878, val mF1 0.6674
+Time: 0:00:32.452753
+Epoch 69/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 69/70: train loss 0.0361, val loss 1.5452
+Epoch 69/70: train mF1 0.9837, val mF1 0.7032
+Time: 0:00:34.166260
+Epoch 70/70
+Training
+Batch: 0  over  215
+Batch: 50  over  215
+Batch: 100  over  215
+Batch: 150  over  215
+Batch: 200  over  215
+Validation
+Batch: 0  over  72
+Batch: 50  over  72
+Epoch 70/70: train loss 0.0420, val loss 1.6511
+Epoch 70/70: train mF1 0.9954, val mF1 0.6809
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Time: 0:00:33.749919
+Testing
+Batch: 0  over  72
+Batch: 50  over  72
+Test F1 by class: [0.56862745 0.72160356 0.86134969 0.76115486 0.72803347 0.51020408]
+Test mF1: 0.6918288529642264
+Plot saved at: ../../unet_256_l1/random_shuffling/resnet18_random_homogene_Adamw_lr3/metrics_test/test_preds.png

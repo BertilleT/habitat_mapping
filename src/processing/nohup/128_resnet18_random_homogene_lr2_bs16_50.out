@@ -1,0 +1,1964 @@
+INFO:albumentations.check_version:A new version of Albumentations is available: 1.4.10 (you have 1.4.9). Upgrade using: pip install --upgrade albumentations
+----------------------- UNet -----------------------
+Patch size: 128
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.7, 0.2]
+Stratified: zone
+Year: all
+Patches: homogeneous
+Batch size: 16
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+30093 homogeneous masks found
+['zone72' 'zone120' 'zone50' 'zone7' 'zone112' 'zone159' 'zone171'
+ 'zone65' 'zone93' 'zone161' 'zone143' 'zone148' 'zone127' 'zone157'
+ 'zone56' 'zone106' 'zone37' 'zone101' 'zone162' 'zone24' 'zone12'
+ 'zone113' 'zone71' 'zone144' 'zone30' 'zone155' 'zone14' 'zone33'
+ 'zone47' 'zone80' 'zone85' 'zone145' 'zone158' 'zone34' 'zone54' 'zone16'
+ 'zone68' 'zone154' 'zone4' 'zone67' 'zone96' 'zone38' 'zone134' 'zone98'
+ 'zone11' 'zone15' 'zone48' 'zone25' 'zone10' 'zone121' 'zone22' 'zone17'
+ 'zone126' 'zone78' 'zone69' 'zone123' 'zone165' 'zone160' 'zone26'
+ 'zone44' 'zone164' 'zone39' 'zone95' 'zone74' 'zone5' 'zone41' 'zone104'
+ 'zone21' 'zone59' 'zone45' 'zone3' 'zone19' 'zone167' 'zone66' 'zone84'
+ 'zone142' 'zone114' 'zone75' 'zone76' 'zone129' 'zone63' 'zone90'
+ 'zone20' 'zone51' 'zone139' 'zone2' 'zone133' 'zone77' 'zone1' 'zone172'
+ 'zone137' 'zone88' 'zone147' 'zone57' 'zone115' 'zone100' 'zone170'
+ 'zone132' 'zone28' 'zone6' 'zone136' 'zone116' 'zone97' 'zone73' 'zone27'
+ 'zone53' 'zone102' 'zone156']
+Nbumber of unique zones: 108
+Train, val and test zones saved in csv file at: ../../results/resnet18_128_l1/stratified_shuffling_by_zone/seed1/img_ids_by_set.csv
+Image shape: torch.Size([16, 4, 128, 128]), Mask shape: torch.Size([16])
+Image: min: 0.0, max: 1.0, dtype: torch.float32
+Mask: [5], dtype: torch.uint8
+Train: 17987 images, Val: 6558 images, Test: 5548 images
+Train: 59.77%, Val: 21.79%, Test: 18.44%
+Creating model...
+Model settings:
+Pretrained: None
+Classes: 6
+The model is Resnet18
+Creating optimizer...
+Training settings:
+Learning rate: 0.01
+Criterion: CrossEntropy
+Optimizer: AdamW
+Using AdamW optimizer
+Training...
+Epoch 1/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 1/50: train loss 1.3449, val loss 1.5654
+Epoch 1/50: train mF1 0.3434, val mF1 0.3134
+Time: 0:01:42.651103
+Epoch 2/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 2/50: train loss 1.0891, val loss 1.8193
+Epoch 2/50: train mF1 0.4813, val mF1 0.3061
+Time: 0:01:40.697672
+Epoch 3/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 3/50: train loss 0.9643, val loss 1.9287
+Epoch 3/50: train mF1 0.5640, val mF1 0.3065
+Time: 0:01:40.298963
+Epoch 4/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 4/50: train loss 0.9063, val loss 2.0318
+Epoch 4/50: train mF1 0.5961, val mF1 0.3192
+Time: 0:01:37.169291
+Epoch 5/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 5/50: train loss 0.8481, val loss 2.7963
+Epoch 5/50: train mF1 0.6283, val mF1 0.2581
+Time: 0:01:39.508567
+Epoch 6/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 6/50: train loss 0.8010, val loss 2.0419
+Epoch 6/50: train mF1 0.6519, val mF1 0.2958
+Time: 0:01:44.073232
+Epoch 7/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 7/50: train loss 0.7708, val loss 1.7658
+Epoch 7/50: train mF1 0.6622, val mF1 0.3753
+Time: 0:01:41.967737
+Epoch 8/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 8/50: train loss 0.7319, val loss 3.1516
+Epoch 8/50: train mF1 0.6813, val mF1 0.1722
+Time: 0:01:43.902991
+Epoch 9/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 9/50: train loss 0.6974, val loss 2.0408
+Epoch 9/50: train mF1 0.6999, val mF1 0.2708
+Time: 0:01:43.793479
+Epoch 10/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 10/50: train loss 0.6599, val loss 2.8846
+Epoch 10/50: train mF1 0.7165, val mF1 0.2618
+Time: 0:01:42.650050
+Epoch 11/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 11/50: train loss 0.6372, val loss 1.9363
+Epoch 11/50: train mF1 0.7251, val mF1 0.3776
+Time: 0:01:41.883415
+Epoch 12/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 12/50: train loss 0.6036, val loss 1.8615
+Epoch 12/50: train mF1 0.7375, val mF1 0.3683
+Time: 0:01:40.447521
+Epoch 13/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 13/50: train loss 0.5546, val loss 2.0840
+Epoch 13/50: train mF1 0.7559, val mF1 0.3991
+Time: 0:01:40.885393
+Epoch 14/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 14/50: train loss 0.5180, val loss 2.4456
+Epoch 14/50: train mF1 0.7749, val mF1 0.3163
+Time: 0:01:42.419468
+Epoch 15/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 15/50: train loss 0.4818, val loss 1.7007
+Epoch 15/50: train mF1 0.7927, val mF1 0.4180
+Time: 0:01:43.157201
+Epoch 16/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 16/50: train loss 0.4418, val loss 2.4866
+Epoch 16/50: train mF1 0.8115, val mF1 0.3442
+Time: 0:01:41.314283
+Epoch 17/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 17/50: train loss 0.3961, val loss 3.2967
+Epoch 17/50: train mF1 0.8268, val mF1 0.3447
+Time: 0:01:41.447838
+Epoch 18/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 18/50: train loss 0.3642, val loss 2.4343
+Epoch 18/50: train mF1 0.8417, val mF1 0.3602
+Time: 0:01:36.019254
+Epoch 19/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 19/50: train loss 0.3465, val loss 2.3437
+Epoch 19/50: train mF1 0.8536, val mF1 0.3494
+Time: 0:01:41.589340
+Epoch 20/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 20/50: train loss 0.3185, val loss 2.6412
+Epoch 20/50: train mF1 0.8636, val mF1 0.3755
+Time: 0:01:40.632629
+Epoch 21/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 21/50: train loss 0.2872, val loss 3.1409
+Epoch 21/50: train mF1 0.8799, val mF1 0.3456
+Time: 0:01:40.112034
+Epoch 22/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 22/50: train loss 0.2981, val loss 2.3038
+Epoch 22/50: train mF1 0.8739, val mF1 0.3879
+Time: 0:01:40.444602
+Epoch 23/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 23/50: train loss 0.2656, val loss 3.5732
+Epoch 23/50: train mF1 0.8885, val mF1 0.3263
+Time: 0:01:42.034707
+Epoch 24/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 24/50: train loss 0.2788, val loss 2.4160
+Epoch 24/50: train mF1 0.8870, val mF1 0.3946
+Time: 0:01:40.463786
+Epoch 25/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 25/50: train loss 0.2598, val loss 3.0072
+Epoch 25/50: train mF1 0.8908, val mF1 0.3260
+Time: 0:01:41.167200
+Epoch 26/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 26/50: train loss 0.2574, val loss 2.8042
+Epoch 26/50: train mF1 0.8906, val mF1 0.3674
+Time: 0:01:41.098900
+Epoch 27/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 27/50: train loss 0.2466, val loss 2.9377
+Epoch 27/50: train mF1 0.8983, val mF1 0.4117
+Time: 0:01:40.588834
+Epoch 28/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 28/50: train loss 0.2717, val loss 2.3940
+Epoch 28/50: train mF1 0.8881, val mF1 0.3983
+Time: 0:01:40.115946
+Epoch 29/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 29/50: train loss 0.2460, val loss 2.8316
+Epoch 29/50: train mF1 0.8982, val mF1 0.3901
+Time: 0:01:40.634711
+Epoch 30/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 30/50: train loss 0.2579, val loss 2.6874
+Epoch 30/50: train mF1 0.8918, val mF1 0.3811
+Time: 0:01:39.919285
+Epoch 31/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 31/50: train loss 0.2486, val loss 2.4973
+Epoch 31/50: train mF1 0.8982, val mF1 0.3778
+Time: 0:01:40.784213
+Epoch 32/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 32/50: train loss 0.2363, val loss 3.0824
+Epoch 32/50: train mF1 0.9036, val mF1 0.3307
+Time: 0:01:40.554317
+Epoch 33/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 33/50: train loss 0.2445, val loss 3.5432
+Epoch 33/50: train mF1 0.8969, val mF1 0.3018
+Time: 0:01:40.928017
+Epoch 34/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 34/50: train loss 0.2496, val loss 2.8630
+Epoch 34/50: train mF1 0.8988, val mF1 0.3642
+Time: 0:01:40.531294
+Epoch 35/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 35/50: train loss 0.2569, val loss 3.3338
+Epoch 35/50: train mF1 0.8957, val mF1 0.3094
+Time: 0:01:39.240730
+Epoch 36/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 36/50: train loss 0.2392, val loss 2.8011
+Epoch 36/50: train mF1 0.9012, val mF1 0.3496
+Time: 0:01:39.513321
+Epoch 37/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 37/50: train loss 0.2354, val loss 2.5951
+Epoch 37/50: train mF1 0.9038, val mF1 0.3658
+Time: 0:01:39.740076
+Epoch 38/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 38/50: train loss 0.2373, val loss 4.4754
+Epoch 38/50: train mF1 0.9021, val mF1 0.3143
+Time: 0:01:39.576421
+Epoch 39/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 39/50: train loss 0.2397, val loss 2.9014
+Epoch 39/50: train mF1 0.8982, val mF1 0.3414
+Time: 0:01:39.742581
+Epoch 40/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 40/50: train loss 0.2309, val loss 3.2848
+Epoch 40/50: train mF1 0.9028, val mF1 0.3604
+Time: 0:01:42.489145
+Epoch 41/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 41/50: train loss 0.2390, val loss 2.9275
+Epoch 41/50: train mF1 0.9007, val mF1 0.3756
+Time: 0:01:40.182914
+Epoch 42/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 42/50: train loss 0.2368, val loss 2.5995
+Epoch 42/50: train mF1 0.9032, val mF1 0.3525
+Time: 0:01:41.443651
+Epoch 43/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 43/50: train loss 0.2334, val loss 2.4679
+Epoch 43/50: train mF1 0.9046, val mF1 0.3679
+Time: 0:01:41.506061
+Epoch 44/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 44/50: train loss 0.2328, val loss 2.8505
+Epoch 44/50: train mF1 0.9044, val mF1 0.3652
+Time: 0:01:40.578259
+Epoch 45/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 45/50: train loss 0.2361, val loss 3.8470
+Epoch 45/50: train mF1 0.9046, val mF1 0.2730
+Time: 0:01:41.388375
+Epoch 46/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 46/50: train loss 0.2344, val loss 2.7239
+Epoch 46/50: train mF1 0.9036, val mF1 0.3394
+Time: 0:01:40.267698
+Epoch 47/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 47/50: train loss 0.2175, val loss 3.0601
+Epoch 47/50: train mF1 0.9119, val mF1 0.3338
+Time: 0:01:33.669795
+Epoch 48/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 48/50: train loss 0.2296, val loss 2.9289
+Epoch 48/50: train mF1 0.9032, val mF1 0.3629
+Time: 0:01:43.600424
+Epoch 49/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 49/50: train loss 0.2274, val loss 3.2019
+Epoch 49/50: train mF1 0.9093, val mF1 0.3833
+Time: 0:01:35.599365
+Epoch 50/50
+Training
+Batch: 0  over  1125
+Batch: 50  over  1125
+Batch: 100  over  1125
+Batch: 150  over  1125
+Batch: 200  over  1125
+Batch: 250  over  1125
+Batch: 300  over  1125
+Batch: 350  over  1125
+Batch: 400  over  1125
+Batch: 450  over  1125
+Batch: 500  over  1125
+Batch: 550  over  1125
+Batch: 600  over  1125
+Batch: 650  over  1125
+Batch: 700  over  1125
+Batch: 750  over  1125
+Batch: 800  over  1125
+Batch: 850  over  1125
+Batch: 900  over  1125
+Batch: 950  over  1125
+Batch: 1000  over  1125
+Batch: 1050  over  1125
+Batch: 1100  over  1125
+Validation
+Batch: 0  over  410
+Batch: 50  over  410
+Batch: 100  over  410
+Batch: 150  over  410
+Batch: 200  over  410
+Batch: 250  over  410
+Batch: 300  over  410
+Batch: 350  over  410
+Batch: 400  over  410
+Epoch 50/50: train loss 0.2249, val loss 2.5696
+Epoch 50/50: train mF1 0.9072, val mF1 0.3822
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Time: 0:01:35.791102
+Testing
+Batch: 0  over  347
+Batch: 50  over  347
+Batch: 100  over  347
+Batch: 150  over  347
+Batch: 200  over  347
+Batch: 250  over  347
+Batch: 300  over  347
+Test F1 by class: [0.00479616 0.21655172 0.25718743 0.00925926 0.28843537 0.0043573 ]
+Test mF1: 0.13009787490761618
+Plot saved at: ../../results/resnet18_128_l1/stratified_shuffling_by_zone/128_resnet18_stratified_homogene_lr2_bs16_50/metrics_test/test_preds.png

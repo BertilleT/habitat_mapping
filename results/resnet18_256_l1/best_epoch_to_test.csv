@@ -1,0 +1,7 @@
+stratified, name_setting, random_seed, data_augmentation, pre_trained, in_channels, training, plot_test, bs, nb_epochs, patience, best_epoch, normalisation, year, location
+random, resnet18_random_homogene_zone2023, 1, False, False, 4, False, True, 16, None, None, 10, channel_by_channel, 2023, all
+random, resnet18_random_homogene, 1, False, False, 4, False, True, 16, None, None, 2, channel_by_channel, all, all
+random, resnet18_random_homogene_augmented, 1, True, False, 4, False, True, 16, None, None, 5, channel_by_channel, all, all
+zone, resnet18_random_homogene_lr3_strat_zone1, 1, False, False, 4, False, True, 16, 55, None, 7, channel_by_channel, all, all
+zone, resnet18_strat_zone1_homogene_lr3, 1, False, False, 4, False, False, 16, 70, None, 7,  channel_by_channel, all, all
+random, resnet18_random_homogene_lr3, 1, False, False, 4, False, False, 16, None, None, 16, channel_by_channel, all, all
