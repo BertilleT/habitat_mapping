@@ -78,10 +78,13 @@ test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=p
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 
 
-#train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
-#plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
-#val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
-#plot_patch_class_by_class(val_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'validation set')
+train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
+plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
+val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
+plot_patch_class_by_class(val_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'validation set')
+test_ds_plot = EcomedDataset_to_plot(test_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
+plot_patch_class_by_class(test_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'test set')
+
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
