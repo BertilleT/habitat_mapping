@@ -46,26 +46,30 @@ print(f'Normalisation: {data_loading_settings["normalisation"]}')
 
 if data_loading_settings['data_augmentation']: 
     print('Data augmentation')
-    transform = A.Compose([
-        A.RandomBrightnessContrast(p=0.5),
-        A.HueSaturationValue(p=0.5),
-        A.GaussNoise(p=0.5),
-        A.VerticalFlip(p=0.5),
-        A.HorizontalFlip(p=0.5),
-        A.Rotate(limit=45, p=0.5),  # Ajout de la rotation avec une limite de 45 degrés et une probabilité de 50%
-        A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0), ratio=(0.75, 1.33), p=0.5),  # Ajout du recadrage aléatoire avec des paramètres définis
+    transform_rgb = A.Compose([
+        A.HueSaturationValue(hue_shift_limit=0.2, sat_shift_limit=0.2, val_shift_limit=0.2, p=0.5),
+        A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1, p=0.5),
         ToTensorV2(),
     ])
 
+    transform_all_channels = A.Compose([
+        A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
+        A.GaussNoise(var_limit=(0.01, 0.05), p=0.5),
+        A.VerticalFlip(p=0.5),
+        A.HorizontalFlip(p=0.5),
+        A.Rotate(limit=45, p=0.5),
+        A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0), ratio=(0.75, 1.33), p=0.5),
+        ToTensorV2(),
+    ])
+    transform = [transform_rgb, transform_all_channels]
 else: 
     print('No data augmentation')
-    transform = None
+    transform = [None, None]
 
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
 #print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
-
-train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform, normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
+train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 # check size of one img and masks, and value of masks at level 1
 img, msk = next(iter(train_dl))
@@ -77,14 +81,14 @@ val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=Fals
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 
-
-train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
+'''
+train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], task = model_settings['task'])
 plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
 val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
 plot_patch_class_by_class(val_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'validation set')
 test_ds_plot = EcomedDataset_to_plot(test_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
 plot_patch_class_by_class(test_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'test set')
-
+'''
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
@@ -93,7 +97,7 @@ sys.stdout.flush()
 ## MODEL
 print('Creating model...')
 print('Model settings:')
-print(f'Pretrained: {model_settings["encoder_weights"]}')
+print(f'Pretrained: {model_settings["pre_trained"]}')
 print(f'Classes: {model_settings["classes"]}')
 if model_settings['model'] == 'Unet':
     print('The model is Unet')
@@ -107,7 +111,7 @@ if model_settings['model'] == 'Unet':
 
 elif model_settings['model'] == 'Resnet18':
     print('The model is Resnet18')
-    model = models.resnet18(weights=False)
+    model = models.resnet18(weights=model_settings['pre_trained'])
     num_channels = model_settings['in_channels']
     # Extract the first conv layer's parameters
     num_filters = model.conv1.out_channels
@@ -115,7 +119,11 @@ elif model_settings['model'] == 'Resnet18':
     stride = model.conv1.stride
     padding = model.conv1.padding
     # Replace the first conv layer with a new one
-    model.conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
+    conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
+    if model_settings['pre_trained']:
+        original_weights = model.conv1.weight.data.mean(dim=1, keepdim=True)
+        conv1.weight.data = original_weights.repeat(1, num_channels, 1, 1)
+    model.conv1 = conv1
     # Replace the classifier head
     model.fc = nn.Linear(512, model_settings['classes'])
     
@@ -174,8 +182,8 @@ if training_settings['training']:
         df = pd.read_csv(training_settings['losses_metric_path'])
         training_losses = df['training_losses'].tolist()
         validation_losses = df['validation_losses'].tolist()
-        training_metric = df['training_metric'].tolist()
-        validation_metric = df['validation_metric'].tolist()
+        training_metric = df['training_mF1'].tolist()
+        validation_metric = df['validation_mF1'].tolist()
 
         best_val_loss = min(validation_losses)
         print('training_losses: ', training_losses)

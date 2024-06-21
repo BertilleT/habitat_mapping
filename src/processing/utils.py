@@ -22,13 +22,14 @@ from sklearn.metrics import accuracy_score
 not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = None, normalisation = "all_channels_together", task = "pixel_classif", my_set = "train"):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = [None, None], normalisation = "all_channels_together", task = "pixel_classif", my_set = "train"):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
         self.imgs = [self.img_dir / msk_path.parts[-2] / msk_path.name.replace('msk', 'img').replace('l123/', '') for msk_path in self.msks]
         self.channels = channels
-        self.transform = transform
+        self.transform_rgb = transform[0]
+        self.transform_all_channels = transform[1]
         self.normalisation = normalisation
         self.task = task
         self.set = my_set
@@ -79,17 +80,21 @@ class EcomedDataset(Dataset):
                     channel = np.clip(channel, p2, p98)
                     channel = (channel - p2) / (p98 - p2)
                     normalized_img[c, :, :] = channel.astype(np.float32)
-        if self.transform and self.set == 'train':
+        if self.transform_rgb and self.set == 'train':
             if self.task == "pixel_classif":
-                augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
+                print('UPDATE TO DO HERE')
+                '''augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
                 aug_img = augmented['image']
                 msk_mapped = augmented['mask']
                 # add fourth channel from img to img
-                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)
+                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)'''
             elif self.task == "image_classif":
-                augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0))
-                aug_img = augmented['image']
-                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)
+                augmented = self.transform_rgb(image=normalized_img[0:3].transpose(1, 2, 0))
+                rgb_transformed_img = augmented['image']
+                temp_img = np.concatenate((rgb_transformed_img, normalized_img[3:4]), axis=0)
+                augmented = self.transform_all_channels(image=temp_img.transpose(1, 2, 0))
+                img = augmented['image']
+
         else: 
             img = normalized_img
         if self.task == "pixel_classif":
@@ -99,13 +104,15 @@ class EcomedDataset(Dataset):
 
 
 class EcomedDataset_to_plot(Dataset):
-    def __init__(self, msk_paths, img_dir, channels=4, transform = None, task = "pixel_classif"):
+    def __init__(self, msk_paths, img_dir, channels=4, transform = None, task = "pixel_classif", my_set = "train"):
         self.img_dir = img_dir
         self.msks = msk_paths
         self.imgs = [self.img_dir / msk_path.parts[-2] / msk_path.name.replace('msk', 'img').replace('l123/', '') for msk_path in self.msks]
         self.channels = channels
-        self.transform = transform
+        self.transform_rgb = transform[0]
+        self.transform_all_channels = transform[1]
         self.task = task
+        self.set = my_set
 
     def __len__(self):
         return len(self.imgs)
@@ -143,21 +150,26 @@ class EcomedDataset_to_plot(Dataset):
                 channel = np.clip(channel, p2, p98)
                 channel = (channel - p2) / (p98 - p2)
                 normalized_img[c, :, :] = channel.astype(np.float32)
-        if self.transform:
+        if self.transform_rgb and self.set == 'train':
             if self.task == "pixel_classif":
-                augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
+                print('UPDATE TO DO HERE')
+                '''augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
                 aug_img = augmented['image']
                 msk_mapped = augmented['mask']
                 # add fourth channel from img to img
-                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)
+                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)'''
             elif self.task == "image_classif":
-                augmented = self.transform(image=normalized_img.transpose(1, 2, 0))
+                augmented = self.transform_rgb(image=normalized_img[0:3].transpose(1, 2, 0))
+                rgb_transformed_img = augmented['image']
+                temp_img = np.concatenate((rgb_transformed_img, normalized_img[3:4]), axis=0)
+                augmented = self.transform_all_channels(image=temp_img.transpose(1, 2, 0))
                 img = augmented['image']
-
+        else: 
+            img = normalized_img
         if self.task == "pixel_classif":
-            return normalized_img, msk_mapped # deal with label at level 2. 
+            return img, msk_mapped # deal with label at level 2. 
         elif self.task == "image_classif":
-            return normalized_img, img_label_mapped, img_label_2
+            return img, img_label_mapped, img_label_2
 
 def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
     print('The seed to shuffle the data is ', str(random_seed))
@@ -570,7 +582,8 @@ def plot_patch_class_by_class(dataset, nb_imgs, habitats_dict, l2_habitats_dict,
                 row = i // 2
                 col = i % 2
                 rgb_img = img[:3, :, :]
-                rgb_img = rgb_img.transpose(1, 2, 0)
+                rgb_img = rgb_img.permute(1, 2, 0)
+
                 axs[row, col].imshow(rgb_img)
                 axs[row, col].text(0, -20, f'Class level 2: {label_2}: {l2_habitats_dict[label_2]}', fontsize=22)
                 axs[row, col].axis('off')

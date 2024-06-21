@@ -5,7 +5,8 @@ import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
-test_existing_model = True
+model_name = 'Resnet18' # 'UNet', 'Resnet18'
+test_existing_model = False
 patch_size = 256
 model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 
@@ -37,7 +38,8 @@ if test_existing_model:
     bs = int(bs)
     in_channels = int(in_channels)
     if pre_trained == True:
-        encoder_weights = 'imagenet'
+        if model_name == 'UNet':
+            encoder_weights = 'imagenet'
     else: 
         encoder_weights = None
 
@@ -51,11 +53,11 @@ if test_existing_model:
 
 else:
     stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_random_homogene_70epochs' # 
+    name_setting = 'resnet18_random_homogene_lr3_pre_trained' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
-    encoder_weights = None #"imagenet" or None
+    pre_trained = True
     year = 'all'# '2023' or 'all'
     in_channels = 4
     training = True
@@ -67,8 +69,13 @@ else:
     task = "image_classif"
     heterogeneity = 'homogeneous'
     location ='all' # 'mediteranean' or 'all'
-    lr = 1e-4
+    lr = 1e-3
     optimizer = 'Adam' # 'Adam' or 'AdamW'
+    if pre_trained == True:
+        if model_name == 'UNet':
+            encoder_weights = 'imagenet'
+    else: 
+        encoder_weights = None
 
 if stratified == 'random':
     parent = 'random_shuffling/'
@@ -126,8 +133,9 @@ data_loading_settings = {
 }
 
 model_settings = {
-    'model': 'Resnet18', # UNet, Resnet18
+    'model': model_name, # UNet, Resnet18
     'encoder_name': "efficientnet-b7",
+    'pre_trained': pre_trained, # True
     'encoder_weights': encoder_weights,
     'in_channels': in_channels,
     'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
@@ -147,8 +155,9 @@ training_settings = {
     'nb_epochs': nb_epochs,
     'early_stopping': True,
     'patience': patience, 
-    'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put 0
+    'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put None
     'losses_metric_path': f'../../{config_name}/metrics_train_val/losses_metric.csv',
+
 }
 
 plotting_settings = {
