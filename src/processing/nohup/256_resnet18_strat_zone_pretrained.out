@@ -10,7 +10,7 @@ Year: all
 Patches: homogeneous
 Batch size: 16
 Normalisation: channel_by_channel
-Data augmentation
+No data augmentation
 The seed to shuffle the data is  1
 The data are from  all  year
 5716 homogeneous masks found
@@ -37,9 +37,10 @@ Train: 3288 images, Val: 1123 images, Test: 1305 images
 Train: 57.52%, Val: 19.65%, Test: 22.83%
 Creating model...
 Model settings:
-Pretrained: False
+Pretrained: True
 Classes: 6
 The model is Resnet18
+Pretrained weights loaded
 Creating optimizer...
 Training settings:
 Learning rate: 0.001
@@ -56,9 +57,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 1/70: train loss 1.5070, val loss 1.9171
-Epoch 1/70: train mF1 0.3044, val mF1 0.2738
-Time: 0:01:01.120771
+Epoch 1/70: train loss 1.1227, val loss 2.2567
+Epoch 1/70: train mF1 0.5124, val mF1 0.2344
+Time: 0:00:33.171321
 Epoch 2/70
 Training
 Batch: 0  over  206
@@ -69,9 +70,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 2/70: train loss 1.3108, val loss 1.8375
-Epoch 2/70: train mF1 0.3756, val mF1 0.2428
-Time: 0:01:02.764354
+Epoch 2/70: train loss 0.8705, val loss 2.2934
+Epoch 2/70: train mF1 0.6121, val mF1 0.3655
+Time: 0:00:32.126874
 Epoch 3/70
 Training
 Batch: 0  over  206
@@ -82,9 +83,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 3/70: train loss 1.2613, val loss 1.4576
-Epoch 3/70: train mF1 0.3920, val mF1 0.3184
-Time: 0:01:03.854588
+Epoch 3/70: train loss 0.7625, val loss 1.6174
+Epoch 3/70: train mF1 0.6581, val mF1 0.3610
+Time: 0:00:32.150918
 Epoch 4/70
 Training
 Batch: 0  over  206
@@ -95,9 +96,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 4/70: train loss 1.1957, val loss 1.7248
-Epoch 4/70: train mF1 0.4333, val mF1 0.2879
-Time: 0:01:00.067539
+Epoch 4/70: train loss 0.7083, val loss 1.1985
+Epoch 4/70: train mF1 0.6927, val mF1 0.4094
+Time: 0:00:32.448762
 Epoch 5/70
 Training
 Batch: 0  over  206
@@ -108,9 +109,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 5/70: train loss 1.1778, val loss 1.8575
-Epoch 5/70: train mF1 0.4327, val mF1 0.2922
-Time: 0:01:03.352090
+Epoch 5/70: train loss 0.6402, val loss 1.6215
+Epoch 5/70: train mF1 0.7142, val mF1 0.3524
+Time: 0:00:32.330060
 Epoch 6/70
 Training
 Batch: 0  over  206
@@ -121,9 +122,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 6/70: train loss 1.1120, val loss 1.2786
-Epoch 6/70: train mF1 0.4826, val mF1 0.3600
-Time: 0:01:02.301504
+Epoch 6/70: train loss 0.5728, val loss 2.7495
+Epoch 6/70: train mF1 0.7298, val mF1 0.3132
+Time: 0:00:31.990767
 Epoch 7/70
 Training
 Batch: 0  over  206
@@ -134,9 +135,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 7/70: train loss 1.0958, val loss 1.5316
-Epoch 7/70: train mF1 0.4684, val mF1 0.3837
-Time: 0:00:59.747228
+Epoch 7/70: train loss 0.5579, val loss 2.4279
+Epoch 7/70: train mF1 0.7581, val mF1 0.3206
+Time: 0:00:32.052816
 Epoch 8/70
 Training
 Batch: 0  over  206
@@ -147,9 +148,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 8/70: train loss 1.0778, val loss 1.7174
-Epoch 8/70: train mF1 0.4757, val mF1 0.3368
-Time: 0:01:03.079353
+Epoch 8/70: train loss 0.5085, val loss 1.9075
+Epoch 8/70: train mF1 0.7817, val mF1 0.3502
+Time: 0:00:32.097751
 Epoch 9/70
 Training
 Batch: 0  over  206
@@ -160,9 +161,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 9/70: train loss 1.0389, val loss 1.7545
-Epoch 9/70: train mF1 0.5073, val mF1 0.3268
-Time: 0:01:01.267871
+Epoch 9/70: train loss 0.4261, val loss 1.9424
+Epoch 9/70: train mF1 0.8106, val mF1 0.3550
+Time: 0:00:31.730216
 Epoch 10/70
 Training
 Batch: 0  over  206
@@ -173,9 +174,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 10/70: train loss 1.0359, val loss 1.4239
-Epoch 10/70: train mF1 0.5069, val mF1 0.3730
-Time: 0:01:00.360097
+Epoch 10/70: train loss 0.4259, val loss 1.6452
+Epoch 10/70: train mF1 0.8109, val mF1 0.3412
+Time: 0:00:31.816129
 Epoch 11/70
 Training
 Batch: 0  over  206
@@ -186,9 +187,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 11/70: train loss 1.0178, val loss 1.3969
-Epoch 11/70: train mF1 0.5284, val mF1 0.3481
-Time: 0:01:03.320398
+Epoch 11/70: train loss 0.3179, val loss 2.2244
+Epoch 11/70: train mF1 0.8614, val mF1 0.3763
+Time: 0:00:31.708829
 Epoch 12/70
 Training
 Batch: 0  over  206
@@ -199,9 +200,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 12/70: train loss 1.0085, val loss 1.5486
-Epoch 12/70: train mF1 0.5276, val mF1 0.3077
-Time: 0:01:01.861989
+Epoch 12/70: train loss 0.2819, val loss 2.4322
+Epoch 12/70: train mF1 0.8696, val mF1 0.3413
+Time: 0:00:31.582702
 Epoch 13/70
 Training
 Batch: 0  over  206
@@ -212,9 +213,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 13/70: train loss 0.9919, val loss 1.4056
-Epoch 13/70: train mF1 0.5451, val mF1 0.3592
-Time: 0:00:59.906369
+Epoch 13/70: train loss 0.2739, val loss 3.1842
+Epoch 13/70: train mF1 0.8857, val mF1 0.3408
+Time: 0:00:31.740793
 Epoch 14/70
 Training
 Batch: 0  over  206
@@ -225,9 +226,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 14/70: train loss 0.9777, val loss 1.5873
-Epoch 14/70: train mF1 0.5496, val mF1 0.3551
-Time: 0:01:02.924505
+Epoch 14/70: train loss 0.2585, val loss 2.2760
+Epoch 14/70: train mF1 0.8883, val mF1 0.3941
+Time: 0:00:31.937042
 Epoch 15/70
 Training
 Batch: 0  over  206
@@ -238,9 +239,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 15/70: train loss 0.9409, val loss 1.6268
-Epoch 15/70: train mF1 0.5656, val mF1 0.3271
-Time: 0:01:00.648602
+Epoch 15/70: train loss 0.1970, val loss 2.4451
+Epoch 15/70: train mF1 0.9122, val mF1 0.4371
+Time: 0:00:32.137093
 Epoch 16/70
 Training
 Batch: 0  over  206
@@ -251,9 +252,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 16/70: train loss 0.9382, val loss 1.5750
-Epoch 16/70: train mF1 0.5664, val mF1 0.3441
-Time: 0:01:00.732358
+Epoch 16/70: train loss 0.1641, val loss 2.1802
+Epoch 16/70: train mF1 0.9295, val mF1 0.3712
+Time: 0:00:32.062246
 Epoch 17/70
 Training
 Batch: 0  over  206
@@ -264,9 +265,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 17/70: train loss 0.9113, val loss 1.7718
-Epoch 17/70: train mF1 0.5731, val mF1 0.2900
-Time: 0:01:02.507819
+Epoch 17/70: train loss 0.1620, val loss 2.4743
+Epoch 17/70: train mF1 0.9331, val mF1 0.3999
+Time: 0:00:32.007685
 Epoch 18/70
 Training
 Batch: 0  over  206
@@ -277,9 +278,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 18/70: train loss 0.8984, val loss 1.4683
-Epoch 18/70: train mF1 0.5915, val mF1 0.3470
-Time: 0:00:59.875809
+Epoch 18/70: train loss 0.1804, val loss 2.9286
+Epoch 18/70: train mF1 0.9287, val mF1 0.3679
+Time: 0:00:31.795885
 Epoch 19/70
 Training
 Batch: 0  over  206
@@ -290,9 +291,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 19/70: train loss 0.8837, val loss 1.4067
-Epoch 19/70: train mF1 0.6100, val mF1 0.3700
-Time: 0:01:02.845869
+Epoch 19/70: train loss 0.1148, val loss 2.4879
+Epoch 19/70: train mF1 0.9470, val mF1 0.4115
+Time: 0:00:31.829238
 Epoch 20/70
 Training
 Batch: 0  over  206
@@ -303,9 +304,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 20/70: train loss 0.8666, val loss 1.5758
-Epoch 20/70: train mF1 0.6123, val mF1 0.3693
-Time: 0:01:04.094975
+Epoch 20/70: train loss 0.1133, val loss 2.4527
+Epoch 20/70: train mF1 0.9566, val mF1 0.3817
+Time: 0:00:31.841175
 Epoch 21/70
 Training
 Batch: 0  over  206
@@ -316,9 +317,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 21/70: train loss 0.8678, val loss 1.5254
-Epoch 21/70: train mF1 0.6046, val mF1 0.3729
-Time: 0:01:00.081924
+Epoch 21/70: train loss 0.0803, val loss 3.1418
+Epoch 21/70: train mF1 0.9655, val mF1 0.4260
+Time: 0:00:32.007660
 Epoch 22/70
 Training
 Batch: 0  over  206
@@ -329,9 +330,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 22/70: train loss 0.8567, val loss 1.8668
-Epoch 22/70: train mF1 0.6132, val mF1 0.3282
-Time: 0:01:01.266773
+Epoch 22/70: train loss 0.0495, val loss 3.7770
+Epoch 22/70: train mF1 0.9824, val mF1 0.4127
+Time: 0:00:31.802901
 Epoch 23/70
 Training
 Batch: 0  over  206
@@ -342,9 +343,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 23/70: train loss 0.8463, val loss 1.3610
-Epoch 23/70: train mF1 0.6223, val mF1 0.3868
-Time: 0:01:01.694908
+Epoch 23/70: train loss 0.1212, val loss 3.1004
+Epoch 23/70: train mF1 0.9570, val mF1 0.3406
+Time: 0:00:31.465884
 Epoch 24/70
 Training
 Batch: 0  over  206
@@ -355,9 +356,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 24/70: train loss 0.8143, val loss 1.4647
-Epoch 24/70: train mF1 0.6294, val mF1 0.3917
-Time: 0:00:59.482229
+Epoch 24/70: train loss 0.1095, val loss 2.8510
+Epoch 24/70: train mF1 0.9549, val mF1 0.3970
+Time: 0:00:31.898668
 Epoch 25/70
 Training
 Batch: 0  over  206
@@ -368,9 +369,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 25/70: train loss 0.8368, val loss 1.5714
-Epoch 25/70: train mF1 0.6280, val mF1 0.3459
-Time: 0:01:01.372445
+Epoch 25/70: train loss 0.0703, val loss 3.4682
+Epoch 25/70: train mF1 0.9717, val mF1 0.4201
+Time: 0:00:32.275200
 Epoch 26/70
 Training
 Batch: 0  over  206
@@ -381,9 +382,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 26/70: train loss 0.8107, val loss 1.5797
-Epoch 26/70: train mF1 0.6402, val mF1 0.3688
-Time: 0:01:01.587889
+Epoch 26/70: train loss 0.0820, val loss 3.3457
+Epoch 26/70: train mF1 0.9636, val mF1 0.3773
+Time: 0:00:31.950564
 Epoch 27/70
 Training
 Batch: 0  over  206
@@ -394,9 +395,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 27/70: train loss 0.7837, val loss 1.5710
-Epoch 27/70: train mF1 0.6511, val mF1 0.3558
-Time: 0:01:00.015348
+Epoch 27/70: train loss 0.0616, val loss 3.2971
+Epoch 27/70: train mF1 0.9768, val mF1 0.4039
+Time: 0:00:32.043243
 Epoch 28/70
 Training
 Batch: 0  over  206
@@ -407,9 +408,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 28/70: train loss 0.7919, val loss 1.3000
-Epoch 28/70: train mF1 0.6407, val mF1 0.4096
-Time: 0:01:01.357871
+Epoch 28/70: train loss 0.0590, val loss 4.1914
+Epoch 28/70: train mF1 0.9761, val mF1 0.3945
+Time: 0:00:31.888359
 Epoch 29/70
 Training
 Batch: 0  over  206
@@ -420,9 +421,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 29/70: train loss 0.7628, val loss 1.4441
-Epoch 29/70: train mF1 0.6584, val mF1 0.3591
-Time: 0:01:01.079674
+Epoch 29/70: train loss 0.0808, val loss 3.6403
+Epoch 29/70: train mF1 0.9715, val mF1 0.3941
+Time: 0:00:31.738488
 Epoch 30/70
 Training
 Batch: 0  over  206
@@ -433,9 +434,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 30/70: train loss 0.7778, val loss 1.6772
-Epoch 30/70: train mF1 0.6353, val mF1 0.3447
-Time: 0:01:00.555936
+Epoch 30/70: train loss 0.0446, val loss 4.2482
+Epoch 30/70: train mF1 0.9804, val mF1 0.3830
+Time: 0:00:31.769860
 Epoch 31/70
 Training
 Batch: 0  over  206
@@ -446,9 +447,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 31/70: train loss 0.7281, val loss 1.5620
-Epoch 31/70: train mF1 0.6756, val mF1 0.3477
-Time: 0:01:01.896775
+Epoch 31/70: train loss 0.0454, val loss 4.0798
+Epoch 31/70: train mF1 0.9829, val mF1 0.4073
+Time: 0:00:31.901427
 Epoch 32/70
 Training
 Batch: 0  over  206
@@ -459,9 +460,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 32/70: train loss 0.7405, val loss 1.5069
-Epoch 32/70: train mF1 0.6684, val mF1 0.3540
-Time: 0:00:59.501976
+Epoch 32/70: train loss 0.0471, val loss 5.3911
+Epoch 32/70: train mF1 0.9800, val mF1 0.3601
+Time: 0:00:31.782878
 Epoch 33/70
 Training
 Batch: 0  over  206
@@ -472,9 +473,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 33/70: train loss 0.7495, val loss 1.7181
-Epoch 33/70: train mF1 0.6594, val mF1 0.3558
-Time: 0:01:02.406784
+Epoch 33/70: train loss 0.0812, val loss 3.0885
+Epoch 33/70: train mF1 0.9702, val mF1 0.4053
+Time: 0:00:31.393120
 Epoch 34/70
 Training
 Batch: 0  over  206
@@ -485,9 +486,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 34/70: train loss 0.7152, val loss 1.4117
-Epoch 34/70: train mF1 0.6822, val mF1 0.3923
-Time: 0:01:01.822601
+Epoch 34/70: train loss 0.0430, val loss 4.2659
+Epoch 34/70: train mF1 0.9814, val mF1 0.4026
+Time: 0:00:32.640123
 Epoch 35/70
 Training
 Batch: 0  over  206
@@ -498,9 +499,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 35/70: train loss 0.7211, val loss 1.3347
-Epoch 35/70: train mF1 0.6683, val mF1 0.4218
-Time: 0:00:59.956977
+Epoch 35/70: train loss 0.0653, val loss 3.4799
+Epoch 35/70: train mF1 0.9809, val mF1 0.3760
+Time: 0:00:32.213852
 Epoch 36/70
 Training
 Batch: 0  over  206
@@ -511,9 +512,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 36/70: train loss 0.6942, val loss 1.4962
-Epoch 36/70: train mF1 0.6974, val mF1 0.3575
-Time: 0:01:02.555712
+Epoch 36/70: train loss 0.0966, val loss 2.9901
+Epoch 36/70: train mF1 0.9609, val mF1 0.4012
+Time: 0:00:32.075542
 Epoch 37/70
 Training
 Batch: 0  over  206
@@ -524,9 +525,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 37/70: train loss 0.6791, val loss 1.4649
-Epoch 37/70: train mF1 0.7039, val mF1 0.3912
-Time: 0:01:01.314803
+Epoch 37/70: train loss 0.0355, val loss 3.1566
+Epoch 37/70: train mF1 0.9858, val mF1 0.3939
+Time: 0:00:32.117906
 Epoch 38/70
 Training
 Batch: 0  over  206
@@ -537,9 +538,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 38/70: train loss 0.6765, val loss 1.5672
-Epoch 38/70: train mF1 0.6960, val mF1 0.3777
-Time: 0:00:59.887912
+Epoch 38/70: train loss 0.0183, val loss 3.5372
+Epoch 38/70: train mF1 0.9927, val mF1 0.3945
+Time: 0:00:32.925549
 Epoch 39/70
 Training
 Batch: 0  over  206
@@ -550,9 +551,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 39/70: train loss 0.6730, val loss 1.5390
-Epoch 39/70: train mF1 0.6961, val mF1 0.3754
-Time: 0:01:02.312831
+Epoch 39/70: train loss 0.0580, val loss 4.2364
+Epoch 39/70: train mF1 0.9774, val mF1 0.3587
+Time: 0:00:32.460902
 Epoch 40/70
 Training
 Batch: 0  over  206
@@ -563,9 +564,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 40/70: train loss 0.6490, val loss 1.7130
-Epoch 40/70: train mF1 0.7106, val mF1 0.4074
-Time: 0:01:00.831005
+Epoch 40/70: train loss 0.0906, val loss 4.8399
+Epoch 40/70: train mF1 0.9590, val mF1 0.3656
+Time: 0:00:32.620186
 Epoch 41/70
 Training
 Batch: 0  over  206
@@ -576,9 +577,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 41/70: train loss 0.6606, val loss 1.9294
-Epoch 41/70: train mF1 0.7060, val mF1 0.3490
-Time: 0:01:00.182476
+Epoch 41/70: train loss 0.0628, val loss 3.7167
+Epoch 41/70: train mF1 0.9790, val mF1 0.4255
+Time: 0:00:32.428617
 Epoch 42/70
 Training
 Batch: 0  over  206
@@ -589,9 +590,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 42/70: train loss 0.6626, val loss 1.5823
-Epoch 42/70: train mF1 0.7010, val mF1 0.3731
-Time: 0:01:02.341315
+Epoch 42/70: train loss 0.0514, val loss 3.2130
+Epoch 42/70: train mF1 0.9782, val mF1 0.4099
+Time: 0:00:32.225522
 Epoch 43/70
 Training
 Batch: 0  over  206
@@ -602,9 +603,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 43/70: train loss 0.6317, val loss 1.6286
-Epoch 43/70: train mF1 0.7085, val mF1 0.3865
-Time: 0:00:59.336292
+Epoch 43/70: train loss 0.0187, val loss 3.8153
+Epoch 43/70: train mF1 0.9938, val mF1 0.4110
+Time: 0:00:32.795872
 Epoch 44/70
 Training
 Batch: 0  over  206
@@ -615,9 +616,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 44/70: train loss 0.6177, val loss 1.4935
-Epoch 44/70: train mF1 0.7142, val mF1 0.3876
-Time: 0:01:01.932513
+Epoch 44/70: train loss 0.0352, val loss 3.7618
+Epoch 44/70: train mF1 0.9883, val mF1 0.3862
+Time: 0:00:32.077535
 Epoch 45/70
 Training
 Batch: 0  over  206
@@ -628,9 +629,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 45/70: train loss 0.6321, val loss 1.6571
-Epoch 45/70: train mF1 0.7040, val mF1 0.3845
-Time: 0:01:03.190771
+Epoch 45/70: train loss 0.0777, val loss 3.6480
+Epoch 45/70: train mF1 0.9705, val mF1 0.3735
+Time: 0:00:32.590163
 Epoch 46/70
 Training
 Batch: 0  over  206
@@ -641,9 +642,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 46/70: train loss 0.6024, val loss 1.4624
-Epoch 46/70: train mF1 0.7326, val mF1 0.4112
-Time: 0:01:00.007129
+Epoch 46/70: train loss 0.0199, val loss 3.6580
+Epoch 46/70: train mF1 0.9940, val mF1 0.3524
+Time: 0:00:32.376811
 Epoch 47/70
 Training
 Batch: 0  over  206
@@ -654,9 +655,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 47/70: train loss 0.5862, val loss 1.6754
-Epoch 47/70: train mF1 0.7389, val mF1 0.4222
-Time: 0:01:01.694011
+Epoch 47/70: train loss 0.0233, val loss 3.6182
+Epoch 47/70: train mF1 0.9929, val mF1 0.3990
+Time: 0:00:31.809650
 Epoch 48/70
 Training
 Batch: 0  over  206
@@ -667,9 +668,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 48/70: train loss 0.6070, val loss 1.6444
-Epoch 48/70: train mF1 0.7300, val mF1 0.3739
-Time: 0:01:01.661229
+Epoch 48/70: train loss 0.0321, val loss 4.1317
+Epoch 48/70: train mF1 0.9904, val mF1 0.4159
+Time: 0:00:31.543189
 Epoch 49/70
 Training
 Batch: 0  over  206
@@ -680,9 +681,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 49/70: train loss 0.5772, val loss 1.7132
-Epoch 49/70: train mF1 0.7424, val mF1 0.3889
-Time: 0:00:59.125778
+Epoch 49/70: train loss 0.0458, val loss 3.7680
+Epoch 49/70: train mF1 0.9828, val mF1 0.3746
+Time: 0:00:31.757446
 Epoch 50/70
 Training
 Batch: 0  over  206
@@ -693,9 +694,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 50/70: train loss 0.5892, val loss 1.5256
-Epoch 50/70: train mF1 0.7323, val mF1 0.4074
-Time: 0:01:01.126432
+Epoch 50/70: train loss 0.0486, val loss 4.1190
+Epoch 50/70: train mF1 0.9849, val mF1 0.3687
+Time: 0:00:31.617049
 Epoch 51/70
 Training
 Batch: 0  over  206
@@ -706,9 +707,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 51/70: train loss 0.5604, val loss 1.4338
-Epoch 51/70: train mF1 0.7447, val mF1 0.4344
-Time: 0:01:00.825847
+Epoch 51/70: train loss 0.0355, val loss 4.5642
+Epoch 51/70: train mF1 0.9873, val mF1 0.3280
+Time: 0:00:32.124826
 Epoch 52/70
 Training
 Batch: 0  over  206
@@ -719,9 +720,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 52/70: train loss 0.5598, val loss 1.6088
-Epoch 52/70: train mF1 0.7479, val mF1 0.4515
-Time: 0:01:00.281518
+Epoch 52/70: train loss 0.0345, val loss 4.0434
+Epoch 52/70: train mF1 0.9848, val mF1 0.3872
+Time: 0:00:31.569889
 Epoch 53/70
 Training
 Batch: 0  over  206
@@ -732,9 +733,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 53/70: train loss 0.5792, val loss 1.6595
-Epoch 53/70: train mF1 0.7455, val mF1 0.3871
-Time: 0:01:01.769167
+Epoch 53/70: train loss 0.0268, val loss 3.8720
+Epoch 53/70: train mF1 0.9917, val mF1 0.3746
+Time: 0:00:31.931412
 Epoch 54/70
 Training
 Batch: 0  over  206
@@ -745,9 +746,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 54/70: train loss 0.5442, val loss 1.5940
-Epoch 54/70: train mF1 0.7533, val mF1 0.3915
-Time: 0:01:00.741271
+Epoch 54/70: train loss 0.0542, val loss 4.1344
+Epoch 54/70: train mF1 0.9845, val mF1 0.3836
+Time: 0:00:32.644614
 Epoch 55/70
 Training
 Batch: 0  over  206
@@ -758,9 +759,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 55/70: train loss 0.5544, val loss 1.6228
-Epoch 55/70: train mF1 0.7500, val mF1 0.3753
-Time: 0:01:01.357817
+Epoch 55/70: train loss 0.0685, val loss 4.3592
+Epoch 55/70: train mF1 0.9687, val mF1 0.3856
+Time: 0:00:31.731220
 Epoch 56/70
 Training
 Batch: 0  over  206
@@ -771,9 +772,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 56/70: train loss 0.5362, val loss 1.8202
-Epoch 56/70: train mF1 0.7617, val mF1 0.3812
-Time: 0:01:01.386358
+Epoch 56/70: train loss 0.0481, val loss 4.1251
+Epoch 56/70: train mF1 0.9837, val mF1 0.3579
+Time: 0:00:31.566536
 Epoch 57/70
 Training
 Batch: 0  over  206
@@ -784,9 +785,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 57/70: train loss 0.5384, val loss 1.5493
-Epoch 57/70: train mF1 0.7481, val mF1 0.4033
-Time: 0:00:59.748182
+Epoch 57/70: train loss 0.0450, val loss 4.7628
+Epoch 57/70: train mF1 0.9866, val mF1 0.3583
+Time: 0:00:32.105669
 Epoch 58/70
 Training
 Batch: 0  over  206
@@ -797,9 +798,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 58/70: train loss 0.5098, val loss 1.6161
-Epoch 58/70: train mF1 0.7676, val mF1 0.3978
-Time: 0:01:02.621682
+Epoch 58/70: train loss 0.0411, val loss 4.2630
+Epoch 58/70: train mF1 0.9841, val mF1 0.3838
+Time: 0:00:32.433863
 Epoch 59/70
 Training
 Batch: 0  over  206
@@ -810,9 +811,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 59/70: train loss 0.5343, val loss 1.5888
-Epoch 59/70: train mF1 0.7597, val mF1 0.4066
-Time: 0:01:01.394235
+Epoch 59/70: train loss 0.0382, val loss 4.1590
+Epoch 59/70: train mF1 0.9879, val mF1 0.3938
+Time: 0:00:31.368275
 Epoch 60/70
 Training
 Batch: 0  over  206
@@ -823,9 +824,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 60/70: train loss 0.5319, val loss 1.8115
-Epoch 60/70: train mF1 0.7600, val mF1 0.3724
-Time: 0:00:58.729086
+Epoch 60/70: train loss 0.0323, val loss 4.1089
+Epoch 60/70: train mF1 0.9912, val mF1 0.3930
+Time: 0:00:32.109679
 Epoch 61/70
 Training
 Batch: 0  over  206
@@ -836,9 +837,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 61/70: train loss 0.5145, val loss 1.9858
-Epoch 61/70: train mF1 0.7567, val mF1 0.4130
-Time: 0:01:01.522497
+Epoch 61/70: train loss 0.0307, val loss 3.8694
+Epoch 61/70: train mF1 0.9896, val mF1 0.4077
+Time: 0:00:31.297362
 Epoch 62/70
 Training
 Batch: 0  over  206
@@ -849,9 +850,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 62/70: train loss 0.5183, val loss 1.7519
-Epoch 62/70: train mF1 0.7721, val mF1 0.3888
-Time: 0:01:00.475224
+Epoch 62/70: train loss 0.0364, val loss 3.7563
+Epoch 62/70: train mF1 0.9856, val mF1 0.4165
+Time: 0:00:31.275101
 Epoch 63/70
 Training
 Batch: 0  over  206
@@ -862,9 +863,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 63/70: train loss 0.5001, val loss 1.8159
-Epoch 63/70: train mF1 0.7721, val mF1 0.3780
-Time: 0:00:59.421543
+Epoch 63/70: train loss 0.0213, val loss 3.6802
+Epoch 63/70: train mF1 0.9970, val mF1 0.4181
+Time: 0:00:31.684477
 Epoch 64/70
 Training
 Batch: 0  over  206
@@ -875,9 +876,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 64/70: train loss 0.5191, val loss 2.2202
-Epoch 64/70: train mF1 0.7626, val mF1 0.3809
-Time: 0:01:02.629322
+Epoch 64/70: train loss 0.0170, val loss 4.2858
+Epoch 64/70: train mF1 0.9943, val mF1 0.3831
+Time: 0:00:31.968251
 Epoch 65/70
 Training
 Batch: 0  over  206
@@ -888,9 +889,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 65/70: train loss 0.4911, val loss 2.0152
-Epoch 65/70: train mF1 0.7730, val mF1 0.3922
-Time: 0:01:01.019161
+Epoch 65/70: train loss 0.0415, val loss 4.8566
+Epoch 65/70: train mF1 0.9817, val mF1 0.3932
+Time: 0:00:31.398827
 Epoch 66/70
 Training
 Batch: 0  over  206
@@ -901,9 +902,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 66/70: train loss 0.5013, val loss 2.1306
-Epoch 66/70: train mF1 0.7662, val mF1 0.3802
-Time: 0:00:59.313018
+Epoch 66/70: train loss 0.0202, val loss 3.6814
+Epoch 66/70: train mF1 0.9924, val mF1 0.4238
+Time: 0:00:32.006514
 Epoch 67/70
 Training
 Batch: 0  over  206
@@ -914,9 +915,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 67/70: train loss 0.4778, val loss 1.8381
-Epoch 67/70: train mF1 0.7757, val mF1 0.4296
-Time: 0:01:01.591052
+Epoch 67/70: train loss 0.0249, val loss 4.4790
+Epoch 67/70: train mF1 0.9895, val mF1 0.3703
+Time: 0:00:31.551337
 Epoch 68/70
 Training
 Batch: 0  over  206
@@ -927,9 +928,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 68/70: train loss 0.5111, val loss 1.6448
-Epoch 68/70: train mF1 0.7710, val mF1 0.4447
-Time: 0:00:59.491793
+Epoch 68/70: train loss 0.0110, val loss 4.4148
+Epoch 68/70: train mF1 0.9947, val mF1 0.3839
+Time: 0:00:31.690138
 Epoch 69/70
 Training
 Batch: 0  over  206
@@ -940,9 +941,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 69/70: train loss 0.4593, val loss 1.6674
-Epoch 69/70: train mF1 0.7847, val mF1 0.4601
-Time: 0:01:01.198618
+Epoch 69/70: train loss 0.0311, val loss 4.3608
+Epoch 69/70: train mF1 0.9916, val mF1 0.4085
+Time: 0:00:31.979489
 Epoch 70/70
 Training
 Batch: 0  over  206
@@ -953,15 +954,9 @@ Batch: 200  over  206
 Validation
 Batch: 0  over  71
 Batch: 50  over  71
-Epoch 70/70: train loss 0.4702, val loss 1.7707
-Epoch 70/70: train mF1 0.7895, val mF1 0.4070
-/home/bertille/.local/lib/python3.8/site-packages/pydantic/main.py:347: UserWarning: Pydantic serializer warnings:
-  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
-  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
-  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
-  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
-  return self.__pydantic_serializer__.to_python(
-/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+Epoch 70/70: train loss 0.0387, val loss 6.0971
+Epoch 70/70: train mF1 0.9874, val mF1 0.4057
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
   warnings.warn(msg)
 /home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
@@ -969,24 +964,10 @@ Epoch 70/70: train mF1 0.7895, val mF1 0.4070
   _warn_prf(average, modifier, msg_start, len(result))
 /home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-Time: 0:01:01.420016
+Time: 0:00:31.390794
 Testing
 Batch: 0  over  82
 Batch: 50  over  82
-Test F1 by class: [0.11320755 0.11764706 0.72197962 0.7209776  0.09210526 0.        ]
-Test mF1: 0.2943195145725867
-Plot saved at: ../../results/resnet18_256_l1/stratified_shuffling_by_zone/resnet18_stratified_homogene_lr3_augmented_data/metrics_test/test_preds.png
+Test F1 by class: [0.1023622  0.36814159 0.63330457 0.703125   0.18421053 0.        ]
+Test mF1: 0.3318573161447053
+Plot saved at: ../../results/resnet18_256_l1/stratified_shuffling_by_zone/resnet18_strat_zone_homogene_lr3_pre_trained/metrics_test/test_preds.png
