@@ -69,18 +69,33 @@ else:
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
 #print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
-train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
+train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform, normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "train", labels = model_settings['labels'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 # check size of one img and masks, and value of masks at level 1
 img, msk = next(iter(train_dl))
 print(f'Image shape: {img.shape}, Mask shape: {msk.shape}')
 print(f"Image: min: {img.min()}, max: {img.max()}, dtype: {img.dtype}")
-print(f"Mask: {np.unique(msk[0])}, dtype: {msk.dtype}")
-val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
+print(f"Mask unique values: {np.unique(msk[0])}, dtype: {msk.dtype}")
+print(f"Mask: ", msk[0])
+val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "val", labels = model_settings['labels'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
-test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'])
+test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 
+#laod one img and msk
+img, msk = next(iter(train_dl))
+# print msk all values
+print(f"Mask 0: ", msk[0])
+print(f"Mask 1: ", msk[1])
+print(f"Mask 2: ", msk[2])
+print(f"Mask 3: ", msk[3])
+print(f"Mask 4: ", msk[4])
+print(f"Mask 5: ", msk[5])
+print(f"Mask 6: ", msk[6])
+print(f"Mask 7: ", msk[7])
+print(f"Mask 8: ", msk[8])
+print(f"Mask 9: ", msk[9])
+print(f"Mask 10: ", msk[10])
 '''
 train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], task = model_settings['task'])
 plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
@@ -99,8 +114,8 @@ print('Creating model...')
 print('Model settings:')
 print(f'Pretrained: {model_settings["pre_trained"]}')
 print(f'Classes: {model_settings["classes"]}')
-if model_settings['model'] == 'Unet':
-    print('The model is Unet')
+if model_settings['model'] == 'UNet':
+    print('The model is UNet')
     print(f'Encoder name: {model_settings["encoder_name"]}')
     model = smp.Unet(
         encoder_name=model_settings['encoder_name'],        
@@ -121,11 +136,17 @@ elif model_settings['model'] == 'Resnet18':
     # Replace the first conv layer with a new one
     conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
     if model_settings['pre_trained']:
-        original_weights = model.conv1.weight.data.mean(dim=1, keepdim=True)
-        conv1.weight.data = original_weights.repeat(1, num_channels, 1, 1)
+        # take the mean of all 3 channels wigths
+        mean_weights = model.conv1.weight.data.mean(dim=1, keepdim=True)
+        # initiliaze the last channel of the pre trained weights with the mean of the 3 channels
+        conv1.weight.data = torch.cat([model.conv1.weight.data, mean_weights], dim=1)
+        print('Pretrained weights loaded')
     model.conv1 = conv1
     # Replace the classifier head
-    model.fc = nn.Linear(512, model_settings['classes'])
+    if model_settings['labels'] == 'single':
+        model.fc = nn.Linear(512, model_settings['classes'])
+    elif model_settings['labels'] == 'multi':
+        model.fc = nn.Linear(512, model_settings['classes'] + 1)
     
 if training_settings['restart_training'] is not None:
     model.load_state_dict(torch.load(model_settings['path_to_last_model']))
@@ -133,7 +154,7 @@ if training_settings['restart_training'] is not None:
 model.to(device)
 
 # METRIC
-if model_settings['model'] == 'Unet':
+if model_settings['model'] == 'UNet':
     metric = 'mIoU'
 elif model_settings['model'] == 'Resnet18':
     metric = 'mF1'
@@ -143,6 +164,9 @@ if training_settings['criterion'] == 'CrossEntropy':
     criterion = nn.CrossEntropyLoss()
 elif training_settings['criterion'] == 'Dice':
     criterion = smp.losses.DiceLoss(mode='multiclass', eps=0.0000001)
+elif training_settings['criterion'] == 'BCEWithDigits':
+    criterion = smp.losses.SoftBCEWithLogitsLoss()
+    print('Using BCEWithDigits criterion')
 else:
     raise ValueError('Criterion not implemented')
 if training_settings['training']:
@@ -204,13 +228,13 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'], model_settings['model'])
+        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'], model_settings['model'], model_settings['labels'])
         training_losses.append(train_loss)
         training_metric.append(tr_metric)
         model.eval()
         with torch.no_grad():
             print('Validation')
-            val_loss, val_metric = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid', model_settings['model'])
+            val_loss, val_metric = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid', model_settings['model'], model_settings['labels'])
             validation_losses.append(val_loss)
             validation_metric.append(val_metric)
 
@@ -256,11 +280,12 @@ else:
         param.to(device)
 
 # TESTING
+
 model.eval()
 with torch.no_grad():
     print('Testing')
-    test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test', model_settings['model'])
-if model_settings['model'] == 'Unet':
+    test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test', model_settings['model'], model_settings['labels'])
+if model_settings['model'] == 'UNet':
     print(f'Test IoU by class: {metrics["IoU_by_class"]}')
     print(f'Test mIoU: {metrics["mIoU"]}')
     metrics['IoU_by_class']['mean'] = metrics['mIoU']
@@ -277,18 +302,41 @@ metrics['F1_by_class'] = {k: round(v, 2) for k, v in metrics['F1_by_class'].item
 f1_df = pd.DataFrame(metrics['F1_by_class'].items(), columns=['class', 'F1'])
 f1_df.to_csv(plotting_settings['F1_path'], index=False)
 
-#plot confusion matrix and save it
-confusion_matrix = metrics['confusion_matrix']
-confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
-#sns.set(font_scale=0.8)
-plt.figure(figsize=(10, 10))
+if labels == 'single':
+    #plot confusion matrix and save it
+    confusion_matrix = metrics['confusion_matrix']
+    print('Confusion matrix: ', confusion_matrix)
+    confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
+    print('Normalized confusion matrix: ', confusion_matrix_normalized)
+    #sns.set(font_scale=0.8)
+    plt.figure(figsize=(10, 10))
 
-ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
-#ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-plt.xlabel('Predicted labels')
-plt.ylabel('True labels')
-plt.title('Normalized confusion matrix')
-plt.savefig(plotting_settings['confusion_matrix_path'])
+    ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
+    #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+    plt.xlabel('Predicted labels')
+    plt.ylabel('True labels')
+    plt.title('Normalized confusion matrix')
+    plt.savefig(plotting_settings['confusion_matrix_path'])
+
+elif labels == 'multi':
+    #plot confusion matrix and save it
+    confusion_matrices = metrics['confusion_matrix']
+    print('Confusion matrix: ', confusion_matrices)
+    # normalize each conf matrix from confusion_matrices
+    confusion_matrices_normalized = []
+    for conf_matrix in confusion_matrices:
+        conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis]
+        confusion_matrices_normalized.append(conf_matrix_normalized)
+    print('Normalized confusion matrix: ', confusion_matrices_normalized)
+    #plot each conf matrixes 
+    for i, conf_matrix_normalized in enumerate(confusion_matrices_normalized):
+        plt.figure(figsize=(10, 10))
+        ax = sns.heatmap(conf_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
+        #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+        plt.xlabel('Predicted labels')
+        plt.ylabel('True labels')
+        plt.title(f'Normalized confusion matrix for class {i}')
+        plt.savefig(plotting_settings['confusion_matrix_path'].replace('.png', f'_class_{i}.png'))
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:
@@ -297,9 +345,13 @@ if plotting_settings['plot_test']:
     img, msk = next(iter(test_dl))
     img, msk = img.to(device), msk.to(device)
     out = model(img)
-    out = torch.argmax(out, dim=1)
-    out = out.int()
+    if model_settings['labels'] == 'single':
+        out = torch.argmax(out, dim=1)
+        out = out.int()
+    elif model_settings['labels'] == 'multi':
+        out = torch.sigmoid(out)
+        out = (out > 0.5).int()
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
-    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'])
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])

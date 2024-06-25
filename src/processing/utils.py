@@ -18,11 +18,13 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import accuracy_score
+# multilabel
+from sklearn.metrics import multilabel_confusion_matrix
 
 not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = [None, None], normalisation = "all_channels_together", task = "pixel_classif", my_set = "train"):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = [None, None], normalisation = "all_channels_together", task = "pixel_classif", my_set = "train", labels = 'single'):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
@@ -33,6 +35,7 @@ class EcomedDataset(Dataset):
         self.normalisation = normalisation
         self.task = task
         self.set = my_set
+        self.labels = labels
 
     def __len__(self):
         return len(self.imgs)
@@ -54,7 +57,23 @@ class EcomedDataset(Dataset):
                     msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
                 elif self.task == "image_classif":  
                     # map value from img_label using group_under_represented_classes_uint8
-                    img_label_mapped = group_under_represented_classes_uint8[img_label]
+                    if self.labels == 'single':
+                        img_label_mapped = group_under_represented_classes_uint8[img_label] # PB HERE
+                    elif self.labels == 'multi':
+                        # store in img_labels all uniques values from masks
+                        labels = np.unique(msk)
+                        labels_mapped = np.vectorize(group_under_represented_classes_uint8.get)(labels)
+                        # unique
+                        unique_labels_mapped = np.unique(labels_mapped)
+                        
+                        binary_labels_mapped = np.zeros(7)
+                        for i in range(6):
+                            if i in unique_labels_mapped:
+                                binary_labels_mapped[i] = 1
+                        if len(unique_labels_mapped) > 1:
+                            binary_labels_mapped[6] = 1
+                        # img_label_mapped and to floaf
+                        img_label_mapped = binary_labels_mapped.astype(np.float32)
             else:
                 msk_mapped = msk
                 img_label_mapped = img_label
@@ -80,14 +99,15 @@ class EcomedDataset(Dataset):
                     channel = np.clip(channel, p2, p98)
                     channel = (channel - p2) / (p98 - p2)
                     normalized_img[c, :, :] = channel.astype(np.float32)
+
         if self.transform_rgb and self.set == 'train':
             if self.task == "pixel_classif":
-                print('UPDATE TO DO HERE')
-                '''augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
-                aug_img = augmented['image']
+                augmented = self.transform_rgb(image=normalized_img[0:3].transpose(1, 2, 0))
+                rgb_transformed_img = augmented['image']
+                temp_img = np.concatenate((rgb_transformed_img, normalized_img[3:4]), axis=0)
+                augmented = self.transform_all_channels(image=temp_img.transpose(1, 2, 0), mask=msk_mapped)
+                img = augmented['image']
                 msk_mapped = augmented['mask']
-                # add fourth channel from img to img
-                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)'''
             elif self.task == "image_classif":
                 augmented = self.transform_rgb(image=normalized_img[0:3].transpose(1, 2, 0))
                 rgb_transformed_img = augmented['image']
@@ -152,12 +172,12 @@ class EcomedDataset_to_plot(Dataset):
                 normalized_img[c, :, :] = channel.astype(np.float32)
         if self.transform_rgb and self.set == 'train':
             if self.task == "pixel_classif":
-                print('UPDATE TO DO HERE')
-                '''augmented = self.transform(image=normalized_img[0:3].transpose(1, 2, 0), mask=msk_mapped)
-                aug_img = augmented['image']
+                augmented = self.transform_rgb(image=normalized_img[0:3].transpose(1, 2, 0))
+                rgb_transformed_img = augmented['image']
+                temp_img = np.concatenate((rgb_transformed_img, normalized_img[3:4]), axis=0)
+                augmented = self.transform_all_channels(image=temp_img.transpose(1, 2, 0), mask=msk_mapped)
+                img = augmented['image']
                 msk_mapped = augmented['mask']
-                # add fourth channel from img to img
-                img = np.concatenate((aug_img, normalized_img[3:4]), axis=0)'''
             elif self.task == "image_classif":
                 augmented = self.transform_rgb(image=normalized_img[0:3].transpose(1, 2, 0))
                 rgb_transformed_img = augmented['image']
@@ -330,7 +350,7 @@ def check_classes_balance(dl, nb_class, task):
 
 
 ## FUNCTION FOR TRAINING, VALIDATION AND TESTING
-def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name):
+def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name, labels):
     print('Training')
     running_loss = 0.0
     patch_confusion_matrices = []
@@ -343,7 +363,8 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name)
         img, msk = img.to(device), msk.to(device)
         optimizer.zero_grad()
         out = model(img)
-        msk = msk.long()
+        if labels == 'single':
+            msk = msk.long() 
         loss = criterion(out, msk)
         loss.backward()
         optimizer.step()
@@ -353,12 +374,19 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name)
             out = out.int() #int means int32 on cpu and int64 on gpu
             patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
         elif model_name == 'Resnet18':
-            _, preds = torch.max(out, 1)
-             # to int
-            preds = preds.int()
+            if labels == 'single':
+                _, preds = torch.max(out, 1)
+                # to int
+                preds = preds.int()
 
-            all_preds.extend(preds.cpu().numpy())
-            all_labels.extend(msk.cpu().numpy())
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(msk.cpu().numpy())
+            elif labels == 'multi':
+                # turn to 1 when proba is > 0.5
+                out = torch.sigmoid(out)
+                preds = torch.where(out > 0.5, torch.tensor(1).to(device), torch.tensor(0).to(device)) # the 2nd arg is the value to put when the condition is True
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(msk.cpu().numpy())
 
     if model_name == 'UNet':
         sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
@@ -371,7 +399,7 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name)
         mF1 = np.mean(F1_by_class)
         return running_loss / len(train_dl), mF1
 
-def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_name):
+def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_name, labels):
     running_loss = 0.0
     patch_confusion_matrices = []
     patch_confusion_matrices_1c = []
@@ -385,7 +413,8 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_na
             print( 'Batch:', i, ' over ', len(dl))
         img, msk = img.to(device), msk.to(device)
         out = model(img)
-        msk = msk.long()
+        if labels == 'single':
+            msk = msk.long()
         loss = criterion(out, msk)
         running_loss += loss.item()
         if model_name == 'UNet':
@@ -393,11 +422,19 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_na
             out = out.int()
             patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
         elif model_name == 'Resnet18':
-            _, preds = torch.max(out, 1)
-            # to int
-            preds = preds.int()
-            all_preds.extend(preds.cpu().numpy())
-            all_labels.extend(msk.cpu().numpy())
+            if labels == 'single':
+                _, preds = torch.max(out, 1)
+                # to int
+                preds = preds.int()
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(msk.cpu().numpy())
+            elif labels == 'multi':
+                # turn to 1 when proba is > 0.5
+                #apply sigmoid
+                out = torch.sigmoid(out)
+                preds = torch.where(out > 0.5, torch.tensor(1).to(device), torch.tensor(0).to(device))
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(msk.cpu().numpy())
     if model_name == 'UNet':   
         sum_confusion_matrix = np.sum(patch_confusion_matrices, axis=0)
         IoU_by_class, F1_by_class = IoU_F1_from_confmatrix(sum_confusion_matrix)
@@ -412,7 +449,11 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_na
             'mF1': mF1
         }
     elif model_name == 'Resnet18':
-        cm = confusion_matrix(all_labels, all_preds, labels=range(nb_classes))
+        if labels == 'single':
+            cm = confusion_matrix(all_labels, all_preds, labels=range(nb_classes))
+        elif labels == 'multi':
+            # multi labels conf matrix
+            cm = multilabel_confusion_matrix(all_labels, all_preds)
         precision = precision_score(all_labels, all_preds, average='macro')
         recall = recall_score(all_labels, all_preds, average='macro')
         accuracy = accuracy_score(all_labels, all_preds) # normalize=True by default 
@@ -454,7 +495,7 @@ def optimizer_to(optim, device):
                     if subparam._grad is not None:
                         subparam._grad.data = subparam._grad.data.to(device)
 
-def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_dict, task):
+def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_dict, task, labels):
     if task == 'pixel_classif':
         classes_msk = np.unique(msk)
         legend_colors_msk = [my_colors_map[c] for c in classes_msk]
@@ -503,26 +544,83 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_di
         plt.savefig(pred_plot_path)
 
     elif task == 'image_classif':
-        # Créer une grille de sous-graphes avec 2 colonnes
-        fig, axs = plt.subplots((nb_imgs + 1) // 2, 2, figsize=(20, 10 * ((nb_imgs + 1) // 2)))
-        fig.subplots_adjust(hspace=0.4, wspace=0.4, top=0.9, bottom=0.02)
-        
-        my_class = np.unique(msk)
-        
-        for i in range(nb_imgs):
-            row = i // 2
-            col = i % 2
-            rgb_img = img[i][:3, :, :]
-            rgb_img = rgb_img.transpose(1, 2, 0)
-            axs[row, col].imshow(rgb_img)
-            axs[row, col].text(0, -20, f'True class: {msk[i]}: {habitats_dict[msk[i].item()]}\nPredicted class: {out[i]}: {habitats_dict[out[i].item()]}', fontsize=16)
-            axs[row, col].axis('off')
-        
-        # Supprimer les axes inutilisés si nb_imgs est impair
-        if nb_imgs % 2 != 0:
-            fig.delaxes(axs[-1, -1])
-        
-        plt.savefig(pred_plot_path)
+        if labels == 'single':
+            # Créer une grille de sous-graphes avec 2 colonnes
+            fig, axs = plt.subplots((nb_imgs + 1) // 2, 2, figsize=(20, 10 * ((nb_imgs + 1) // 2)))
+            fig.subplots_adjust(hspace=0.4, wspace=0.4, top=0.9, bottom=0.02)
+            
+            my_class = np.unique(msk)
+
+            for i in range(nb_imgs):
+                row = i // 2
+                col = i % 2
+                rgb_img = img[i][:3, :, :]
+                rgb_img = rgb_img.transpose(1, 2, 0)
+                axs[row, col].imshow(rgb_img)
+                axs[row, col].text(0, -20, f'True class: {msk[i]}: {habitats_dict[msk[i].item()]}\nPredicted class: {out[i]}: {habitats_dict[out[i].item()]}', fontsize=16)
+                axs[row, col].axis('off')
+            
+            # Supprimer les axes inutilisés si nb_imgs est impair
+            if nb_imgs % 2 != 0:
+                fig.delaxes(axs[-1, -1])
+            
+            plt.savefig(pred_plot_path)
+
+        elif labels == 'multi':
+            # 3 col, multiple rows
+            fig, axs = plt.subplots(nb_imgs, 3, figsize=(20, 5*nb_imgs))
+            for i in range(nb_imgs):
+                rgb_img = img[i][:3, :, :]
+                rgb_img = rgb_img.transpose(1, 2, 0)
+                axs[i, 0].imshow(rgb_img)#/float(5000.0))
+                axs[i, 0].set_title('Image')
+                true_heterogenity = msk[i][-1]
+                pred_heterogenity = out[i][-1]
+                if true_heterogenity == 1:
+                    true_heterogenity = 'HETEROGENE'
+                else:
+                    true_heterogenity = 'HOMOGENE'
+                if pred_heterogenity == 1:
+                    pred_heterogenity = 'HETEROGENE'
+                else:
+                    pred_heterogenity = 'HOMOGENE'
+                
+                # garder que 6 premiers éléments
+                msk_ = msk[i][:-1]
+                out_ = out[i][:-1]
+                # col 2 = textes classes vraies et heterogenity. Col 3 = textes classes prédites et heterogenity
+                # pour chaque classe, afficher le nom de la classe
+                #créer un texte avecun rteour à al ligne netre chaque classe
+                true_classes_text = ''
+                # keep the indexes of the values 1
+                print('msk_', msk_)
+                msk_ = np.where(msk_ == 1)[0]
+                print('msk_', msk_)
+                for j in msk_:
+                    true_classes_text += f'_{habitats_dict[j]}_'
+                #remove all \n in true_classes_text
+                true_classes_text = true_classes_text.replace('\n', '')
+                # add \n every 35 characters in true_classes_text
+                true_classes_text = '\n'.join([true_classes_text[i:i+35] for i in range(0, len(true_classes_text), 35)])
+
+                true_classes_text += f'\n {true_heterogenity}'
+                #afficher le texte dans la col 2
+                axs[i, 1].text(0, 0, true_classes_text, fontsize=16)
+                axs[i, 1].axis('off')
+
+                out_ = np.where(out_ == 1)[0]
+                pred_classes_text = ''
+                for j in out_:
+                    pred_classes_text += f'_{habitats_dict[j]}_'
+                
+                #remove all \n in pred_classes_text
+                pred_classes_text = pred_classes_text.replace('\n', '')
+                pred_classes_text = '\n'.join([pred_classes_text[i:i+35] for i in range(0, len(pred_classes_text), 35)])
+                pred_classes_text += f'\n {pred_heterogenity}'
+                axs[i, 2].text(0, 0, pred_classes_text, fontsize=16)
+                axs[i, 2].axis('off')
+            plt.savefig(pred_plot_path)
+            
     print('Plot saved at:', pred_plot_path)
 
 def plot_patch_msk(img, msk, pred_plot_path, my_colors_map, nb_imgs, habitats_dict, task):        
@@ -594,6 +692,7 @@ def plot_patch_class_by_class(dataset, nb_imgs, habitats_dict, l2_habitats_dict,
         print(f'Plot saved at: {set_name} : {c} class')
         plt.clf()
     
+
 def plot_losses_metrics(losses_metric_path, losses_plot_path, metrics_plot_path, metric):
     # Read the CSV file into a DataFrame
     df = pd.read_csv(losses_metric_path)

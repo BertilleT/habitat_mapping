@@ -9,9 +9,10 @@ model_name = 'Resnet18' # 'UNet', 'Resnet18'
 test_existing_model = False
 patch_size = 256
 model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
+#model_type = 'unet_256_l1/'
 
 if test_existing_model: 
-    name_setting = 'resnet18_strat_zone1_homogene_lr3'
+    name_setting = 'resnet18_random_all_patches_multi_label'
     #laod all variables from csv best_epoch_to_test
     best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
     #remov the space before alla values and name columns
@@ -44,36 +45,42 @@ if test_existing_model:
         encoder_weights = None
 
     task = "image_classif"
-    heterogeneity = 'homogeneous'
+    heterogeneity = 'all'
     lr = 1e-3
     bs = 16
     optimizer = 'Adam'
+    labels = "multi"
+    loss = 'BCEWithDigits'
 
 # ---------------------------------------
 
 else:
     stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_random_homogene_lr3_pre_trained' # 
+    name_setting = 'resnet18_random_all_patches_256_multi_label_10epochs_labels_corrected' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
-    pre_trained = True
+    pre_trained = False
     year = 'all'# '2023' or 'all'
     in_channels = 4
     training = True
     plot_test = True
     bs = 16
-    nb_epochs = 70
-    patience = 70
+    nb_epochs = 10
+    patience = 10
     best_epoch = 1
-    task = "image_classif"
-    heterogeneity = 'homogeneous'
+    task = "image_classif" # 'image_classif' or 'pixel_classif'
+    labels = "multi" # 'multi_label' or 'single_label'
+    heterogeneity = 'all' # 'homogeneous' or 'heterogeneous', 'all'
     location ='all' # 'mediteranean' or 'all'
     lr = 1e-3
     optimizer = 'Adam' # 'Adam' or 'AdamW'
+    loss = 'BCEWithDigits' # 'Dice' or 'CrossEntropy' or 'BCEWithDigits'
     if pre_trained == True:
         if model_name == 'UNet':
             encoder_weights = 'imagenet'
+        else:
+            encoder_weights = None
     else: 
         encoder_weights = None
 
@@ -145,12 +152,13 @@ model_settings = {
     'path_to_last_optim': f'../../{config_name}/models/optim_last.pt',
     'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch{best_epoch}.pt',#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     'task': task, # image_classif, pixel_classif
+    'labels': labels, # multi, single
     }
 
 training_settings = {
     'training': training,
     'lr': lr,
-    'criterion': 'CrossEntropy', #Dice or CrossEntropy
+    'criterion': loss, #Dice or CrossEntropy
     'optimizer': optimizer,
     'nb_epochs': nb_epochs,
     'early_stopping': True,
@@ -180,7 +188,8 @@ plotting_settings = {
         2: "Bois forets et autres habitats boises",
         3: "Habitats agricoles horticoles et domestiques régulierement \n ou recemment cultives",
         4: "Zones baties sites industriels et autres habitats artificiels",
-        5: "Autre: Habitats marins, Habitats cotiers, Eaux de surfaces continentales, \n Habitats continentaux sans vegetation ou à vegetation clairsemee, Autres"
+        5: "Autre: Habitats marins, Habitats cotiers, Eaux de surfaces continentales, \n Habitats continentaux sans vegetation ou à vegetation clairsemee, Autres", 
+        6: "Patch héterogène"
     }, 
     'l2_habitats_dict' : {
         0: "sédiment intertidal",
