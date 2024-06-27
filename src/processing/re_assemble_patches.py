@@ -1,70 +1,25 @@
-# i = row, j = col
-# take zone1_0_0 for example
-# tif images in this zone are like img_zone1_0_0_patch_2_12.tif. 2 is i and 12 is j
-
-# plot the image by using the following code:
-
-# create a grid with each item has 256 by 256 pixels
-#sizee of the grids depends of max and min i, and max and min j
-
-'''from pathlib import Path
-import numpy as np
-import pandas as pd
-
-zone = 'zone1_0_0'
-tif_paths = sorted(list(Path(f'../../data/patch256/msk/{zone}').rglob('*.tif')))
-
-#make a df with the tif paths
-#split the tif paths to get the row and col indexes
-tif_paths_df = pd.DataFrame(tif_paths, columns=['tif_path'])
-tif_paths_df['row_index'] = tif_paths_df.tif_path.apply(lambda x: int(x.stem.split('_')[-2]))
-tif_paths_df['col_index'] = tif_paths_df.tif_path.apply(lambda x: int(x.stem.split('_')[-1]))
-#remove limit on number of characters displayed
-pd.set_option('display.max_colwidth', None)
-print(tif_paths_df)
-
-min_row = tif_paths_df.row_index.min()
-max_row = tif_paths_df.row_index.max()
-min_col = tif_paths_df.col_index.min()
-max_col = tif_paths_df.col_index.max()
-
-print(min_row, max_row, min_col, max_col)'''
-
-
-
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import tifffile as tiff
 import matplotlib.pyplot as plt
 
+pd.set_option('display.max_colwidth', None)
 my_colors_map = {
-    0: '#789262',  # Vert olive
-    1: '#555555',  # Gris
-    2: '#006400',  # Vert foncé
-    3: '#00ff00',  # Vert vif
-    4: '#ff4500',  # Rouge
-    5: '#8a2be2',  # Violet, 6 noir, 7 gris
-    6: '#000000',  # Noir
-    7: '#808080',  # Gris
-    8: '#ffffff'  # Blanc
-}
+        0: '#789262',  # Vert olive
+        1: '#555555',  # Gris
+        2: '#006400',  # Vert foncé
+        3: '#00ff00',  # Vert vif
+        4: '#ff4500',  # Rouge
+        5: '#8a2be2',  # Violet
 
-# Function to reassemble patches into a full image
+        6: '#000000',  # Noir
+        7: '#c7c7c7',  # Gris
+        8: '#ffffff'  # Blanc
+    }
+
+ # Function to reassemble patches into a full image
 def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
-    """
-    Reassemble image patches into a full image.
-
-    Parameters:
-    patches (list of np.array): List of image patches (each patch is a 2D numpy array).
-    i_indices (list of int): List of row indices for the patches.
-    j_indices (list of int): List of column indices for the patches.
-    patch_size (int): Size of each patch (default is 256).
-
-    Returns:
-    np.array: The reassembled image.
-    """
-    # Determine the size of the full image
     max_i = max(i_indices)
     min_i = min(i_indices)
     max_j = max(j_indices)
@@ -74,9 +29,8 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
     full_image_height = (max_i - min_i + 1) * patch_size
     full_image_width = (max_j - min_j + 1) * patch_size
     
-    # Initialize the full image with zeros (assuming single-channel masks)
+    # Initialize the full image with 8 (assuming single-channel masks)
     #full_image = np.zeros((full_image_height, full_image_width), dtype=patches[0].dtype)
-    #intialize it with 100 instead of 0
     full_image = np.ones((full_image_height, full_image_width), dtype=patches[0].dtype) * 8
     
     # Place each patch in the correct location in the full image
@@ -84,92 +38,129 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
         row_start = (i - min_i) * patch_size
         row_end = row_start + patch_size
         col_start = (j - min_j) * patch_size
-        col_end = col_start + patch_size
-        full_image[row_start:row_end, col_start:col_end] = patch
+        col_end = col_start + patch_size 
+        full_image[row_start:row_end, col_start:col_end] = patch[:patch_size, :patch_size]
     
+    print(np.unique(full_image))
     return full_image
 
-# Setup
-zone = 'zone1_0_0'
-tif_paths = sorted(list(Path(f'../../data/patch256/msk/{zone}').rglob('*.tif')))
+zones = ['zone1_0_0', 'zone10_0_1', 'zone20_0_0', 'zone30_0_0', 'zone63_0_0', 'zone78_10_8', 'zone78_16_10']
 
-# Make a DataFrame with the TIFF paths and extract row and column indices
-tif_paths_df = pd.DataFrame(tif_paths, columns=['tif_path'])
-tif_paths_df['row_index'] = tif_paths_df.tif_path.apply(lambda x: int(x.stem.split('_')[-2]))
-tif_paths_df['col_index'] = tif_paths_df.tif_path.apply(lambda x: int(x.stem.split('_')[-1]))
+for zone in ['zone20_0_0']:#zones: 
+    # Setup
+    tif_paths = sorted(list(Path(f'../../data/patch256/msk/{zone}').rglob('*.tif')))
 
-# Remove limit on number of characters displayed
-pd.set_option('display.max_colwidth', None)
-print(tif_paths_df)
+    # Make a DataFrame with the TIFF paths and extract row and column indices
+    tif_paths_df = pd.DataFrame(tif_paths, columns=['tif_path'])
+    tif_paths_df['row_index'] = tif_paths_df.tif_path.apply(lambda x: int(x.stem.split('_')[-2]))
+    tif_paths_df['col_index'] = tif_paths_df.tif_path.apply(lambda x: int(x.stem.split('_')[-1]))
 
-min_row = tif_paths_df.row_index.min()
-max_row = tif_paths_df.row_index.max()
-min_col = tif_paths_df.col_index.min()
-max_col = tif_paths_df.col_index.max()
+    min_row = tif_paths_df.row_index.min()
+    max_row = tif_paths_df.row_index.max()
+    min_col = tif_paths_df.col_index.min()
+    max_col = tif_paths_df.col_index.max()
 
-print(min_row, max_row, min_col, max_col)
+    # Read patches and store them along with their indices
+    patches = []
+    patches_pixels = []
 
-# Read patches and store them along with their indices
-patches = []
-i_indices = []
-j_indices = []
+    i_indices = []
+    j_indices = []
 
-for tif_path in tif_paths:
-    #read first channel of the tif image
+    temp_patches = []
+    pixel_temp_patches = []
+    temp_i = []
+    temp_j = []
+    for tif_path in tif_paths:    
+        patch = tiff.imread(tif_path)[:, :, :, 0]
+        group_under_represented_classes = {0: 5, 1: 5, 2: 5, 3: 0, 4: 1, 5: 2, 6: 5, 7: 3, 8: 4, 9: 5}
+        group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
+        patch = np.vectorize(group_under_represented_classes_uint8.get)(patch)
+        unique = np.unique(patch)
+        patches_pixels.append(patch[0, :, :])
+        # get dim of patch
+        if len(unique) > 1:
+            # if multiple classes in the patch, then rows of 6 and 7 to have lines
+            striped = np.ones(patch.shape) * 6
+            my_list = list(range(0, striped.shape[2], 64))
+            for i in my_list:
+                striped[0, :, i:i+32] = 7  
+            #get size of patch
+            patches.append(striped[0, :, :])
+            # save patch png as test
+            '''my_classes = np.unique(striped)
+            customs_colors = [my_colors_map[i] for i in my_classes]
+            my_cmap = plt.cm.colors.ListedColormap(customs_colors)
+            plt.imshow(striped[0, :, :], cmap = my_cmap)
+            plt.axis('off')
+            plt.savefig(f'../../imgs/reassembled/test.png', bbox_inches='tight', pad_inches=0)
+            '''
+        else:
+            
+            #type of patch
+            patches.append(patch[0, :, :])
+
+        splitted = tif_path.stem.split('_')
+        i = int(splitted[-2])
+        j = int(splitted[-1]) 
+        i_indices.append(i)
+        j_indices.append(j)
+        if j in range(8, 10):
+            if i in range(7, 8):
+                temp_i.append(i)
+                temp_j.append(j)
+                pixel_temp_patches.append(patch[0, :, :])
+
+                if len(unique) > 1:
+                    print('striped')
+                    # print unique values in patch
+                    print(np.unique(striped))
+                    temp_patches.append(striped[0, :, :])
+                else:
+                    temp_patches.append(patch[0, :, :])
+
+    # Reassemble the full image with temp
+    print('Reassembling the full image, pixel level')
+    reassembled_image_pixel = reassemble_patches(pixel_temp_patches, temp_i, temp_j)
+    my_classes_pixels = np.unique(reassembled_image_pixel)
+    print('Unique values in reassembled image:', my_classes_pixels)
+    customs_colors_pixels = [my_colors_map[i] for i in my_classes_pixels]
+    my_cmap_pixels = plt.cm.colors.ListedColormap(customs_colors_pixels)
+    plt.imshow(reassembled_image_pixel, cmap = my_cmap_pixels)
+    plt.axis('off')
+    plt.savefig(f'../../imgs/reassembled/png/{zone}_pixel_level_temp_v2.png', bbox_inches='tight', pad_inches=0)
+
+    # Reassemble the full image with temp at patch level
+    print('Reassembling the full image, patch level')
+    reassembled_image = reassemble_patches(temp_patches, temp_i, temp_j)
+    my_classes = np.unique(reassembled_image)
+    print('Unique values in reassembled image:', my_classes)
+    customs_colors = [my_colors_map[i] for i in my_classes]
+    my_cmap = plt.cm.colors.ListedColormap(customs_colors)
+    plt.imshow(reassembled_image, cmap = my_cmap)
+    plt.axis('off')
+    plt.savefig(f'../../imgs/reassembled/png/{zone}_patch_level_temp_v2.png', bbox_inches='tight', pad_inches=0)
     
-    patch = tiff.imread(tif_path)[:, :, :, 0]
-    # get unique values in the patch
-    unique = np.unique(patch)
-    print(unique)
-    if len(unique) > 1:
-        # set ALL values to 6. I get a patch full of 6
-        patch = np.ones(patch.shape) * 6
-        my_list = list(range(0, patch.shape[2], 60))
-        print('my_list', my_list)
-        for i in my_list:
-            print('i', i)
-            print('i+10', i+30)
-            if i+10 > 255:
-                patch[:, i:] = 7
-            patch[:, i:i+30] = 7
-            #remove limit on print array
-            np.set_printoptions(threshold=np.inf)
-        
-        '''#print('patch', patch)
-        #plot the patch
-        #[1, 256, 256] rmeove 1
-        patch = patch[0]
-        plt.imshow(patch, cmap='gray')
-        plt.axis('off')
-        #savefig
-        plt.savefig(f'patch_test.png', bbox_inches='tight', pad_inches=0)
-        #break
-        break'''
 
-    splitted = tif_path.stem.split('_')
-    i = int(splitted[-2])
-    j = int(splitted[-1])
-    patches.append(patch)
-    i_indices.append(i)
-    j_indices.append(j)
+    '''    # Reassemble the full image
+    print('Reassembling the full image, pixel level')
+    reassembled_image_pixel = reassemble_patches(patches_pixels, i_indices, j_indices)
+    my_classes_pixels = np.unique(reassembled_image_pixel)
+    customs_colors_pixels = [my_colors_map[i] for i in my_classes_pixels]
+    my_cmap_pixels = plt.cm.colors.ListedColormap(customs_colors_pixels)
+    plt.imshow(reassembled_image_pixel, cmap = my_cmap_pixels)
+    plt.axis('off')
+    plt.savefig(f'../../imgs/reassembled/png/{zone}_pixel_level.png', bbox_inches='tight', pad_inches=0)
 
-# Reassemble the full image
-reassembled_image = reassemble_patches(patches, i_indices, j_indices)
-
-# Save the reassembled image
-output_path = f'../../data/reassembled/{zone}_reassembled_v2.tif'
-Path(output_path).parent.mkdir(parents=True, exist_ok=True)  # Ensure the output directory exists
-tiff.imwrite(output_path, reassembled_image)
-print(f'Reassembled image saved to {output_path}')
-
-#plot the tif avd save as png
-import matplotlib.pyplot as plt
-#plot using colors from the dictionary
-my_classes = np.unique(reassembled_image)
-customs_colors = [my_colors_map[i] for i in my_classes]
-my_cmap = plt.cm.colors.ListedColormap(customs_colors)
-
-plt.imshow(reassembled_image, cmap=my_cmap)
-plt.colorbar()
-plt.axis('off')
-plt.savefig(f'../../data/reassembled/{zone}_reassembled_v2.png', bbox_inches='tight', pad_inches=0)
+    print('Reassembling the full image, patch level')
+    # Reassemble the full image
+    reassembled_image = reassemble_patches(patches, i_indices, j_indices)
+    output_path = f'../../imgs/reassembled/tif/{zone}_patch_level.tif'
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)  
+    tiff.imwrite(output_path, reassembled_image)
+    my_classes = np.unique(reassembled_image)
+    customs_colors = [my_colors_map[i] for i in my_classes]
+    my_cmap = plt.cm.colors.ListedColormap(customs_colors)
+    plt.imshow(reassembled_image, cmap = my_cmap)
+    plt.axis('off')
+    plt.savefig(f'../../imgs/reassembled/png/{zone}_patch_level.png', bbox_inches='tight', pad_inches=0)'''

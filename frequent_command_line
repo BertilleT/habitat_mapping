@@ -5,7 +5,7 @@ conda activate ecomed_venv
 nohup python3 my_script.py
 tail -f nohup.out
 
-nohup python3 main.py > nohup/256_resnet18_strat_zone_homogene_lr3_augmented.out &
+nohup python3 main.py > nohup/all_patches_256_resnet_multi_labels_70epochs.out &
 
 ps -p 2565469 -f
 

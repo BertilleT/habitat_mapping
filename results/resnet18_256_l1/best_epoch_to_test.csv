@@ -5,3 +5,5 @@ random, resnet18_random_homogene_augmented, 1, True, False, 4, False, True, 16, 
 zone, resnet18_random_homogene_lr3_strat_zone1, 1, False, False, 4, False, True, 16, 55, None, 7, channel_by_channel, all, all
 zone, resnet18_strat_zone1_homogene_lr3, 1, False, False, 4, False, False, 16, 70, None, 7,  channel_by_channel, all, all
 random, resnet18_random_homogene_lr3, 1, False, False, 4, False, False, 16, None, None, 16, channel_by_channel, all, all
+random, resnet18_random_all_patches_multi_label, 1, False, False, 4, False, True, 16, 10, 10, 10, channel_by_channel, all, all
+random, resnet18_random_all_patches_multi_label_70epochs,  1, False, False, 4, False, True, 16, 10, 10, 10, channel_by_channel, all, all
