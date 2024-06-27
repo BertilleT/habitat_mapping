@@ -222,8 +222,6 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         # Shuffle with random_seed fixed and split in 60 20 20
         np.random.seed(random_seed)
         np.random.shuffle(msk_paths)
-        full_img_test = []
-        # remove from msk_paths the images with zone1_0_0, zone
         n = len(msk_paths)
         train_paths = msk_paths[:int(split[0]*n)]
         val_paths = msk_paths[int(split[0]*n):int((split[0]+split[1])*n)]
