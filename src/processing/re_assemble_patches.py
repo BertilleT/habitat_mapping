@@ -18,8 +18,22 @@ my_colors_map = {
         8: '#ffffff'  # Blanc
     }
 
- # Function to reassemble patches into a full image
+
+# Function to reassemble patches into a full image
 def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
+    """
+    Reassemble image patches into a full image.
+
+    Parameters:
+    patches (list of np.array): List of image patches (each patch is a 2D numpy array).
+    i_indices (list of int): List of row indices for the patches.
+    j_indices (list of int): List of column indices for the patches.
+    patch_size (int): Size of each patch (default is 256).
+
+    Returns:
+    np.array: The reassembled image.
+    """
+    # Determine the size of the full image
     max_i = max(i_indices)
     min_i = min(i_indices)
     max_j = max(j_indices)
@@ -28,9 +42,7 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
     # Calculate the full image dimensions
     full_image_height = (max_i - min_i + 1) * patch_size
     full_image_width = (max_j - min_j + 1) * patch_size
-    
-    # Initialize the full image with 8 (assuming single-channel masks)
-    #full_image = np.zeros((full_image_height, full_image_width), dtype=patches[0].dtype)
+
     full_image = np.ones((full_image_height, full_image_width), dtype=patches[0].dtype) * 8
     
     # Place each patch in the correct location in the full image
