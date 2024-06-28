@@ -12,7 +12,7 @@ model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 #model_type = 'unet_256_l1/'
 
 if test_existing_model: 
-    name_setting = 'resnet18_random_all_patches_multi_label'
+    name_setting = 'resnet18_random_all_patches_256_multi_label_60epochs_labels_corrected'
     #laod all variables from csv best_epoch_to_test
     best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
     #remov the space before alla values and name columns
@@ -21,14 +21,7 @@ if test_existing_model:
     # take the row with same name_setting
     best_epoch_to_test = best_epoch_to_test[best_epoch_to_test['name_setting'] == name_setting]
     #turn each column and value into a variable
-    print(best_epoch_to_test)
-    print(type(best_epoch_to_test))
-
     for column in best_epoch_to_test.columns:
-        print(f"Processing column: {column}")
-        print(f"Type of best_epoch_to_test[{column}]: {type(best_epoch_to_test[column])}")
-        print(f"First value of best_epoch_to_test[{column}]: {best_epoch_to_test[column].values[0]}")
-            
         if column not in ['name_setting', 'stratified', 'normalisation', 'year']:
             exec(f'{column} = {best_epoch_to_test[column].values[0]}')
         else:
@@ -56,7 +49,7 @@ if test_existing_model:
 
 else:
     stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_random_all_patches_256_multi_label_10epochs_labels_corrected' # 
+    name_setting = 'resnet18_random_all_patches_256_multi_label_60epochs_labels_corrected' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
@@ -66,8 +59,8 @@ else:
     training = True
     plot_test = True
     bs = 16
-    nb_epochs = 10
-    patience = 10
+    nb_epochs = 60
+    patience = 60
     best_epoch = 1
     task = "image_classif" # 'image_classif' or 'pixel_classif'
     labels = "multi" # 'multi_label' or 'single_label'

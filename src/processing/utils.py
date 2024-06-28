@@ -24,7 +24,7 @@ from sklearn.metrics import multilabel_confusion_matrix
 not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zone78',  'zone167', 'zone169', 'zone170', 'zone171', 'zone172']
 
 class EcomedDataset(Dataset):
-    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = [None, None], normalisation = "all_channels_together", task = "pixel_classif", my_set = "train", labels = 'single'):
+    def __init__(self, msk_paths, img_dir, level=1, channels=4, transform = [None, None], normalisation = "all_channels_together", task = "pixel_classif", my_set = "train", labels = 'single', path_mask_name = None):
         self.img_dir = img_dir
         self.level = level
         self.msks = msk_paths
@@ -36,6 +36,7 @@ class EcomedDataset(Dataset):
         self.task = task
         self.set = my_set
         self.labels = labels
+        self.path_mask_name = path_mask_name
 
     def __len__(self):
         return len(self.imgs)
@@ -120,7 +121,10 @@ class EcomedDataset(Dataset):
         if self.task == "pixel_classif":
             return img, msk_mapped
         elif self.task == "image_classif":
+            if self.path_mask_name:
+                return img, img_label_mapped, msk_path
             return img, img_label_mapped
+
 
 
 class EcomedDataset_to_plot(Dataset):
@@ -193,7 +197,7 @@ class EcomedDataset_to_plot(Dataset):
 
 def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
     print('The seed to shuffle the data is ', str(random_seed))
-    print('The data are from ', kwargs['year'], ' year')
+    print('The data are from ', kwargs['year'], ' year')    
     #extract unique zones from alltif names
     if kwargs['patches'] == 'heterogeneous':
         #load the csv file with the list of heterogen masks '../../csv/heterogen_masks.csv'
@@ -218,6 +222,13 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         #msk_paths = [msk_path for msk_path in msk_paths if str(msk_path).split('/').parts[-2].split('_')[0] in zones_2023['zone_id'].values]
         print(len(msk_paths), ' kept masks from 2023 zones')
         print('The data are from 2023')
+
+    zones_to_plot = []
+    for msk_path in msk_paths:
+        if 'zone1_0_0' in str(msk_path) or 'zone100_0_0' in str(msk_path) or 'zone133_0_0' in str(msk_path):
+            zones_to_plot.append(msk_path)
+    # drop the paths from msk_paths
+    msk_paths = [msk_path for msk_path in msk_paths if msk_path not in zones_to_plot]
     if stratified == 'random':
         # Shuffle with random_seed fixed and split in 60 20 20
         np.random.seed(random_seed)
@@ -293,6 +304,8 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
             train_paths += msk_paths_subfolder[:int(split[0]*n)]
             val_paths += msk_paths_subfolder[int(split[0]*n):int((split[0]+split[1])*n)]
             test_paths += msk_paths_subfolder[int((split[0]+split[1])*n):]
+    #concat test_paths with zones_to_plot
+    test_paths = test_paths + zones_to_plot
     return train_paths, val_paths, test_paths
   
 def IoU_F1_from_confmatrix(conf_matrix):
