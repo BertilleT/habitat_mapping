@@ -39,6 +39,12 @@ my_colors_map = {
     7: '#c7c7c7',  # Gris
     8: '#ffffff'  # Blanc
 }
+
+zones = ['zone1_0_0', 'zone100_0_0', 'zone133_0_0']
+patch_size = patch_level_param['patch_size']
+msk_folder = data_loading_settings['msk_folder']
+msk_paths = list(msk_folder.rglob('*.tif'))
+
 customs_color = list(my_colors_map.values())
 bounds = list(my_colors_map.keys())
 my_cmap = plt.cm.colors.ListedColormap(customs_color)
@@ -69,7 +75,6 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
     # Calculate the full image dimensions
     full_image_height = (max_i - min_i + 1) * patch_size
     full_image_width = (max_j - min_j + 1) * patch_size
-    print(patches[0].shape)
     full_image = np.ones((full_image_height, full_image_width), dtype=patches[0].dtype) * 8
     
     # Place each patch in the correct location in the full image
@@ -81,15 +86,6 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
         full_image[row_start:row_end, col_start:col_end] = patch[:patch_size, :patch_size]
         
     return full_image
-
-
-#zone = 'zone1_0_0'
-#zone = 'zone100_0_0'
-zone = 'zone133_0_0'
-patch_size = patch_level_param['patch_size']
-msk_folder = data_loading_settings['msk_folder']
-msk_paths = list(msk_folder.rglob('*.tif'))
-
 
 # Keep only masks with zone in it
 msk_paths = [msk_path for msk_path in msk_paths if zone in msk_path.stem]
@@ -174,7 +170,7 @@ for i in range(len(dataset)):
         #remove first dimension
     pred = torch.sigmoid(pred)
     # heteroneity to 1 if last value of pred vector is > 0.5
-    heterogeneity = 1 if pred[0, -1].item() > 0.5 else 0
+    heterogeneity = 1 if pred[0, -1].item() >= 0.6 else 0
     #if last value of pred vector is 1
     if heterogeneity == 1:
         # if multiple classes in the patch, then strip the patch
@@ -222,6 +218,7 @@ axs[2].imshow(predicted_image, cmap=my_cmap, norm=my_norm)
 axs[2].axis('off')
 axs[2].set_title('Predicted')
 
+re_assemble_patches_path = plot_settings['re_assemble_patches_path'][:-4] + f'_{zone}.png'
 # Save the combined figure
-plt.savefig(f'../../imgs/reassembled_pred/{patch_size}/{zone}_combined.png', bbox_inches='tight', pad_inches=0)
+plt.savefig(re_assemble_patches_path, bbox_inches='tight', pad_inches=0)
 plt.show()
