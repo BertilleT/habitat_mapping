@@ -7,7 +7,7 @@ import pandas as pd
 # -------------------------------------------------------------------------------------------
 model_name = 'Resnet18' # 'UNet', 'Resnet18'
 test_existing_model = False
-patch_size = 256
+patch_size = 128
 model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 #model_type = 'unet_256_l1/'
 
@@ -44,12 +44,18 @@ if test_existing_model:
     optimizer = 'Adam'
     labels = "multi"
     loss = 'BCEWithDigits'
+    classes = 7 # 6
+    testing = False
+    plot_test = False
+    plot_re_assemble = True
+    tune_alpha1 = False
+    tune_alpha2 = False
 
 # ---------------------------------------
 
 else:
-    stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_random_all_patches_256_multi_label_60epochs_labels_corrected' # 
+    stratified = 'zone' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
+    name_setting = 'resnet18_zone_all_patches_128_multi_label_60epochs_labels_corrected' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
@@ -57,8 +63,10 @@ else:
     year = 'all'# '2023' or 'all'
     in_channels = 4
     training = True
+    testing = True
     plot_test = True
-    bs = 16
+    plot_re_assemble = True
+    bs = 64
     nb_epochs = 60
     patience = 60
     best_epoch = 1
@@ -69,6 +77,7 @@ else:
     lr = 1e-3
     optimizer = 'Adam' # 'Adam' or 'AdamW'
     loss = 'BCEWithDigits' # 'Dice' or 'CrossEntropy' or 'BCEWithDigits'
+    classes = 7 # 6
     if pre_trained == True:
         if model_name == 'UNet':
             encoder_weights = 'imagenet'
@@ -92,7 +101,7 @@ config_name = 'results/'  + model_type + parent + name_setting
 
 # -------------------------------------------------------------------------------------------
 if heterogeneity != 'homogeneous':
-    seeds_splitting = {'zone1': [0.68, 0.15], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34], 'zone20231': [0.63, 0.14] }
+    seeds_splitting = {'zone1': [0.68, 0.2], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34], 'zone20231': [0.63, 0.14] }
 else: 
     if location != 'mediteranean':
         seeds_splitting = {'zone1': [0.7, 0.2], 'random1': [0.6, 0.2]}
@@ -138,7 +147,7 @@ model_settings = {
     'pre_trained': pre_trained, # True
     'encoder_weights': encoder_weights,
     'in_channels': in_channels,
-    'classes': 6 if patch_level_param['level'] == 1 else 113, # 113 to be checked
+    'classes': classes if patch_level_param['level'] == 1 else 113, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
@@ -150,6 +159,7 @@ model_settings = {
 
 training_settings = {
     'training': training,
+    'testing': testing,
     'lr': lr,
     'criterion': loss, #Dice or CrossEntropy
     'optimizer': optimizer,
@@ -158,7 +168,10 @@ training_settings = {
     'patience': patience, 
     'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put None
     'losses_metric_path': f'../../{config_name}/metrics_train_val/losses_metric.csv',
-
+    'tune_alpha1': tune_alpha1,
+    'tune_alpha2': tune_alpha2,
+    'alpha1': 0.6, 
+    'alpha2': 0.4,
 }
 
 plotting_settings = {
@@ -229,6 +242,8 @@ plotting_settings = {
     'F1_path': f'../../{config_name}/metrics_test/F1s.csv',
     'pred_plot_path': f'../../{config_name}/metrics_test/test_preds.png',
     'img_msk_plot_path': f'../../{config_name}/img_msk.png',
+    're_assemble_patches_path': f'../../{config_name}/metrics_test/re_assemble_patches.png',
+    'plot_re_assemble': plot_re_assemble,
 }
 
 # Save important settings in a csv file: 

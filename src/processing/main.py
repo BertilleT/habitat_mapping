@@ -85,6 +85,7 @@ test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=Fa
 #laod one img and msk
 img, msk = next(iter(train_dl))
 # print msk all values
+'''
 print(f"Mask 0: ", msk[0])
 print(f"Mask 1: ", msk[1])
 print(f"Mask 2: ", msk[2])
@@ -96,7 +97,6 @@ print(f"Mask 7: ", msk[7])
 print(f"Mask 8: ", msk[8])
 print(f"Mask 9: ", msk[9])
 print(f"Mask 10: ", msk[10])
-'''
 train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], task = model_settings['task'])
 plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
 val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
@@ -143,11 +143,7 @@ elif model_settings['model'] == 'Resnet18':
         print('Pretrained weights loaded')
     model.conv1 = conv1
     # Replace the classifier head
-    if model_settings['labels'] == 'single':
-        model.fc = nn.Linear(512, model_settings['classes'])
-    elif model_settings['labels'] == 'multi':
-        model.fc = nn.Linear(512, model_settings['classes'] + 1)
-    
+    model.fc = nn.Linear(512, model_settings['classes'])    
 if training_settings['restart_training'] is not None:
     model.load_state_dict(torch.load(model_settings['path_to_last_model']))
     print('Model from last epoch', training_settings['restart_training'], ' loaded')
@@ -234,7 +230,7 @@ if training_settings['training']:
         model.eval()
         with torch.no_grad():
             print('Validation')
-            val_loss, val_metric = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid', model_settings['model'], model_settings['labels'])
+            val_loss, val_metric = valid_test(model, val_dl, criterion, device, model_settings['classes'], 'valid', model_settings['model'], model_settings['labels'], training_settings['alpha1'], training_settings['alpha2'])
             validation_losses.append(val_loss)
             validation_metric.append(val_metric)
 
@@ -271,7 +267,7 @@ if training_settings['training']:
         param.to(device)
 
 else: 
-    plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
+    #plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
     model.to(device)
     model.load_state_dict(torch.load(model_settings['path_to_best_model']))
     print('Model ', model_settings['path_to_best_model'], ' loaded')
@@ -279,67 +275,221 @@ else:
     for param in model.parameters():
         param.to(device)
 
+# TUNING ALPHA1 FOR MULTI LABEL CLASSIFICATION
+if training_settings['tune_alpha1']:
+    model.eval()
+    print('Tuning alpha1')
+    alpha1_values = [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.]
+    print(alpha1_values)
+    precisions = []
+    recalls = []
+    f1s = []
+    for alpha1 in alpha1_values:
+        print(f'Alpha1: {alpha1}')
+        with torch.no_grad():
+            print('Tuning alpha1 on validation set')
+            precision, recall, f1 = tune_alpha1_valid(model, val_dl, device, alpha1)
+        precisions.append(precision)
+        recalls.append(recall)
+        f1s.append(f1)
+        print(f'Precision: {precision}, Recall: {recall}, F1: {f1}')
+    # close last fig
+    plt.close()
+    #plot precision against recall. Precision in y axis, recall in x axis. Add the index of each point
+
+    plt.plot(recalls, precisions)
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    for i, txt in enumerate(alpha1_values):
+        plt.annotate(txt, (recalls[i], precisions[i]))
+    # add a red line horizontal line at 1 from 0 yo 1 x axis
+    plt.axhline(y=1, color='r', linestyle='--')
+    # add a red line vertical line at 1 from 0 yo 1 y axis
+    plt.axvline(x=1, color='r', linestyle='--')
+        
+    plt.title('Precision against Recall')
+    plt.savefig('precision_recall.png')
+    #close
+    plt.close()
+
+    print(np.argmax(f1s))
+    best_alpha1 = alpha1_values[np.argmax(f1s)]
+    #plot f1s against alpha1
+    plt.plot(alpha1_values, f1s)
+    plt.xlabel('Alpha1')
+    plt.ylabel('F1')
+    plt.title('F1 against Alpha1')
+    # set in red the best alpha1
+    plt.axvline(x=best_alpha1, color='r', linestyle='--')
+    plt.savefig('f1_alpha1.png')
+    print(f'Best alpha1: {best_alpha1}')
+
+
+# TUNING ALPHA2 FOR MULTI LABEL CLASSIFICATION
+if training_settings['tune_alpha2']:
+    alpha1 = 0.6
+    model.eval()
+    alpha2_values = [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.]
+    precisions = []
+    recalls = []
+    f1s = []
+    for alpha2 in alpha2_values:
+        print(f'Alpha2: {alpha2}')
+        with torch.no_grad():
+            print('Tuning alpha2 on validation set')
+            precision, recall, f1 = tune_alpha2_valid(model, val_dl, device, alpha1, alpha2)
+            mean_precision = np.mean(precision)
+            mean_recall = np.mean(recall)
+            mean_f1 = np.mean(f1)
+            precisions.append(precision)
+            recalls.append(recall)
+            f1s.append(f1)
+            print(f'Precision: {precision}, Recall: {recall}, F1: {f1}')
+            print(f'MEAN Precision: {mean_precision}, Recall: {mean_recall}, F1: {mean_f1}')
+            # mean precision, recall and f1
+    print(np.argmax(f1s))
+
+    # select only precision and recall of the class 0
+    precisions_0 = [precision[0] for precision in precisions]
+    recalls_0 = [recall[0] for recall in recalls]
+    precision_1 = [precision[1] for precision in precisions]
+    recall_1 = [recall[1] for recall in recalls]
+    precisions_2 = [precision[2] for precision in precisions]
+    recalls_2 = [recall[2] for recall in recalls]
+    precisions_3 = [precision[3] for precision in precisions]
+    recalls_3 = [recall[3] for recall in recalls]
+    precisions_4 = [precision[4] for precision in precisions]
+    recalls_4 = [recall[4] for recall in recalls]
+    precisions_5 = [precision[5] for precision in precisions]
+    recalls_5 = [recall[5] for recall in recalls]
+
+    plt.plot(recalls_0, precisions_0, color='#789262')
+    plt.plot(recall_1, precision_1, color='#555555')
+    plt.plot(recalls_2, precisions_2, color='#006400')
+    plt.plot(recalls_3, precisions_3, color='#00ff00')
+    plt.plot(recalls_4, precisions_4, color='#ff4500')
+    plt.plot(recalls_5, precisions_5, color='#8a2be2')
+    plt.plot
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision against Recall by class')
+    plt.savefig('precision_recall_by_class.png')
+    #close
+    plt.close()
+
+    # drop the 5th for each precision and recall
+    precisions = [precision[:5] for precision in precisions]
+    recalls = [recall[:5] for recall in recalls]
+    # mean precision and recall
+    mean_precisions = [np.mean(precision) for precision in precisions]
+    mean_recalls = [np.mean(recall) for recall in recalls]
+
+    # plot mean precision against mean recall
+    plt.plot(mean_recalls, mean_precisions)
+    for i, txt in enumerate(alpha2_values):
+        plt.annotate(txt, (mean_recalls[i], mean_precisions[i]))
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.axhline(y=1, color='r', linestyle='--')
+    plt.axvline(x=1, color='r', linestyle='--')
+    plt.title('Mean Precision against Mean Recall')
+    plt.savefig('mean_precision_recall.png')    
+    #close
+    plt.close()
+
+    #plot F1 against alpha2 by color
+    f1s_0 = [f1[0] for f1 in f1s]
+    f1s_1 = [f1[1] for f1 in f1s]
+    f1s_2 = [f1[2] for f1 in f1s]
+    f1s_3 = [f1[3] for f1 in f1s]
+    f1s_4 = [f1[4] for f1 in f1s]
+    f1s_5 = [f1[5] for f1 in f1s]
+
+    plt.plot(alpha2_values, f1s_0, color='#789262')
+    plt.plot(alpha2_values, f1s_1, color='#555555')
+    plt.plot(alpha2_values, f1s_2, color='#006400')
+    plt.plot(alpha2_values, f1s_3, color='#00ff00')
+    plt.plot(alpha2_values, f1s_4, color='#ff4500')
+    plt.plot(alpha2_values, f1s_5, color='#8a2be2')
+    plt.xlabel('Alpha2')
+    plt.ylabel('F1')
+    plt.title('F1 against Alpha2 by class')
+    plt.savefig('f1_alpha2_by_class.png')
+    #close
+    plt.close()
+
+    # remove F1 of the 5th class
+    f1s = [f1[:5] for f1 in f1s]
+    #plot mean f1 against alpha2
+    mean_f1s = [np.mean(f1) for f1 in f1s]
+    plt.plot(alpha2_values, mean_f1s)
+    plt.xlabel('Alpha2')
+    plt.ylabel('F1')
+    plt.title('Mean F1 against Alpha2')
+    plt.axvline(x=alpha2_values[np.argmax(mean_f1s)], color='r', linestyle='--')
+    plt.savefig('mean_f1_alpha2.png')
+    #close
+    plt.close()
+
 # TESTING
+if training_settings['testing']:
+    model.eval()
+    with torch.no_grad():
+        print('Testing')
+        test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test', model_settings['model'], model_settings['labels'], training_settings['alpha1'], training_settings['alpha2'])
+    if model_settings['model'] == 'UNet':
+        print(f'Test IoU by class: {metrics["IoU_by_class"]}')
+        print(f'Test mIoU: {metrics["mIoU"]}')
+        metrics['IoU_by_class']['mean'] = metrics['mIoU']
+        metrics['IoU_by_class'] = {k: round(v, 2) for k, v in metrics['IoU_by_class'].items()}
+        iou_df = pd.DataFrame(metrics['IoU_by_class'].items(), columns=['class', 'IoU'])
+        iou_df.to_csv(plotting_settings['IoU_path'], index=False)
 
-model.eval()
-with torch.no_grad():
-    print('Testing')
-    test_loss, metrics = valid_test(model, test_dl, criterion, device, model_settings['classes'], 'test', model_settings['model'], model_settings['labels'])
-if model_settings['model'] == 'UNet':
-    print(f'Test IoU by class: {metrics["IoU_by_class"]}')
-    print(f'Test mIoU: {metrics["mIoU"]}')
-    metrics['IoU_by_class']['mean'] = metrics['mIoU']
-    metrics['IoU_by_class'] = {k: round(v, 2) for k, v in metrics['IoU_by_class'].items()}
-    iou_df = pd.DataFrame(metrics['IoU_by_class'].items(), columns=['class', 'IoU'])
-    iou_df.to_csv(plotting_settings['IoU_path'], index=False)
+    print(f'Test F1 by class: {metrics["F1_by_class"]}')
+    print(f'Test mF1: {metrics["mF1"]}')
+    # turn metrics['F1_by_class'] from array to dict
+    metrics['F1_by_class'] = {k: v for k, v in enumerate(metrics['F1_by_class'])}
+    metrics['F1_by_class']['mean'] = metrics['mF1']
+    metrics['F1_by_class'] = {k: round(v, 2) for k, v in metrics['F1_by_class'].items()}
+    f1_df = pd.DataFrame(metrics['F1_by_class'].items(), columns=['class', 'F1'])
+    f1_df.to_csv(plotting_settings['F1_path'], index=False)
 
-print(f'Test F1 by class: {metrics["F1_by_class"]}')
-print(f'Test mF1: {metrics["mF1"]}')
-# turn metrics['F1_by_class'] from array to dict
-metrics['F1_by_class'] = {k: v for k, v in enumerate(metrics['F1_by_class'])}
-metrics['F1_by_class']['mean'] = metrics['mF1']
-metrics['F1_by_class'] = {k: round(v, 2) for k, v in metrics['F1_by_class'].items()}
-f1_df = pd.DataFrame(metrics['F1_by_class'].items(), columns=['class', 'F1'])
-f1_df.to_csv(plotting_settings['F1_path'], index=False)
-
-if labels == 'single':
-    #plot confusion matrix and save it
-    confusion_matrix = metrics['confusion_matrix']
-    print('Confusion matrix: ', confusion_matrix)
-    confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
-    print('Normalized confusion matrix: ', confusion_matrix_normalized)
-    #sns.set(font_scale=0.8)
-    plt.figure(figsize=(10, 10))
-
-    ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
-    #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    plt.xlabel('Predicted labels')
-    plt.ylabel('True labels')
-    plt.title('Normalized confusion matrix')
-    plt.savefig(plotting_settings['confusion_matrix_path'])
-
-elif labels == 'multi':
-    #plot confusion matrix and save it
-    confusion_matrices = metrics['confusion_matrix']
-    print('Confusion matrix: ', confusion_matrices)
-    # normalize each conf matrix from confusion_matrices
-    confusion_matrices_normalized = []
-    for conf_matrix in confusion_matrices:
-        conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis]
-        confusion_matrices_normalized.append(conf_matrix_normalized)
-    print('Normalized confusion matrix: ', confusion_matrices_normalized)
-    #plot each conf matrixes 
-    for i, conf_matrix_normalized in enumerate(confusion_matrices_normalized):
+    if labels == 'single':
+        #plot confusion matrix and save it
+        confusion_matrix = metrics['confusion_matrix']
+        confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
+        #sns.set(font_scale=0.8)
         plt.figure(figsize=(10, 10))
-        ax = sns.heatmap(conf_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
+
+        ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
         #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
         plt.xlabel('Predicted labels')
         plt.ylabel('True labels')
-        plt.title(f'Normalized confusion matrix for class {i}')
-        plt.savefig(plotting_settings['confusion_matrix_path'].replace('.png', f'_class_{i}.png'))
+        plt.title('Normalized confusion matrix')
+        plt.savefig(plotting_settings['confusion_matrix_path'])
+
+    elif labels == 'multi':
+        #plot confusion matrix and save it
+        confusion_matrices = metrics['confusion_matrix']
+        # normalize each conf matrix from confusion_matrices
+        confusion_matrices_normalized = []
+        for conf_matrix in confusion_matrices:
+            conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis]
+            confusion_matrices_normalized.append(conf_matrix_normalized)
+        #plot each conf matrixes 
+        for i, conf_matrix_normalized in enumerate(confusion_matrices_normalized):
+            plt.figure(figsize=(10, 10))
+            ax = sns.heatmap(conf_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
+            #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+            plt.xlabel('Predicted labels')
+            plt.ylabel('True labels')
+            plt.title(f'Normalized confusion matrix for class {i}')
+            plt.savefig(plotting_settings['confusion_matrix_path'].replace('.png', f'_class_{i}.png'))
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:
+    alpha1 = training_settings['alpha1']
+    alpha2 = training_settings['alpha2']
     # plot img, original mask and prediction
     model.eval()
     img, msk = next(iter(test_dl))
@@ -350,8 +500,42 @@ if plotting_settings['plot_test']:
         out = out.int()
     elif model_settings['labels'] == 'multi':
         out = torch.sigmoid(out)
-        out = (out > 0.5).int()
+        # remove heterogenity from out
+        out_classes_ecosystems = out[:, :-1]
+        # turn to 1 when proba is > alpha1 for heterogenity
+        heterogenity_predicted = torch.where(out[:, -1] >= alpha1, torch.tensor(1).to(device), torch.tensor(0).to(device))
+        # turn to 1 when proba is > alpha2 for each class except heterogenity
+        binary_pred = torch.where(out_classes_ecosystems >= alpha2, torch.tensor(1).to(device), torch.tensor(0).to(device))
+        # concat heterogenity to binary_pred
+        binary_pred = torch.cat((binary_pred, heterogenity_predicted.unsqueeze(1)), dim=1)
+            
+        for i, vector in enumerate(out):
+            # if homogenity is predicted
+            if vector[-1] < alpha1:
+                # keep the class with the max proba
+                max_class = torch.argmax(out_classes_ecosystems[i])
+                binary_pred[i, :-1] = 0
+                binary_pred[i, max_class] = 1  
+        out = binary_pred 
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
     plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])
+
+if plotting_settings['plot_re_assemble']:
+    model.eval()
+    model.to('cpu')
+
+    new_colors_maps = {k: v for k, v in plotting_settings['my_colors_map'].items()}
+    new_colors_maps[6] = '#000000'  # Noir
+    new_colors_maps[7] = '#c7c7c7'  # Gris
+    new_colors_maps[8] = '#ffffff'  # Blanc
+
+    customs_color = list(new_colors_maps.values())
+    bounds = list(new_colors_maps.keys())
+    my_cmap = plt.cm.colors.ListedColormap(customs_color)
+    my_norm = plt.cm.colors.BoundaryNorm(bounds, my_cmap.N)
+
+    zones = ['zone1_0_0', 'zone100_0_0', 'zone133_0_0']
+    for zone in zones: 
+        plot_reassembled_patches(zone, model, patch_level_param['patch_size'], data_loading_settings['msk_folder'], training_settings['alpha1'], my_cmap, my_norm, plotting_settings['re_assemble_patches_path'][:-4], patch_level_param['level'], model_settings, data_loading_settings) 
