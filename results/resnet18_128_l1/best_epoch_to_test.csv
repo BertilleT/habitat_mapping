@@ -1,0 +1,3 @@
+stratified, name_setting, random_seed, data_augmentation, pre_trained, in_channels, training, plot_test, bs, nb_epochs, patience, best_epoch, normalisation, year, location
+random, resnet18_multi_label_128_random_40epochs_bs64_labels_corrected, 1, False, False, 4, False, True, 64, 40, 40, 8, channel_by_channel, all, all
+zone, resnet18_multi_label_128_zone_40epochs_bs64_labels_corrected, 1, False, False, 4, False, True, 64, 40, 40, 1, channel_by_channel, all, all

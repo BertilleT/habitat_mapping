@@ -6,13 +6,13 @@ import pandas as pd
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
 model_name = 'Resnet18' # 'UNet', 'Resnet18'
-test_existing_model = False
-patch_size = 128
+test_existing_model = True
+patch_size = 256
 model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 #model_type = 'unet_256_l1/'
 
 if test_existing_model: 
-    name_setting = 'resnet18_random_all_patches_256_multi_label_60epochs_labels_corrected'
+    name_setting = 'resnet18_random_homogene_lr3_2023_mediteranean'
     #laod all variables from csv best_epoch_to_test
     best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
     #remov the space before alla values and name columns
@@ -38,9 +38,8 @@ if test_existing_model:
         encoder_weights = None
 
     task = "image_classif"
-    heterogeneity = 'all'
+    heterogeneity = 'homogeneous'
     lr = 1e-3
-    bs = 16
     optimizer = 'Adam'
     labels = "multi"
     loss = 'BCEWithDigits'
@@ -55,10 +54,10 @@ if test_existing_model:
 
 else:
     stratified = 'zone' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_zone_all_patches_128_multi_label_60epochs_labels_corrected' # 
+    name_setting = 'resnet18_multi_label_128_zone_40epochs_bs64_augmented' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
-    data_augmentation = False
+    data_augmentation = True
     pre_trained = False
     year = 'all'# '2023' or 'all'
     in_channels = 4
@@ -66,9 +65,11 @@ else:
     testing = True
     plot_test = True
     plot_re_assemble = True
+    tune_alpha1 = False
+    tune_alpha2 = False
     bs = 64
-    nb_epochs = 60
-    patience = 60
+    nb_epochs = 40
+    patience = 40
     best_epoch = 1
     task = "image_classif" # 'image_classif' or 'pixel_classif'
     labels = "multi" # 'multi_label' or 'single_label'
@@ -97,7 +98,12 @@ elif stratified == 'acquisition':
 elif stratified == 'zone2023':
     parent = 'stratified_shuffling_zone2023/'
 
-config_name = 'results/'  + model_type + parent + name_setting
+if model_name == 'Resnet18':
+    heterogeneity_path = heterogeneity + '/'
+else:
+    heterogeneity_path = ''
+
+config_name = 'results/'  + model_type + parent + heterogeneity_path + name_setting
 
 # -------------------------------------------------------------------------------------------
 if heterogeneity != 'homogeneous':
