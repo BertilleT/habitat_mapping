@@ -1,0 +1,2 @@
+patch_size,level,stratified,random_seed,split,bs,encoder_name,encoder_weights,in_channels,classes,training,lr,criterion,optimizer,nb_epochs,early_stopping,patience
+128,1,zone,1,"[0.68, 0.2]",64,efficientnet-b7,None,4,7,True,0.001,BCEWithDigits,Adam,40,True,40

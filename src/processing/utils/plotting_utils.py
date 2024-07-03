@@ -204,7 +204,7 @@ def plot_patch_class_by_class(dataset, nb_imgs, habitats_dict, l2_habitats_dict,
         plt.clf()
 
 # Function to reassemble patches into a full image
-def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
+def reassemble_patches(patches, i_indices, j_indices, patch_size):
     """
     Reassemble image patches into a full image.
 
@@ -240,21 +240,20 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size=256):
         
     return full_image
 
-def plot_reassembled_patches(zone, model, patch_size, msk_folder, alpha1, my_cmap, my_norm, path_to_save, level, model_settings, data_loading_settings):
-    msk_paths = list(msk_folder.rglob('*.tif'))
-    msk_paths = [msk_path for msk_path in msk_paths if zone in msk_path.stem]
-    dataset = EcomedDataset(msk_paths, data_loading_settings['img_folder'], level=level, channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'], path_mask_name = True)
-
+def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, my_norm, path_to_save):
     # Predict all the masks from the dataset
     predictions = []
     i_indices = []
     j_indices = []
+    k_indices = []
+    l_indices = []
     img_classif_patches = []
     pixels_classif_patches = []
     predicted_patches = []
 
     for i in range(len(dataset)):
         img, msk, tif_path = dataset[i]
+        # print shape
         # INDICES OF THE PATCH IN THE FULL IMAGE
         splitted = tif_path.stem.split('_')
         if patch_size == 256:
@@ -263,12 +262,16 @@ def plot_reassembled_patches(zone, model, patch_size, msk_folder, alpha1, my_cma
         elif patch_size == 128:
             i = int(splitted[-4])
             j = int(splitted[-3])
+            k = splitted[-2]
+            l = splitted[-1]
         i_indices.append(i)
         j_indices.append(j)
 
         if patch_size == 256:
             original_patch = tiff.imread(tif_path)[:, :, :, 0] # dtype = uint8 (confirmed by print(patch.dtype))
         elif patch_size == 128:
+            k_indices.append(k)
+            l_indices.append(l)
             original_patch = tiff.imread(tif_path)[0,:,:]
             # dd a one dimension to the patch
             original_patch = np.expand_dims(original_patch, axis=0)
@@ -331,6 +334,21 @@ def plot_reassembled_patches(zone, model, patch_size, msk_folder, alpha1, my_cma
             predicted_patches.append(array_pred[0, :, :])
 
     # Reassemble the patches
+    if patch_size == 128:
+        # mmade a df with i_indices, j_indices, k_indices, l_indices
+        df = pd.DataFrame({'i': i_indices, 'j': j_indices, 'k': k_indices, 'l': l_indices})
+        # turn all idncices from  iby *2
+        df['i'] = df['i'] * 2
+        df['j'] = df['j'] * 2
+        # when k == bottom, i + 1
+        df['i'] = np.where(df['k'] == 'bottom', df['i'] + 1, df['i'])
+        # when l == right, j + 1
+        df['j'] = np.where(df['l'] == 'right', df['j'] + 1, df['j'])
+        # turn into i_indices, j_indices
+        i_indices = df['i'].tolist()
+        j_indices = df['j'].tolist()
+
+
     print('Reassembling the patches...')
     reassembled_image_pixel = reassemble_patches(pixels_classif_patches, i_indices, j_indices, patch_size=patch_size)
     reassembled_image = reassemble_patches(img_classif_patches, i_indices, j_indices, patch_size=patch_size)

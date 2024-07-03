@@ -81,9 +81,23 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name,
             elif labels == 'multi':
                 # turn to 1 when proba is > 0.5
                 out = torch.sigmoid(out)
-                preds = torch.where(out > alpha2, torch.tensor(1).to(device), torch.tensor(0).to(device)) # the 2nd arg is the value to put when the condition is True          
-                # TO COMPLETE
-                all_preds.extend(preds.cpu().numpy())
+                out_classes_ecosystems = out[:, :-1]
+                # turn to 1 when proba is > alpha1 for heterogenity
+                heterogenity_predicted = torch.where(out[:, -1] >= alpha1, torch.tensor(1).to(device), torch.tensor(0).to(device))
+                # turn to 1 when proba is > alpha2 for each class except heterogenity
+                binary_pred = torch.where(out_classes_ecosystems >= alpha2, torch.tensor(1).to(device), torch.tensor(0).to(device))
+                # concat heterogenity to binary_pred
+                binary_pred = torch.cat((binary_pred, heterogenity_predicted.unsqueeze(1)), dim=1)
+                 
+                for i, vector in enumerate(out):
+                    # if homogenity is predicted
+                    if vector[-1] < alpha1:
+                        # keep the class with the max proba
+                        max_class = torch.argmax(out_classes_ecosystems[i])
+                        binary_pred[i, :-1] = 0
+                        binary_pred[i, max_class] = 1    
+
+                all_preds.extend(binary_pred.cpu().numpy())
                 all_labels.extend(msk.cpu().numpy())
 
     if model_name == 'UNet':

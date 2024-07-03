@@ -16,7 +16,9 @@ import torchvision.models as models
 
 from datetime import datetime
 
-from utils import *
+from utils.data_utils import *
+from utils.plotting_utils import *
+from utils.train_val_test_utils import *
 from settings import *
 
 import warnings
@@ -58,7 +60,7 @@ if data_loading_settings['data_augmentation']:
         A.VerticalFlip(p=0.5),
         A.HorizontalFlip(p=0.5),
         A.Rotate(limit=45, p=0.5),
-        A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0), ratio=(0.75, 1.33), p=0.5),
+        A.RandomResizedCrop(height=patch_level_param['patch_size'], width=patch_level_param['patch_size'], scale=(0.8, 1.0), ratio=(0.75, 1.33), p=0.5),
         ToTensorV2(),
     ])
     transform = [transform_rgb, transform_all_channels]
@@ -196,6 +198,7 @@ if training_settings['training']:
     validation_metric = []
     count = 0
     best_val_loss = np.inf 
+    best_val_metric = 0
 
     if training_settings['restart_training']:
         # load losses
@@ -206,11 +209,13 @@ if training_settings['training']:
         validation_metric = df['validation_mF1'].tolist()
 
         best_val_loss = min(validation_losses)
+        best_val_metric = max(validation_metric)
         print('training_losses: ', training_losses)
         print('validation_losses: ', validation_losses)
         print('training_metric: ', training_metric)
         print('validation_metric: ', validation_metric)
         print('best_val_loss', best_val_loss)
+        print('best_val_metric', best_val_metric)
         print('Losses and metric loaded')
 
     for epoch in range(training_settings['nb_epochs']):
@@ -224,7 +229,7 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'], model_settings['model'], model_settings['labels'])
+        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'], model_settings['model'], model_settings['labels'], training_settings['alpha1'], training_settings['alpha2'])
         training_losses.append(train_loss)
         training_metric.append(tr_metric)
         model.eval()
@@ -236,9 +241,12 @@ if training_settings['training']:
 
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train loss {train_loss:.4f}, val loss {val_loss:.4f}')
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train {metric} {tr_metric:.4f}, val {metric} {val_metric:.4f}')
-        if val_loss < best_val_loss:
+        if val_loss <= best_val_loss or val_metric >= best_val_metric:
             count = 0
-            best_val_loss = val_loss
+            if val_loss <= best_val_loss:
+                best_val_loss = val_loss
+            elif val_metric >= best_val_metric:
+                best_val_metric = val_metric
             torch.save(model.state_dict(), model_settings['path_to_intermed_model'] + f'_epoch{epoch+1}.pt')
             torch.save(optimizer.state_dict(), model_settings['path_to_intermed_optim'] + f'_epoch{epoch+1}.pt')
         else:
@@ -267,7 +275,7 @@ if training_settings['training']:
         param.to(device)
 
 else: 
-    #plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
+    plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
     model.to(device)
     model.load_state_dict(torch.load(model_settings['path_to_best_model']))
     print('Model ', model_settings['path_to_best_model'], ' loaded')
@@ -538,4 +546,8 @@ if plotting_settings['plot_re_assemble']:
 
     zones = ['zone1_0_0', 'zone100_0_0', 'zone133_0_0']
     for zone in zones: 
-        plot_reassembled_patches(zone, model, patch_level_param['patch_size'], data_loading_settings['msk_folder'], training_settings['alpha1'], my_cmap, my_norm, plotting_settings['re_assemble_patches_path'][:-4], patch_level_param['level'], model_settings, data_loading_settings) 
+        msk_paths = list(data_loading_settings['msk_folder'].rglob('*.tif'))
+        msk_paths = [msk_path for msk_path in msk_paths if zone in msk_path.stem]
+
+        dataset = EcomedDataset(msk_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'], path_mask_name = True)
+        plot_reassembled_patches(zone, model, dataset, patch_level_param['patch_size'], training_settings['alpha1'], my_cmap, my_norm, plotting_settings['re_assemble_patches_path'][:-4])
