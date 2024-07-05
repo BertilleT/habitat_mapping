@@ -6,13 +6,13 @@ import pandas as pd
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
 model_name = 'Resnet18' # 'UNet', 'Resnet18'
-test_existing_model = True
-patch_size = 256
+test_existing_model = False
+patch_size = 64
 model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 #model_type = 'unet_256_l1/'
 
 if test_existing_model: 
-    name_setting = 'resnet18_random_homogene_lr3_2023_mediteranean'
+    name_setting = 'resnet18_multi_label_64_random_10epochs_bs256'
     #laod all variables from csv best_epoch_to_test
     best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
     #remov the space before alla values and name columns
@@ -22,7 +22,7 @@ if test_existing_model:
     best_epoch_to_test = best_epoch_to_test[best_epoch_to_test['name_setting'] == name_setting]
     #turn each column and value into a variable
     for column in best_epoch_to_test.columns:
-        if column not in ['name_setting', 'stratified', 'normalisation', 'year']:
+        if column not in ['name_setting', 'stratified', 'normalisation', 'year', 'location']:
             exec(f'{column} = {best_epoch_to_test[column].values[0]}')
         else:
             exec(f'{column} = best_epoch_to_test[column].values[0]')
@@ -38,14 +38,14 @@ if test_existing_model:
         encoder_weights = None
 
     task = "image_classif"
-    heterogeneity = 'homogeneous'
+    heterogeneity = 'all'
     lr = 1e-3
     optimizer = 'Adam'
     labels = "multi"
     loss = 'BCEWithDigits'
     classes = 7 # 6
-    testing = False
-    plot_test = False
+    testing = True
+    plot_test = True
     plot_re_assemble = True
     tune_alpha1 = False
     tune_alpha2 = False
@@ -54,10 +54,10 @@ if test_existing_model:
 
 else:
     stratified = 'zone' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_multi_label_128_zone_40epochs_bs64_augmented' # 
+    name_setting = 'resnet18_multi_label_64_zone_60epochs_bs4096' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
-    data_augmentation = True
+    data_augmentation = False
     pre_trained = False
     year = 'all'# '2023' or 'all'
     in_channels = 4
@@ -67,9 +67,9 @@ else:
     plot_re_assemble = True
     tune_alpha1 = False
     tune_alpha2 = False
-    bs = 64
-    nb_epochs = 40
-    patience = 40
+    bs = 4096
+    nb_epochs = 60
+    patience = 60
     best_epoch = 1
     task = "image_classif" # 'image_classif' or 'pixel_classif'
     labels = "multi" # 'multi_label' or 'single_label'

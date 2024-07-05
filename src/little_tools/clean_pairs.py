@@ -25,7 +25,7 @@ for img in imgs:
     i += 1'''
 
 
-img_folder = Path(f'../../data/patch128/img/')
+img_folder = Path(f'../../data/patch64/img/')
 imgs = list(img_folder.rglob('*.tif'))
 i = 0
 img_to_drop = []
@@ -49,8 +49,8 @@ print(f'Number of images to drop: {len(img_to_drop)}')
 print(img_to_drop)
 
 # print len of imgs and msks
-img_folder = Path(f'../../data/patch128/img/')
-msk_folder = Path(f'../../data/patch128/msk/')
+img_folder = Path(f'../../data/patch64/img/')
+msk_folder = Path(f'../../data/patch64/msk/')
 imgs = list(img_folder.rglob('*.tif'))
 msks = list(msk_folder.rglob('*.tif'))
 print(f'Number of images: {len(imgs)}')
@@ -65,8 +65,8 @@ for img in img_to_drop:
     msk.unlink()
 
 # print len of imgs and msks
-img_folder = Path(f'../../data/patch128/img/')
-msk_folder = Path(f'../../data/patch128/msk/')
+img_folder = Path(f'../../data/patch64/img/')
+msk_folder = Path(f'../../data/patch64/msk/')
 imgs = list(img_folder.rglob('*.tif'))
 msks = list(msk_folder.rglob('*.tif'))
 print(f'Number of images: {len(imgs)}')

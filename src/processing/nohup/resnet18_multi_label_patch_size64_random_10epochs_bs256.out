@@ -1,0 +1,214 @@
+----------------------- UNet -----------------------
+Patch size: 64
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2]
+Stratified: random
+Year: all
+Patches: all
+Batch size: 256
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+Image: min: 0.0, max: 1.0
+Mask unique values: [0. 1.]
+Train: 99564 images, Val: 33188 images, Test: 37716 images
+Train: 58.41%, Val: 19.47%, Test: 22.12%
+Creating model...
+Model settings:
+Pretrained: False
+Classes: 7
+The model is Resnet18
+Using BCEWithDigits criterion
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: BCEWithDigits
+Optimizer: Adam
+Training...
+Epoch 1/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 1/10: train loss 0.3694, val loss 0.5247
+Epoch 1/10: train mF1 0.4065, val mF1 0.2913
+Time: 0:06:58.363103
+Epoch 2/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 2/10: train loss 0.3260, val loss 0.3843
+Epoch 2/10: train mF1 0.5069, val mF1 0.4434
+Time: 0:07:00.331204
+Epoch 3/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 3/10: train loss 0.3046, val loss 0.3439
+Epoch 3/10: train mF1 0.5514, val mF1 0.5195
+Time: 0:07:01.887519
+Epoch 4/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 4/10: train loss 0.2899, val loss 0.5275
+Epoch 4/10: train mF1 0.5786, val mF1 0.2991
+Time: 0:07:01.597185
+Epoch 5/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 5/10: train loss 0.2768, val loss 0.5105
+Epoch 5/10: train mF1 0.5999, val mF1 0.3974
+Time: 0:07:01.104901
+Epoch 6/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 6/10: train loss 0.2642, val loss 0.4053
+Epoch 6/10: train mF1 0.6221, val mF1 0.4814
+Time: 0:07:16.728772
+Epoch 7/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 7/10: train loss 0.2521, val loss 0.3553
+Epoch 7/10: train mF1 0.6426, val mF1 0.4970
+Time: 0:07:23.745986
+Epoch 8/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 8/10: train loss 0.2396, val loss 0.3822
+Epoch 8/10: train mF1 0.6628, val mF1 0.5125
+Time: 0:07:21.867586
+Epoch 9/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 9/10: train loss 0.2250, val loss 0.3154
+Epoch 9/10: train mF1 0.6873, val mF1 0.5759
+Time: 0:07:00.695602
+Epoch 10/10
+Training
+Batch: 0  over  389
+Batch: 50  over  389
+Batch: 100  over  389
+Batch: 150  over  389
+Batch: 200  over  389
+Batch: 250  over  389
+Batch: 300  over  389
+Batch: 350  over  389
+Validation
+Batch: 0  over  130
+Batch: 50  over  130
+Batch: 100  over  130
+Epoch 10/10: train loss 0.2070, val loss 0.3358
+Epoch 10/10: train mF1 0.7157, val mF1 0.5796
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Time: 0:06:58.371553
+Testing
+Batch: 0  over  148
+Batch: 50  over  148
+Batch: 100  over  148
+Test F1 by class: [0.43069753 0.5707208  0.73730564 0.67117448 0.64091222 0.51405941
+ 0.25255648]
+Test mF1: 0.5453466518052918
+Plot saved at: ../../results/resnet18_64_l1/random_shuffling/all/resnet18_multi_label_64_random_10epochs_bs256/metrics_test/test_preds.png
+Reassembling the patches...
+Reassembling the patches...
+Reassembling the patches...

@@ -5,7 +5,7 @@ conda activate ecomed_venv
 nohup python3 my_script.py
 tail -f nohup.out
 
-nohup python3 main.py > nohup/resnet18_multi_label_128_random_40epochs_bs64_augmented.out &
+nohup python3 main.py > nohup/resnet18_multi_label_patch_size64_random_10epochs_bs256_augmented.out &
 
 ps -p 2565469 -f
 

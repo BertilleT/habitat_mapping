@@ -74,7 +74,7 @@ class EcomedDataset(Dataset):
                                 binary_labels_mapped[i] = 1
                         if len(unique_labels_mapped) > 1:
                             binary_labels_mapped[6] = 1
-                        # img_label_mapped and to floaf
+                        # img_label_mapped and to float32 because of the loss function
                         img_label_mapped = binary_labels_mapped.astype(np.float32)
             else:
                 msk_mapped = msk

@@ -1,0 +1,224 @@
+----------------------- UNet -----------------------
+Patch size: 64
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.68, 0.2]
+Stratified: zone
+Year: all
+Patches: all
+Batch size: 256
+Normalisation: channel_by_channel
+Data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+Nbumber of unique zones: 108
+Train, val and test zones saved in csv file at: ../../results/resnet18_64_l1/stratified_shuffling_by_zone/seed1/img_ids_by_set.csv
+Image: min: 0.0, max: 1.0
+Mask unique values: [0. 1.]
+Train: 102118 images, Val: 36030 images, Test: 32320 images
+Train: 59.90%, Val: 21.14%, Test: 18.96%
+Creating model...
+Model settings:
+Pretrained: False
+Classes: 7
+The model is Resnet18
+Using BCEWithDigits criterion
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: BCEWithDigits
+Optimizer: Adam
+Training...
+Epoch 1/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 1/10: train loss 0.3999, val loss 0.4519
+Epoch 1/10: train mF1 0.3590, val mF1 0.2609
+Time: 0:08:47.405942
+Epoch 2/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 2/10: train loss 0.3656, val loss 0.4846
+Epoch 2/10: train mF1 0.4365, val mF1 0.2808
+Time: 0:08:50.022087
+Epoch 3/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 3/10: train loss 0.3530, val loss 0.4209
+Epoch 3/10: train mF1 0.4687, val mF1 0.3015
+Time: 0:08:50.398495
+Epoch 4/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 4/10: train loss 0.3429, val loss 0.4223
+Epoch 4/10: train mF1 0.4956, val mF1 0.3170
+Time: 0:08:49.644857
+Epoch 5/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 5/10: train loss 0.3351, val loss 0.5553
+Epoch 5/10: train mF1 0.5102, val mF1 0.2699
+Time: 0:08:46.919829
+Epoch 6/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 6/10: train loss 0.3275, val loss 0.4405
+Epoch 6/10: train mF1 0.5273, val mF1 0.2991
+Time: 0:08:49.977396
+Epoch 7/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 7/10: train loss 0.3218, val loss 0.4421
+Epoch 7/10: train mF1 0.5387, val mF1 0.3056
+Time: 0:08:51.481959
+Epoch 8/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 8/10: train loss 0.3166, val loss 0.4552
+Epoch 8/10: train mF1 0.5499, val mF1 0.3164
+Time: 0:08:50.463747
+Epoch 9/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 9/10: train loss 0.3117, val loss 0.4489
+Epoch 9/10: train mF1 0.5570, val mF1 0.3015
+Time: 0:09:07.196943
+Epoch 10/10
+Training
+Batch: 0  over  399
+Batch: 50  over  399
+Batch: 100  over  399
+Batch: 150  over  399
+Batch: 200  over  399
+Batch: 250  over  399
+Batch: 300  over  399
+Batch: 350  over  399
+Validation
+Batch: 0  over  141
+Batch: 50  over  141
+Batch: 100  over  141
+Epoch 10/10: train loss 0.3073, val loss 0.4451
+Epoch 10/10: train mF1 0.5674, val mF1 0.3218
+/home/bertille/.local/lib/python3.8/site-packages/pydantic/main.py:347: UserWarning: Pydantic serializer warnings:
+  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
+  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
+  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
+  Expected `Union[float, tuple[float, float]]` but got `list` - serialized value may not be as expected
+  return self.__pydantic_serializer__.to_python(
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+Time: 0:09:11.660370
+Testing
+Batch: 0  over  127
+Batch: 50  over  127
+Batch: 100  over  127
+Test F1 by class: [0.40105677 0.21081713 0.64949363 0.32123575 0.46338028 0.01205727
+ 0.1341262 ]
+Test mF1: 0.31316671897659687
+Plot saved at: ../../results/resnet18_64_l1/stratified_shuffling_by_zone/all/resnet18_multi_label_64_zone_10epochs_bs256_augmented/metrics_test/test_preds.png
+Reassembling the patches...
+Reassembling the patches...
+Reassembling the patches...

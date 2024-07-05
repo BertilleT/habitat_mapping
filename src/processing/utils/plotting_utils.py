@@ -256,7 +256,7 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
         # print shape
         # INDICES OF THE PATCH IN THE FULL IMAGE
         splitted = tif_path.stem.split('_')
-        if patch_size == 256:
+        if patch_size == 256 or patch_size == 64:
             i = int(splitted[-2])
             j = int(splitted[-1])
         elif patch_size == 128:
@@ -269,6 +269,11 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
 
         if patch_size == 256:
             original_patch = tiff.imread(tif_path)[:, :, :, 0] # dtype = uint8 (confirmed by print(patch.dtype))
+
+        elif patch_size == 64:
+            original_patch = tiff.imread(tif_path)[0, :, :] 
+            original_patch = np.expand_dims(original_patch, axis=0)
+
         elif patch_size == 128:
             k_indices.append(k)
             l_indices.append(l)

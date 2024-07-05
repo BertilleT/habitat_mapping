@@ -75,10 +75,6 @@ train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
 # check size of one img and masks, and value of masks at level 1
 img, msk = next(iter(train_dl))
-print(f'Image shape: {img.shape}, Mask shape: {msk.shape}')
-print(f"Image: min: {img.min()}, max: {img.max()}, dtype: {img.dtype}")
-print(f"Mask unique values: {np.unique(msk[0])}, dtype: {msk.dtype}")
-print(f"Mask: ", msk[0])
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "val", labels = model_settings['labels'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'])
@@ -86,19 +82,11 @@ test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=Fa
 
 #laod one img and msk
 img, msk = next(iter(train_dl))
-# print msk all values
+# print img high and low values
+print(f'Image: min: {img.min()}, max: {img.max()}')
+# print unique values of the mask
+print(f'Mask unique values: {np.unique(msk[0])}')
 '''
-print(f"Mask 0: ", msk[0])
-print(f"Mask 1: ", msk[1])
-print(f"Mask 2: ", msk[2])
-print(f"Mask 3: ", msk[3])
-print(f"Mask 4: ", msk[4])
-print(f"Mask 5: ", msk[5])
-print(f"Mask 6: ", msk[6])
-print(f"Mask 7: ", msk[7])
-print(f"Mask 8: ", msk[8])
-print(f"Mask 9: ", msk[9])
-print(f"Mask 10: ", msk[10])
 train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], task = model_settings['task'])
 plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
 val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
