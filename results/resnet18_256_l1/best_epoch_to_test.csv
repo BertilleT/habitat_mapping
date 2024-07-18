@@ -11,3 +11,4 @@ random, resnet18_random_all_patches_256_multi_label_10epochs_labels_corrected, 1
 random, resnet18_random_all_patches_256_multi_label_60epochs_labels_corrected, 1, False, False, 4, False, True, 16, 60, 60, 12, channel_by_channel, all, all
 zone, resnet18_zone_all_patches_256_multi_label_60epochs_labels_corrected, 1, False, False, 4, False, True, 16, 60, 60, 1, channel_by_channel, all, all
 random, resnet18_random_homogene_lr3_2023_mediteranean, 1, False, False, 4, False, True, 16, 70, 70, 14, channel_by_channel, 2023, mediteranean
+zone, resnet18_multi_label_256_zone_60epochs_bs16_filtered, 1, False, False, 4, False, True, 16, 40, 40, 22, channel_by_channel, all, all

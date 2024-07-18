@@ -47,7 +47,7 @@ def IoU_F1_from_confmatrix(conf_matrix):
 
 
 ## FUNCTION FOR TRAINING, VALIDATION AND TESTING
-def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name, labels, alpha1, alpha2):
+def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name, labels, alpha1, alpha2, nb_output_heads):
     print('Training')
     running_loss = 0.0
     patch_confusion_matrices = []
@@ -62,7 +62,18 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name,
         out = model(img)
         if labels == 'single':
             msk = msk.long() 
+        #get shape of out
         loss = criterion(out, msk)
+        # if nb_output_heads == 2
+        # give a weight of 2 to the heterogenity term
+        if labels == 'multi' and nb_output_heads == 2:
+            w1 = 0
+            w2 = 1
+            #take only the 6 first rows of out
+            habitats_loss = criterion(out[:, :-1], msk[:, :-1])
+            fronteer_loss = criterion(out[:, -1], msk[:, -1])
+            loss = w1 * habitats_loss + w2 * fronteer_loss
+
         loss.backward()
         optimizer.step()
         running_loss += loss.item()
@@ -70,7 +81,7 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name,
             out = torch.argmax(out, dim=1)
             out = out.int() #int means int32 on cpu and int64 on gpu
             patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
-        elif model_name == 'Resnet18':
+        elif model_name in ['Resnet18', 'Resnet34']:
             if labels == 'single':
                 _, preds = torch.max(out, 1)
                 # to int
@@ -108,7 +119,7 @@ def train(model, train_dl, criterion, optimizer, device, nb_classes, model_name,
         return running_loss / len(train_dl), mIoU
 
 
-    elif model_name == 'Resnet18':
+    elif model_name in ['Resnet18', 'Resnet34']:
         F1_by_class = f1_score(all_labels, all_preds, average=None)
         mF1 = np.mean(F1_by_class)
         return running_loss / len(train_dl), mF1
@@ -135,7 +146,7 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_na
             out = torch.argmax(out, dim=1)
             out = out.int()
             patch_confusion_matrices.append(confusion_matrix(msk.flatten().cpu().numpy(), out.flatten().cpu().numpy(), labels=range(nb_classes)))
-        elif model_name == 'Resnet18':
+        elif model_name in ['Resnet18', 'Resnet34']:
             if labels == 'single':
                 _, preds = torch.max(out, 1)
                 # to int
@@ -179,7 +190,7 @@ def valid_test(model, dl, criterion, device, nb_classes, valid_or_test, model_na
             'mIoU': mIoU,
             'mF1': mF1
         }
-    elif model_name == 'Resnet18':
+    elif model_name in ['Resnet18', 'Resnet34']:
         if labels == 'single':
             cm = confusion_matrix(all_labels, all_preds, labels=range(nb_classes))
         elif labels == 'multi':

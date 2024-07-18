@@ -240,7 +240,8 @@ def reassemble_patches(patches, i_indices, j_indices, patch_size):
         
     return full_image
 
-def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, my_norm, path_to_save):
+def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, my_norm, path_to_save, post_processing=False, plot_post_processing = False, df = None):
+    
     # Predict all the masks from the dataset
     predictions = []
     i_indices = []
@@ -250,10 +251,16 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
     img_classif_patches = []
     pixels_classif_patches = []
     predicted_patches = []
+    post_processed_predicted_patches = []
+
+    true_classes = [] # OK
+    true_heterogenity = [] # OK
+    predicted_classes = [] # OK
+    predicted_heterogenity = [] # OK
+    probability_vectors = [] # OK
 
     for i in range(len(dataset)):
         img, msk, tif_path = dataset[i]
-        # print shape
         # INDICES OF THE PATCH IN THE FULL IMAGE
         splitted = tif_path.stem.split('_')
         if patch_size == 256 or patch_size == 64:
@@ -286,24 +293,28 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
         unique, counts = np.unique(original_patch, return_counts=True)
         group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
         patch = np.vectorize(group_under_represented_classes_uint8.get)(original_patch)
-
         # ORIGINAL PATCHES AT PIXEL LEVEL
         pixels_classif_patches.append(patch[0, :, :]) # we obtain a numpy array of (256, 256) of uint8 type
 
         # PATCHES IWTH ONE CLASS PER PATCH 
         if len(np.unique(patch)) > 1:
+            true_heterogenity.append(1)
+            true_classes.append(6)
             # if multiple classes in the patch, then strip the patch
             striped = np.ones(patch.shape) * 6 # striped is a numpy array of (1, 256, 256)
             # Every 64 pixels in column, we set the value to 7 for 32 columns of pixels
             my_list = list(range(0, striped.shape[2], 64))
-            for i in my_list:
-                striped[0, :, i:i+32] = 7
+            for n in my_list:
+                striped[0, :, n:n+32] = 7
             # turn to uint8
             striped = striped.astype(np.uint8) #  previously, striped was of type float64
             # Striped is an array of (1, 256, 256) with 6 and 7 values, uint8 type
             img_classif_patches.append(striped[0, :, :])            
         else:
+            true_heterogenity.append(0)
             img_classif_patches.append(patch[0, :, :])
+            true_classes.append(np.uint8(np.unique(patch)[0]))
+
         # PREDICTION
         # img to tensor
         img = torch.unsqueeze(torch.tensor(img), 0)
@@ -311,20 +322,24 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
             pred = model(img)
             #remove first dimension
         pred = torch.sigmoid(pred)
+        probability_vectors.append(pred)
         # heteroneity to 1 if last value of pred vector is > alpha1
         heterogeneity = 1 if pred[0, -1].item() >= alpha1 else 0
+        predicted_heterogenity.append(heterogeneity)
         #if last value of pred vector is 1
         if heterogeneity == 1:
+            predicted_classes.append(6)
             # if multiple classes in the patch, then strip the patch
             pred_striped = np.ones(patch.shape) * 6 # striped is a numpy array of (1, 256, 256)
             # Every 64 pixels in column, we set the value to 7 for 32 columns of pixels
             pred_my_list = list(range(0, pred_striped.shape[2], 64))
-            for i in pred_my_list:
-                pred_striped[0, :, i:i+32] = 7
+            for m in pred_my_list:
+                pred_striped[0, :, m:m+32] = 7
             # turn to uint8
             pred_striped = pred_striped.astype(np.uint8) #  previously, striped was of type float64
             # Striped is an array of (1, 256, 256) with 6 and 7 values, uint8 type
             predicted_patches.append(pred_striped[0, :, :])   
+            post_processed_predicted_patches.append(pred_striped[0, :, :])
         else:
             # remove last value of pred vector
             pred = pred[:, :-1]
@@ -333,12 +348,20 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
             # create a numpy array of (256, 256) full of the predicted class
             # turn pred which is an int to uint8
             pred = np.uint8(pred)
+            predicted_classes.append(pred)
             array_pred = np.ones(patch.shape) * pred
             # to uint8
             array_pred = array_pred.astype(np.uint8)
             predicted_patches.append(array_pred[0, :, :])
+            
+            if plot_post_processing == True: 
+                #new_class can be found in predicted_class column from df with index i and j
+                new_pred = df[(df['i'] == i) & (df['j'] == j)]['predicted_class'].values[0]
+                new_pred = np.uint8(new_pred)
+                new_array_pred = np.ones(patch.shape) * new_pred
+                new_array_pred = new_array_pred.astype(np.uint8)
+                post_processed_predicted_patches.append(new_array_pred[0, :, :])
 
-    # Reassemble the patches
     if patch_size == 128:
         # mmade a df with i_indices, j_indices, k_indices, l_indices
         df = pd.DataFrame({'i': i_indices, 'j': j_indices, 'k': k_indices, 'l': l_indices})
@@ -353,30 +376,46 @@ def plot_reassembled_patches(zone, model, dataset, patch_size, alpha1, my_cmap, 
         i_indices = df['i'].tolist()
         j_indices = df['j'].tolist()
 
+    if post_processing == True:
+        return i_indices, j_indices, true_classes, true_heterogenity, predicted_classes, predicted_heterogenity, probability_vectors
+    else:
+        # Reassemble the patches
+        print('Reassembling the patches...')
+        reassembled_image_pixel = reassemble_patches(pixels_classif_patches, i_indices, j_indices, patch_size=patch_size)
+        reassembled_image = reassemble_patches(img_classif_patches, i_indices, j_indices, patch_size=patch_size)
+        predicted_image = reassemble_patches(predicted_patches, i_indices, j_indices, patch_size=patch_size)
+        if plot_post_processing == True:
+            n = 4
+        else:
+            n = 3
 
-    print('Reassembling the patches...')
-    reassembled_image_pixel = reassemble_patches(pixels_classif_patches, i_indices, j_indices, patch_size=patch_size)
-    reassembled_image = reassemble_patches(img_classif_patches, i_indices, j_indices, patch_size=patch_size)
-    predicted_image = reassemble_patches(predicted_patches, i_indices, j_indices, patch_size=patch_size)
+        # Create a figure with 1 row and 3 columns
+        fig, axs = plt.subplots(1, n, figsize=(15, 5))
+        # Display the images in the subplots
+        axs[0].imshow(reassembled_image_pixel, cmap=my_cmap, norm=my_norm)
+        axs[0].axis('off')
+        axs[0].set_title('Pixel Level')
 
-    # Create a figure with 1 row and 3 columns
-    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
-    # Display the images in the subplots
-    axs[0].imshow(reassembled_image_pixel, cmap=my_cmap, norm=my_norm)
-    axs[0].axis('off')
-    axs[0].set_title('Pixel Level')
+        axs[1].imshow(reassembled_image, cmap=my_cmap, norm=my_norm)
+        axs[1].axis('off')
+        axs[1].set_title('Image Level')
 
-    axs[1].imshow(reassembled_image, cmap=my_cmap, norm=my_norm)
-    axs[1].axis('off')
-    axs[1].set_title('Image Level')
+        axs[2].imshow(predicted_image, cmap=my_cmap, norm=my_norm)
+        axs[2].axis('off')
+        axs[2].set_title('Predicted')
 
-    axs[2].imshow(predicted_image, cmap=my_cmap, norm=my_norm)
-    axs[2].axis('off')
-    axs[2].set_title('Predicted')
-
-    re_assemble_patches_path = path_to_save + f'_{zone}.png'
-    plt.savefig(re_assemble_patches_path, bbox_inches='tight', pad_inches=0)
-    plt.close()
+        if plot_post_processing == True:
+            post_processed_predicted_image = reassemble_patches(post_processed_predicted_patches, i_indices, j_indices, patch_size=patch_size)
+            axs[3].imshow(post_processed_predicted_image, cmap=my_cmap, norm=my_norm)
+            axs[3].axis('off')
+            axs[3].set_title('Post-processed Predicted')
+            re_assemble_patches_path = path_to_save + f'_{zone}_post_processed.png'
+            plt.savefig(re_assemble_patches_path, bbox_inches='tight', pad_inches=0)
+            plt.close()
+        else:
+            re_assemble_patches_path = path_to_save + f'_{zone}.png'
+            plt.savefig(re_assemble_patches_path, bbox_inches='tight', pad_inches=0)
+            plt.close()
 
 def plot_losses_metrics(losses_metric_path, losses_plot_path, metrics_plot_path, metric):
     # Read the CSV file into a DataFrame

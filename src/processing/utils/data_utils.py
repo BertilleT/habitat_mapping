@@ -46,6 +46,14 @@ class EcomedDataset(Dataset):
         img_path = self.imgs[idx]
         msk_path = self.msks[idx]
         with rasterio.open(msk_path) as src:
+            '''msk_l2 = src.read(2)
+            # if 18, 19, 24 ou 29 in msk_l2, then filter the image
+            if 18 in msk_l2 or 19 in msk_l2 or 24 in msk_l2 or 29 in msk_l2:
+                #print(msk_path)
+            msk_l3 = src.read(3)
+            # if 67 or 70 in msk_l3, then filter the image
+            if 67 in msk_l3 or 70 in msk_l3:
+                #print(msk_path)'''
             msk = src.read(self.level)
             # print unique values in msk
             img_label = msk[0, 0]
@@ -53,32 +61,38 @@ class EcomedDataset(Dataset):
             #get type of values in msk
             if self.level == 1:
                 group_under_represented_classes = {0: 5, 1: 5, 2: 5, 3: 0, 4: 1, 5: 2, 6: 5, 7: 3, 8: 4, 9: 5}
-                group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
-                #if tasl is pixel_classif, then group under represented classes
-                if self.task == "pixel_classif":
-                    msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
-                elif self.task == "image_classif":  
-                    # map value from img_label using group_under_represented_classes_uint8
-                    if self.labels == 'single':
-                        img_label_mapped = group_under_represented_classes_uint8[img_label] # PB HERE
-                    elif self.labels == 'multi':
-                        # store in img_labels all uniques values from masks
-                        labels = np.unique(msk)
-                        labels_mapped = np.vectorize(group_under_represented_classes_uint8.get)(labels)
-                        # unique
-                        unique_labels_mapped = np.unique(labels_mapped)
-                        
+            elif self.level == 2:
+                group_under_represented_classes = {0: 16,1: 16,2: 16,3: 16,4: 16,5: 16,6: 16,7: 16,8: 0,9: 1,10: 16,11: 2,12: 16,13: 3,14: 16,15: 4,16: 5,17: 6,18: 16,19: 7,20: 8,21: 9,22: 10,23: 16,24: 11,25: 16,26: 16,27: 16,28: 12,29: 16,30: 13,31: 14,32: 16,33: 15,34: 16,35: 16,255: 16}
+            group_under_represented_classes_uint8 = {np.uint8(k): np.uint8(v) for k, v in group_under_represented_classes.items()}
+            #if tasl is pixel_classif, then group under represented classes
+            if self.task == "pixel_classif":
+                msk_mapped = np.vectorize(group_under_represented_classes_uint8.get)(msk)
+            elif self.task == "image_classif":  
+                # map value from img_label using group_under_represented_classes_uint8
+                if self.labels == 'single':
+                    img_label_mapped = group_under_represented_classes_uint8[img_label] # PB HERE 
+                elif self.labels == 'multi':
+                    # store in img_labels all uniques values from masks
+                    labels = np.unique(msk)
+                    labels_mapped = np.vectorize(group_under_represented_classes_uint8.get)(labels)
+                    # unique
+                    unique_labels_mapped = np.unique(labels_mapped)
+                    if self.level == 1:
                         binary_labels_mapped = np.zeros(7)
                         for i in range(6):
                             if i in unique_labels_mapped:
                                 binary_labels_mapped[i] = 1
                         if len(unique_labels_mapped) > 1:
                             binary_labels_mapped[6] = 1
+                    elif self.level == 2:
+                        binary_labels_mapped = np.zeros(18)
+                        for i in range(17):
+                            if i in unique_labels_mapped:
+                                binary_labels_mapped[i] = 1
+                        if len(unique_labels_mapped) > 1:
+                            binary_labels_mapped[17] = 1
                         # img_label_mapped and to float32 because of the loss function
-                        img_label_mapped = binary_labels_mapped.astype(np.float32)
-            else:
-                msk_mapped = msk
-                img_label_mapped = img_label
+                    img_label_mapped = binary_labels_mapped.astype(np.float32) 
 
         with rasterio.open(img_path) as src:
             img = src.read()
@@ -199,6 +213,13 @@ class EcomedDataset_to_plot(Dataset):
 def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kwargs):
     print('The seed to shuffle the data is ', str(random_seed))
     print('The data are from ', kwargs['year'], ' year')    
+    #load csv file from ../../csv/path_to_filter.csv, one single col with name file_path
+    path_to_filter = pd.read_csv('../../csv/paths_to_filter.csv')
+    # get the values of the column
+    path_to_filter = path_to_filter['file_path'].values
+    # turn to paths
+    path_to_filter = [Path(path) for path in path_to_filter]
+    
     #extract unique zones from alltif names
     if kwargs['patches'] == 'heterogeneous':
         #load the csv file with the list of heterogen masks '../../csv/heterogen_masks.csv'
@@ -217,6 +238,8 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
 
     elif kwargs['patches'] == 'all':
         msk_paths = list(msk_folder.rglob('*.tif'))
+        # filter
+        #msk_paths = [msk_path for msk_path in msk_paths if msk_path not in path_to_filter]
     if kwargs['year'] == '2023':
         zones_2023 = pd.read_csv(kwargs['2023_zones'])
         msk_paths = [msk_path for msk_path in msk_paths if str(msk_path).split('/')[-2].split('_')[0] in zones_2023['zone_AJ'].values]
@@ -266,7 +289,6 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         train_zone_ids = zone_ids[:int(split[0]*n)]# there are not the same number of images by zone. To get 60 20 20 split, tune by hand 0.67. 
         val_zone_ids = zone_ids[int(split[0]*n):int((split[0]+split[1])*n)] # 0.67 0.9
         test_zone_ids = zone_ids[int((split[0]+split[1])*n):]
-
         train_zone_ids_str = ','.join(train_zone_ids)
         val_zone_ids_str = ','.join(val_zone_ids)
         test_zone_ids_str = ','.join(test_zone_ids)
@@ -274,17 +296,31 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         my_dict = {'train_img_ids': train_zone_ids_str, 'val_img_ids': val_zone_ids_str, 'test_img_ids': test_zone_ids_str}
         # from dict to df. Each k dict is a riw in df. df with ione single oclumn
         df = pd.DataFrame(list(my_dict.items()), columns=['set', 'img_ids'])
-        df.to_csv(kwargs['img_ids_by_set'])
-        print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
+        #df.to_csv(kwargs['img_ids_by_set'])
+        #print('Train, val and test zones saved in csv file at:', kwargs['img_ids_by_set'])
         
+        '''train_zone_ids = ['zone72', 'zone69', 'zone50', 'zone120', 'zone112', 'zone75', 'zone7', 'zone56', 'zone57', 'zone74', 'zone84', 'zone148', 'zone171', 'zone157', 'zone143', 'zone106', 'zone37', 'zone33', 'zone136', 'zone24', 'zone88', 'zone113', 'zone129', 'zone144', 'zone155', 'zone156', 'zone93', 'zone14', 'zone30', 'zone127', 'zone159', 'zone98', 'zone172', 'zone10', 'zone54', 'zone147', 'zone77', 'zone145', 'zone4', 'zone123', 'zone161', 'zone38', 'zone134', 'zone101', 'zone11', 'zone15', 'zone48', 'zone5', 'zone154', 'zone121', 'zone22', 'zone17', 'zone126', 'zone6', 'zone169', 'zone95', 'zone85', 'zone19', 'zone26', 'zone65', 'zone68', 'zone39', 'zone160', 'zone139', 'zone115', 'zone80', 'zone104', 'zone165', 'zone76', 'zone45', 'zone34', 'zone21', 'zone167']
+        val_zone_ids = [
+            'zone27', 'zone162', 'zone142', 'zone114', 'zone71', 'zone25', 
+            'zone63', 'zone133', 'zone66', 'zone20', 'zone117', 'zone41', 
+            'zone2', 'zone78', 'zone47', 'zone3', 'zone102', 'zone137', 
+            'zone16', 'zone59', 'zone44', 'zone164'
+        ]
+        test_zone_ids = [
+            'zone90', 'zone170', 'zone132', 'zone28', 'zone12', 'zone96', 
+            'zone116', 'zone97', 'zone73', 'zone158', 'zone53', 'zone51', 'zone67'
+        ]'''
         train_paths = []
         val_paths = []
         test_paths = []
         for zone_id in train_zone_ids:
+            print('hey')
             train_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
         for zone_id in val_zone_ids:
+            print('hey2')
             val_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
         for zone_id in test_zone_ids:
+            print('hey3')
             test_paths += list(msk_df[msk_df['zone_id'] == zone_id]['mask_path'])
     elif stratified == 'acquisition':
         #for each subfolder in msk_folder, set 60% of the patches to train, 20% to val and 20% to test
@@ -307,6 +343,7 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
     #concat test_paths with zones_to_plot
     test_paths = test_paths + zones_to_plot
     return train_paths, val_paths, test_paths
+
 
 def classes_balance(zone_list, path_pixels_by_zone):
     zones = list(set(zone_list))

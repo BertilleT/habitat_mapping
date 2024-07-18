@@ -1,0 +1,4 @@
+,set,img_ids
+0,train_img_ids,"zone72,zone69,zone50,zone120,zone112,zone75,zone7,zone56,zone57,zone74,zone84,zone148,zone171,zone157,zone143,zone106,zone37,zone33,zone136,zone24,zone88,zone113,zone129,zone144,zone155,zone156,zone93,zone14,zone30,zone127,zone159,zone98,zone172,zone10,zone54,zone147,zone77,zone145,zone4,zone123,zone161,zone38,zone134,zone101,zone11,zone15,zone48,zone5,zone154,zone121,zone22,zone17,zone126,zone6,zone169,zone95,zone85,zone19,zone26,zone65,zone68,zone39,zone160,zone139,zone115,zone80,zone104,zone165,zone76,zone45,zone34,zone21,zone167"
+1,val_img_ids,"zone27,zone162,zone142,zone114,zone71,zone25,zone63,zone133,zone66,zone20,zone117,zone41,zone2,zone78,zone47,zone3,zone102,zone137,zone16,zone59,zone44,zone164"
+2,test_img_ids,"zone90,zone170,zone132,zone28,zone12,zone96,zone116,zone97,zone73,zone158,zone53,zone51,zone67"

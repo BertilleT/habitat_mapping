@@ -1,0 +1,536 @@
+----------------------- UNet -----------------------
+Patch size: 64
+Classification level: 2
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2]
+Stratified: random
+Year: all
+Patches: all
+Batch size: 4096
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+Image: min: 0.0, max: 1.0
+Mask unique values: [0. 1.]
+Mask nb of dimensions: torch.Size([18])
+Train: 99564 images, Val: 33188 images, Test: 37716 images
+Train: 58.41%, Val: 19.47%, Test: 22.12%
+Creating model...
+Model settings:
+Pretrained: None
+Classes: 18
+The model is:  Resnet18
+Using BCEWithDigits criterion
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: BCEWithDigits
+Optimizer: Adam
+Training...
+Epoch 1/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 1/60: train loss 0.2834, val loss 0.2828
+Epoch 1/60: train mF1 0.0683, val mF1 0.0135
+Time: 0:07:05.349304
+Epoch 2/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 2/60: train loss 0.2270, val loss 0.2477
+Epoch 2/60: train mF1 0.0997, val mF1 0.1152
+Time: 0:07:09.176365
+Epoch 3/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 3/60: train loss 0.2106, val loss 0.2286
+Epoch 3/60: train mF1 0.2188, val mF1 0.1913
+Time: 0:07:02.719901
+Epoch 4/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 4/60: train loss 0.1958, val loss 0.2054
+Epoch 4/60: train mF1 0.2856, val mF1 0.2766
+Time: 0:07:03.828241
+Epoch 5/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 5/60: train loss 0.1825, val loss 0.2134
+Epoch 5/60: train mF1 0.3461, val mF1 0.2892
+Time: 0:07:06.814668
+Epoch 6/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 6/60: train loss 0.1730, val loss 0.2220
+Epoch 6/60: train mF1 0.3929, val mF1 0.2493
+Time: 0:07:02.414139
+Epoch 7/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 7/60: train loss 0.1642, val loss 0.2086
+Epoch 7/60: train mF1 0.4354, val mF1 0.3200
+Time: 0:07:04.726058
+Epoch 8/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 8/60: train loss 0.1551, val loss 0.1814
+Epoch 8/60: train mF1 0.4725, val mF1 0.3870
+Time: 0:07:03.700668
+Epoch 9/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 9/60: train loss 0.1482, val loss 0.1874
+Epoch 9/60: train mF1 0.5047, val mF1 0.3665
+Time: 0:07:07.869838
+Epoch 10/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 10/60: train loss 0.1388, val loss 0.2025
+Epoch 10/60: train mF1 0.5419, val mF1 0.3570
+Time: 0:07:07.352321
+Epoch 11/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 11/60: train loss 0.1295, val loss 0.2023
+Epoch 11/60: train mF1 0.5819, val mF1 0.3801
+Time: 0:07:00.346339
+Epoch 12/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 12/60: train loss 0.1169, val loss 0.2522
+Epoch 12/60: train mF1 0.6254, val mF1 0.3130
+Time: 0:07:00.310202
+Epoch 13/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 13/60: train loss 0.1038, val loss 0.2803
+Epoch 13/60: train mF1 0.6735, val mF1 0.2550
+Time: 0:07:00.744080
+Epoch 14/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 14/60: train loss 0.0915, val loss 0.2255
+Epoch 14/60: train mF1 0.7158, val mF1 0.3849
+Time: 0:07:13.459036
+Epoch 15/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 15/60: train loss 0.0750, val loss 0.2851
+Epoch 15/60: train mF1 0.7701, val mF1 0.3289
+Time: 0:07:04.247003
+Epoch 16/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 16/60: train loss 0.0599, val loss 0.2442
+Epoch 16/60: train mF1 0.8214, val mF1 0.4294
+Time: 0:07:01.794087
+Epoch 17/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 17/60: train loss 0.0475, val loss 0.2891
+Epoch 17/60: train mF1 0.8619, val mF1 0.3980
+Time: 0:07:03.805305
+Epoch 18/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 18/60: train loss 0.0377, val loss 0.2759
+Epoch 18/60: train mF1 0.8971, val mF1 0.4208
+Time: 0:07:01.076025
+Epoch 19/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 19/60: train loss 0.0280, val loss 0.2764
+Epoch 19/60: train mF1 0.9265, val mF1 0.4502
+Time: 0:07:04.069573
+Epoch 20/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 20/60: train loss 0.0230, val loss 0.3391
+Epoch 20/60: train mF1 0.9428, val mF1 0.4088
+Time: 0:07:01.105478
+Epoch 21/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 21/60: train loss 0.0166, val loss 0.3095
+Epoch 21/60: train mF1 0.9612, val mF1 0.4450
+Time: 0:06:58.690172
+Epoch 22/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 22/60: train loss 0.0122, val loss 0.3083
+Epoch 22/60: train mF1 0.9738, val mF1 0.4684
+Time: 0:07:04.795320
+Epoch 23/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 23/60: train loss 0.0094, val loss 0.3268
+Epoch 23/60: train mF1 0.9806, val mF1 0.4567
+Time: 0:07:03.309472
+Epoch 24/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 24/60: train loss 0.0065, val loss 0.3231
+Epoch 24/60: train mF1 0.9883, val mF1 0.4779
+Time: 0:06:59.229766
+Epoch 25/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 25/60: train loss 0.0048, val loss 0.3392
+Epoch 25/60: train mF1 0.9919, val mF1 0.4812
+Time: 0:07:06.439792
+Epoch 26/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 26/60: train loss 0.0034, val loss 0.3349
+Epoch 26/60: train mF1 0.9953, val mF1 0.4847
+Time: 0:07:02.438180
+Epoch 27/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 27/60: train loss 0.0023, val loss 0.3399
+Epoch 27/60: train mF1 0.9971, val mF1 0.4812
+Time: 0:07:02.284224
+Epoch 28/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 28/60: train loss 0.0015, val loss 0.3468
+Epoch 28/60: train mF1 0.9982, val mF1 0.4947
+Time: 0:07:03.758674
+Epoch 29/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 29/60: train loss 0.0011, val loss 0.3532
+Epoch 29/60: train mF1 0.9991, val mF1 0.4824
+Time: 0:07:05.411126
+Epoch 30/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 30/60: train loss 0.0008, val loss 0.3494
+Epoch 30/60: train mF1 0.9993, val mF1 0.4980
+Time: 0:06:57.198411
+Epoch 31/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 31/60: train loss 0.0006, val loss 0.3526
+Epoch 31/60: train mF1 0.9996, val mF1 0.5005
+Time: 0:06:55.556995
+Epoch 32/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 32/60: train loss 0.0004, val loss 0.3571
+Epoch 32/60: train mF1 0.9997, val mF1 0.4998
+Time: 0:06:51.426059
+Epoch 33/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 33/60: train loss 0.0003, val loss 0.3595
+Epoch 33/60: train mF1 0.9999, val mF1 0.5021
+Time: 0:06:58.000523
+Epoch 34/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 34/60: train loss 0.0002, val loss 0.3592
+Epoch 34/60: train mF1 1.0000, val mF1 0.5070
+Time: 0:07:02.125857
+Epoch 35/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 35/60: train loss 0.0002, val loss 0.3621
+Epoch 35/60: train mF1 1.0000, val mF1 0.5017
+Time: 0:07:08.961584
+Epoch 36/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 36/60: train loss 0.0002, val loss 0.3659
+Epoch 36/60: train mF1 0.9999, val mF1 0.5027
+Time: 0:07:06.925300
+Epoch 37/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 37/60: train loss 0.0002, val loss 0.3649
+Epoch 37/60: train mF1 0.9999, val mF1 0.5053
+Time: 0:07:01.213558
+Epoch 38/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 38/60: train loss 0.0001, val loss 0.3680
+Epoch 38/60: train mF1 1.0000, val mF1 0.5042
+Time: 0:07:06.747310
+Epoch 39/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 39/60: train loss 0.0001, val loss 0.3695
+Epoch 39/60: train mF1 1.0000, val mF1 0.5045
+Time: 0:07:07.843081
+Epoch 40/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 40/60: train loss 0.0001, val loss 0.3710
+Epoch 40/60: train mF1 1.0000, val mF1 0.5042
+Time: 0:07:07.048679
+Epoch 41/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 41/60: train loss 0.0001, val loss 0.3728
+Epoch 41/60: train mF1 1.0000, val mF1 0.5049
+Time: 0:06:59.091856
+Epoch 42/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 42/60: train loss 0.0001, val loss 0.3743
+Epoch 42/60: train mF1 1.0000, val mF1 0.5047
+Time: 0:07:00.053343
+Epoch 43/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 43/60: train loss 0.0001, val loss 0.3761
+Epoch 43/60: train mF1 1.0000, val mF1 0.5042
+Time: 0:07:08.127764
+Epoch 44/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 44/60: train loss 0.0001, val loss 0.3778
+Epoch 44/60: train mF1 1.0000, val mF1 0.5040
+Time: 0:07:03.690352
+Epoch 45/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 45/60: train loss 0.0001, val loss 0.3795
+Epoch 45/60: train mF1 1.0000, val mF1 0.5034
+Time: 0:07:03.644086
+Epoch 46/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 46/60: train loss 0.0001, val loss 0.3813
+Epoch 46/60: train mF1 1.0000, val mF1 0.5030
+Time: 0:07:04.403804
+Epoch 47/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 47/60: train loss 0.0001, val loss 0.3825
+Epoch 47/60: train mF1 1.0000, val mF1 0.5039
+Time: 0:07:03.142251
+Epoch 48/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 48/60: train loss 0.0001, val loss 0.3846
+Epoch 48/60: train mF1 1.0000, val mF1 0.5049
+Time: 0:07:06.051433
+Epoch 49/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 49/60: train loss 0.0001, val loss 0.3854
+Epoch 49/60: train mF1 1.0000, val mF1 0.5046
+Time: 0:07:00.964816
+Epoch 50/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 50/60: train loss 0.0001, val loss 0.3864
+Epoch 50/60: train mF1 1.0000, val mF1 0.5033
+Time: 0:07:08.859706
+Epoch 51/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 51/60: train loss 0.0001, val loss 0.3878
+Epoch 51/60: train mF1 1.0000, val mF1 0.5030
+Time: 0:07:03.223121
+Epoch 52/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 52/60: train loss 0.0001, val loss 0.3894
+Epoch 52/60: train mF1 1.0000, val mF1 0.5048
+Time: 0:07:01.411312
+Epoch 53/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 53/60: train loss 0.0001, val loss 0.3908
+Epoch 53/60: train mF1 1.0000, val mF1 0.5028
+Time: 0:07:01.961310
+Epoch 54/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 54/60: train loss 0.0001, val loss 0.3916
+Epoch 54/60: train mF1 1.0000, val mF1 0.5045
+Time: 0:07:00.342236
+Epoch 55/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 55/60: train loss 0.0001, val loss 0.3931
+Epoch 55/60: train mF1 1.0000, val mF1 0.5036
+Time: 0:07:02.989486
+Epoch 56/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 56/60: train loss 0.0001, val loss 0.3946
+Epoch 56/60: train mF1 1.0000, val mF1 0.5041
+Time: 0:07:02.628893
+Epoch 57/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 57/60: train loss 0.0000, val loss 0.3957
+Epoch 57/60: train mF1 1.0000, val mF1 0.5041
+Time: 0:07:01.992761
+Epoch 58/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 58/60: train loss 0.0000, val loss 0.3969
+Epoch 58/60: train mF1 1.0000, val mF1 0.5028
+Time: 0:07:02.153604
+Epoch 59/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 59/60: train loss 0.0000, val loss 0.3982
+Epoch 59/60: train mF1 1.0000, val mF1 0.5032
+Time: 0:07:00.002746
+Epoch 60/60
+Training
+Batch: 0  over  25
+Validation
+Batch: 0  over  9
+Epoch 60/60: train loss 0.0000, val loss 0.3993
+Epoch 60/60: train mF1 1.0000, val mF1 0.5025
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+Time: 0:07:04.371689
+Testing
+Batch: 0  over  10
+Test F1 by class: [0.1962775  0.2882418  0.35140806 0.04086845 0.38779329 0.50961538
+ 0.21238938 0.42198778 0.57917019 0.47328244 0.4109254  0.414279
+ 0.67615048 0.36604607 0.200409   0.31918709 0.40223464 0.32874675]
+Test mF1: 0.3655007065219275
+Traceback (most recent call last):
+  File "main.py", line 507, in <module>
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])
+KeyError: 'my_colors_map'
