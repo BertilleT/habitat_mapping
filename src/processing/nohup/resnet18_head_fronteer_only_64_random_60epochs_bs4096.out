@@ -1,0 +1,715 @@
+----------------------- UNet -----------------------
+Patch size: 64
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.6, 0.2]
+Stratified: random
+Year: all
+Patches: all
+Batch size: 4096
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+Image: min: 0.0, max: 1.0
+Mask unique values: [0. 1.]
+Train: 99564 images, Val: 33188 images, Test: 37716 images
+Train: 58.41%, Val: 19.47%, Test: 22.12%
+Creating model...
+Model settings:
+Pretrained: False
+Classes: 7
+The model is Resnet18
+Using BCEWithDigits criterion
+Creating optimizer...
+Training settings:
+Learning rate: 0.001
+Criterion: BCEWithDigits
+Optimizer: Adam
+Training...
+Epoch 1/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.12413449564134497
+Validation
+Batch: 0  over  9
+Epoch 1/60: train loss 0.4281, val loss 0.6705
+Epoch 1/60: train mF1 0.1241, val mF1 0.1473
+Time: 0:07:26.456059
+Epoch 2/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.19417284921141847
+Validation
+Batch: 0  over  9
+Epoch 2/60: train loss 0.3861, val loss 0.6485
+Epoch 2/60: train mF1 0.1942, val mF1 0.0832
+Time: 0:07:40.235880
+Epoch 3/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.29022166607079014
+Validation
+Batch: 0  over  9
+Epoch 3/60: train loss 0.3717, val loss 0.6461
+Epoch 3/60: train mF1 0.2902, val mF1 0.1333
+Time: 0:07:38.759152
+Epoch 4/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.3559322033898305
+Validation
+Batch: 0  over  9
+Epoch 4/60: train loss 0.3586, val loss 0.6381
+Epoch 4/60: train mF1 0.3559, val mF1 0.1253
+Time: 0:07:36.962926
+Epoch 5/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.41703982563899344
+Validation
+Batch: 0  over  9
+Epoch 5/60: train loss 0.3400, val loss 0.6618
+Epoch 5/60: train mF1 0.4170, val mF1 0.0899
+Time: 0:07:36.403862
+Epoch 6/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.49920964599492706
+Validation
+Batch: 0  over  9
+Epoch 6/60: train loss 0.3091, val loss 0.6574
+Epoch 6/60: train mF1 0.4992, val mF1 0.0984
+Time: 0:07:35.935056
+Epoch 7/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.5989944285908412
+Validation
+Batch: 0  over  9
+Epoch 7/60: train loss 0.2692, val loss 0.6564
+Epoch 7/60: train mF1 0.5990, val mF1 0.1240
+Time: 0:07:34.445975
+Epoch 8/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.7006373486297004
+Validation
+Batch: 0  over  9
+Epoch 8/60: train loss 0.2151, val loss 0.6558
+Epoch 8/60: train mF1 0.7006, val mF1 0.1172
+Time: 0:07:32.134115
+Epoch 9/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.7791055808796353
+Validation
+Batch: 0  over  9
+Epoch 9/60: train loss 0.1691, val loss 0.6647
+Epoch 9/60: train mF1 0.7791, val mF1 0.1071
+Time: 0:07:31.169838
+Epoch 10/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.8339156059179148
+Validation
+Batch: 0  over  9
+Epoch 10/60: train loss 0.1320, val loss 0.6768
+Epoch 10/60: train mF1 0.8339, val mF1 0.1063
+Time: 0:07:32.746346
+Epoch 11/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.8673696896655618
+Validation
+Batch: 0  over  9
+Epoch 11/60: train loss 0.1094, val loss 0.7151
+Epoch 11/60: train mF1 0.8674, val mF1 0.0837
+Time: 0:07:12.360390
+Epoch 12/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.8984005271670761
+Validation
+Batch: 0  over  9
+Epoch 12/60: train loss 0.0862, val loss 0.7064
+Epoch 12/60: train mF1 0.8984, val mF1 0.0981
+Time: 0:07:44.576316
+Epoch 13/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9204704481167187
+Validation
+Batch: 0  over  9
+Epoch 13/60: train loss 0.0694, val loss 0.7067
+Epoch 13/60: train mF1 0.9205, val mF1 0.1131
+Time: 0:07:39.467067
+Epoch 14/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9342752392023608
+Validation
+Batch: 0  over  9
+Epoch 14/60: train loss 0.0583, val loss 0.7243
+Epoch 14/60: train mF1 0.9343, val mF1 0.1035
+Time: 0:07:39.529485
+Epoch 15/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.94129542615833
+Validation
+Batch: 0  over  9
+Epoch 15/60: train loss 0.0511, val loss 0.7078
+Epoch 15/60: train mF1 0.9413, val mF1 0.1116
+Time: 0:07:36.103914
+Epoch 16/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9436732752727165
+Validation
+Batch: 0  over  9
+Epoch 16/60: train loss 0.0483, val loss 0.7257
+Epoch 16/60: train mF1 0.9437, val mF1 0.1054
+Time: 0:07:38.121353
+Epoch 17/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9646262140247706
+Validation
+Batch: 0  over  9
+Epoch 17/60: train loss 0.0332, val loss 0.7243
+Epoch 17/60: train mF1 0.9646, val mF1 0.1179
+Time: 0:07:33.179620
+Epoch 18/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9625051993582506
+Validation
+Batch: 0  over  9
+Epoch 18/60: train loss 0.0339, val loss 0.7259
+Epoch 18/60: train mF1 0.9625, val mF1 0.1067
+Time: 0:07:33.728481
+Epoch 19/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9703294089665835
+Validation
+Batch: 0  over  9
+Epoch 19/60: train loss 0.0278, val loss 0.7417
+Epoch 19/60: train mF1 0.9703, val mF1 0.1165
+Time: 0:07:34.677127
+Epoch 20/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9675965728854763
+Validation
+Batch: 0  over  9
+Epoch 20/60: train loss 0.0289, val loss 0.7515
+Epoch 20/60: train mF1 0.9676, val mF1 0.1088
+Time: 0:07:36.723672
+Epoch 21/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9757688999614438
+Validation
+Batch: 0  over  9
+Epoch 21/60: train loss 0.0225, val loss 0.7509
+Epoch 21/60: train mF1 0.9758, val mF1 0.1114
+Time: 0:07:34.955209
+Epoch 22/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9764003918425506
+Validation
+Batch: 0  over  9
+Epoch 22/60: train loss 0.0217, val loss 0.7498
+Epoch 22/60: train mF1 0.9764, val mF1 0.1189
+Time: 0:07:33.034683
+Epoch 23/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9755374351371385
+Validation
+Batch: 0  over  9
+Epoch 23/60: train loss 0.0227, val loss 0.7659
+Epoch 23/60: train mF1 0.9755, val mF1 0.1144
+Time: 0:07:35.901404
+Epoch 24/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9763210147289807
+Validation
+Batch: 0  over  9
+Epoch 24/60: train loss 0.0217, val loss 0.7506
+Epoch 24/60: train mF1 0.9763, val mF1 0.1008
+Time: 0:07:34.919901
+Epoch 25/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9770612293284334
+Validation
+Batch: 0  over  9
+Epoch 25/60: train loss 0.0210, val loss 0.7767
+Epoch 25/60: train mF1 0.9771, val mF1 0.0904
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+Time: 0:07:35.327613
+Epoch 26/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9768366106118576
+Validation
+Batch: 0  over  9
+Epoch 26/60: train loss 0.0209, val loss 0.7494
+Epoch 26/60: train mF1 0.9768, val mF1 0.1167
+Time: 0:07:33.630919
+Epoch 27/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9832024885202192
+Validation
+Batch: 0  over  9
+Epoch 27/60: train loss 0.0159, val loss 0.7514
+Epoch 27/60: train mF1 0.9832, val mF1 0.1102
+Time: 0:07:30.415342
+Epoch 28/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9854101180238419
+Validation
+Batch: 0  over  9
+Epoch 28/60: train loss 0.0137, val loss 0.7729
+Epoch 28/60: train mF1 0.9854, val mF1 0.0980
+Time: 0:07:33.900252
+Epoch 29/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9812192665442265
+Validation
+Batch: 0  over  9
+Epoch 29/60: train loss 0.0171, val loss 0.7555
+Epoch 29/60: train mF1 0.9812, val mF1 0.1094
+Time: 0:07:34.361132
+Epoch 30/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9823480630257079
+Validation
+Batch: 0  over  9
+Epoch 30/60: train loss 0.0168, val loss 0.7552
+Epoch 30/60: train mF1 0.9823, val mF1 0.1042
+Time: 0:07:33.529563
+Epoch 31/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9814765418926529
+Validation
+Batch: 0  over  9
+Epoch 31/60: train loss 0.0171, val loss 0.7493
+Epoch 31/60: train mF1 0.9815, val mF1 0.1090
+Time: 0:07:34.505312
+Epoch 32/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9839670450167443
+Validation
+Batch: 0  over  9
+Epoch 32/60: train loss 0.0150, val loss 0.7680
+Epoch 32/60: train mF1 0.9840, val mF1 0.1102
+Time: 0:07:27.848423
+Epoch 33/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9831031007292346
+Validation
+Batch: 0  over  9
+Epoch 33/60: train loss 0.0162, val loss 0.7563
+Epoch 33/60: train mF1 0.9831, val mF1 0.1225
+Time: 0:07:35.477641
+Epoch 34/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9862169131813735
+Validation
+Batch: 0  over  9
+Epoch 34/60: train loss 0.0129, val loss 0.7809
+Epoch 34/60: train mF1 0.9862, val mF1 0.1069
+Time: 0:07:33.993170
+Epoch 35/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.988891192937761
+Validation
+Batch: 0  over  9
+Epoch 35/60: train loss 0.0108, val loss 0.7689
+Epoch 35/60: train mF1 0.9889, val mF1 0.1217
+Time: 0:07:37.683849
+Epoch 36/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9878034339846062
+Validation
+Batch: 0  over  9
+Epoch 36/60: train loss 0.0110, val loss 0.7647
+Epoch 36/60: train mF1 0.9878, val mF1 0.1129
+Time: 0:07:36.333315
+Epoch 37/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9861131673230095
+Validation
+Batch: 0  over  9
+Epoch 37/60: train loss 0.0132, val loss 0.7677
+Epoch 37/60: train mF1 0.9861, val mF1 0.1197
+Time: 0:07:31.587678
+Epoch 38/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.986311111111111
+Validation
+Batch: 0  over  9
+Epoch 38/60: train loss 0.0130, val loss 0.7689
+Epoch 38/60: train mF1 0.9863, val mF1 0.1153
+Time: 0:07:31.733798
+Epoch 39/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9860658167803142
+Validation
+Batch: 0  over  9
+Epoch 39/60: train loss 0.0136, val loss 0.7695
+Epoch 39/60: train mF1 0.9861, val mF1 0.1029
+Time: 0:07:38.584615
+Epoch 40/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9880017775144423
+Validation
+Batch: 0  over  9
+Epoch 40/60: train loss 0.0108, val loss 0.7767
+Epoch 40/60: train mF1 0.9880, val mF1 0.1221
+Time: 0:07:36.685312
+Epoch 41/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9879211320978152
+Validation
+Batch: 0  over  9
+Epoch 41/60: train loss 0.0121, val loss 0.7632
+Epoch 41/60: train mF1 0.9879, val mF1 0.1120
+Time: 0:07:32.036577
+Epoch 42/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.985945561288027
+Validation
+Batch: 0  over  9
+Epoch 42/60: train loss 0.0136, val loss 0.7688
+Epoch 42/60: train mF1 0.9859, val mF1 0.1201
+Time: 0:07:33.564375
+Epoch 43/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9872494366030127
+Validation
+Batch: 0  over  9
+Epoch 43/60: train loss 0.0123, val loss 0.7740
+Epoch 43/60: train mF1 0.9872, val mF1 0.1172
+Time: 0:07:10.669767
+Epoch 44/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9876199502428623
+Validation
+Batch: 0  over  9
+Epoch 44/60: train loss 0.0118, val loss 0.8075
+Epoch 44/60: train mF1 0.9876, val mF1 0.1078
+Time: 0:06:44.383210
+Epoch 45/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9916748140905993
+Validation
+Batch: 0  over  9
+Epoch 45/60: train loss 0.0083, val loss 0.7964
+Epoch 45/60: train mF1 0.9917, val mF1 0.1060
+Time: 0:06:44.371779
+Epoch 46/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9930691309756531
+Validation
+Batch: 0  over  9
+Epoch 46/60: train loss 0.0064, val loss 0.7871
+Epoch 46/60: train mF1 0.9931, val mF1 0.1118
+Time: 0:06:45.048867
+Epoch 47/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9896650774378869
+Validation
+Batch: 0  over  9
+Epoch 47/60: train loss 0.0093, val loss 0.7920
+Epoch 47/60: train mF1 0.9897, val mF1 0.1177
+Time: 0:06:44.356882
+Epoch 48/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.987731879333847
+Validation
+Batch: 0  over  9
+Epoch 48/60: train loss 0.0120, val loss 0.7980
+Epoch 48/60: train mF1 0.9877, val mF1 0.1115
+Time: 0:06:43.172482
+Epoch 49/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9875673435557397
+Validation
+Batch: 0  over  9
+Epoch 49/60: train loss 0.0117, val loss 0.7888
+Epoch 49/60: train mF1 0.9876, val mF1 0.1080
+Time: 0:06:43.796019
+Epoch 50/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9905246950136207
+Validation
+Batch: 0  over  9
+Epoch 50/60: train loss 0.0091, val loss 0.7779
+Epoch 50/60: train mF1 0.9905, val mF1 0.1124
+Time: 0:06:43.458401
+Epoch 51/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9897548264834775
+Validation
+Batch: 0  over  9
+Epoch 51/60: train loss 0.0103, val loss 0.7909
+Epoch 51/60: train mF1 0.9898, val mF1 0.1061
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+Time: 0:06:43.767826
+Epoch 52/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9877069818418792
+Validation
+Batch: 0  over  9
+Epoch 52/60: train loss 0.0118, val loss 0.7792
+Epoch 52/60: train mF1 0.9877, val mF1 0.1153
+Time: 0:06:42.553758
+Epoch 53/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9877018817602607
+Validation
+Batch: 0  over  9
+Epoch 53/60: train loss 0.0114, val loss 0.8154
+Epoch 53/60: train mF1 0.9877, val mF1 0.1016
+Time: 0:06:43.951438
+Epoch 54/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9893938496178232
+Validation
+Batch: 0  over  9
+Epoch 54/60: train loss 0.0100, val loss 0.7858
+Epoch 54/60: train mF1 0.9894, val mF1 0.1193
+Time: 0:06:43.047671
+Epoch 55/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9911195311112427
+Validation
+Batch: 0  over  9
+Epoch 55/60: train loss 0.0081, val loss 0.7889
+Epoch 55/60: train mF1 0.9911, val mF1 0.1130
+Time: 0:06:43.631821
+Epoch 56/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9910550322848173
+Validation
+Batch: 0  over  9
+Epoch 56/60: train loss 0.0084, val loss 0.7868
+Epoch 56/60: train mF1 0.9911, val mF1 0.1202
+Time: 0:06:42.762599
+Epoch 57/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9920942764930565
+Validation
+Batch: 0  over  9
+Epoch 57/60: train loss 0.0079, val loss 0.7934
+Epoch 57/60: train mF1 0.9921, val mF1 0.1197
+Time: 0:06:43.619529
+Epoch 58/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.991999525897831
+Validation
+Batch: 0  over  9
+Epoch 58/60: train loss 0.0075, val loss 0.7870
+Epoch 58/60: train mF1 0.9920, val mF1 0.1315
+Time: 0:06:43.609639
+Epoch 59/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9907001540101884
+Validation
+Batch: 0  over  9
+Epoch 59/60: train loss 0.0089, val loss 0.7785
+Epoch 59/60: train mF1 0.9907, val mF1 0.1300
+Time: 0:06:42.821206
+Epoch 60/60
+Training
+Batch: 0  over  25
+F1 of the heterogenity class: 0.9893601256631398
+Validation
+Batch: 0  over  9
+Epoch 60/60: train loss 0.0100, val loss 0.7886
+Epoch 60/60: train mF1 0.9894, val mF1 0.1272
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/home/bertille/.local/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+Time: 0:06:43.483817
+Testing
+Batch: 0  over  10
+Test F1 by class: [0.29299681 0.         0.         0.03921569 0.         0.13509474
+ 0.40981889]
+Test mF1: 0.12530373314526894
+Plot saved at: ../../results/resnet18_64_l1/random_shuffling/all/resnet18_multi_label_64_random_60epochs_bs4096_only_fronteer/metrics_test/test_preds.png
+Reassembling the patches...
+f1_by_class:  [0.12323492 0.         0.         0.         0.         0.
+ 0.        ]
+post_f1_by_class [0.00326264 0.         0.         0.         0.         0.        ]
+Reassembling the patches...
+Reassembling the patches...
+f1_by_class:  [0.07272727 0.         0.         0.         0.         0.00954654
+ 0.        ]
+post_f1_by_class [0.         0.         0.         0.         0.00911162 0.        ]
+Reassembling the patches...
+Reassembling the patches...
+f1_by_class:  [0.06535948 0.         0.         0.         0.        ]
+post_f1_by_class [0. 0. 0. 0. 0.]
+Reassembling the patches...

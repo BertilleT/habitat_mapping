@@ -1,0 +1,236 @@
+pre_trained False
+----------------------- UNet -----------------------
+Patch size: 64
+Classification level: 1
+Using device: cuda
+Loading data...
+Data loading settings:
+Splitting data: [0.68, 0.2]
+Stratified: zone
+Year: all
+Patches: all
+Batch size: 4096
+Normalisation: channel_by_channel
+No data augmentation
+The seed to shuffle the data is  1
+The data are from  all  year
+Nbumber of unique zones: 108
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey2
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+hey3
+/home/bertille/.local/lib/python3.8/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Creating model...
+Model settings:
+Pretrained: False
+Classes: 7
+The model is:  Resnet18
+Batch 1/25
+Batch 2/25
+Batch 3/25
+Batch 4/25
+Batch 5/25
+Batch 6/25
+Batch 7/25
+Batch 8/25
+Batch 9/25
+Batch 10/25
+Batch 11/25
+Batch 12/25
+Batch 13/25
+Batch 14/25
+Batch 15/25
+Batch 16/25
+Batch 17/25
+Batch 18/25
+Batch 19/25
+Batch 20/25
+Batch 21/25
+Batch 22/25
+Batch 23/25
+Batch 24/25
+Batch 25/25
+Batch 1/8
+Batch 2/8
+Batch 3/8
+Batch 4/8
+Batch 5/8
+Batch 6/8
+Batch 7/8
+Batch 8/8
+Features shape: (106332, 512)
+Running t-SNE on features...
+79892
+Saved features and labels
+Batch 1/25
+Batch 2/25
+Batch 3/25
+Batch 4/25
+Batch 5/25
+Batch 6/25
+Batch 7/25
+Batch 8/25
+Batch 9/25
+Batch 10/25
+Batch 11/25
+Batch 12/25
+Batch 13/25
+Batch 14/25
+Batch 15/25
+Batch 16/25
+Batch 17/25
+Batch 18/25
+Batch 19/25
+Batch 20/25
+Batch 21/25
+Batch 22/25
+Batch 23/25
+Batch 24/25
+Batch 25/25
+Batch 1/8
+Batch 2/8
+Batch 3/8
+Batch 4/8
+Batch 5/8
+Batch 6/8
+Batch 7/8
+Batch 8/8
+Features shape: (28106, 512)
+Running t-SNE on features...
+22226
+Saved features and labels
+Batch 1/25
+Batch 2/25
+Batch 3/25
+Batch 4/25
+Batch 5/25
+Batch 6/25
+Batch 7/25
+Batch 8/25
+Batch 9/25
+Batch 10/25
+Batch 11/25
+Batch 12/25
+Batch 13/25
+Batch 14/25
+Batch 15/25
+Batch 16/25
+Batch 17/25
+Batch 18/25
+Batch 19/25
+Batch 20/25
+Batch 21/25
+Batch 22/25
+Batch 23/25
+Batch 24/25
+Batch 25/25
+Traceback (most recent call last):
+  File "t_sne_one_class.py", line 134, in <module>
+    features_train = np.concatenate(features_train) # Concatenate the list of arrays
+  File "<__array_function__ internals>", line 200, in concatenate
+ValueError: need at least one array to concatenate

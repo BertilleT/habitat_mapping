@@ -5,14 +5,14 @@ import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
-model_name = 'Resnet18' # 'UNet', 'Resnet18'
-test_existing_model = False
+model_name = 'Resnet18' # 'UNet', 'Resnet18', 'Resnet34'
+test_existing_model = True
 patch_size = 64
 model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 #model_type = 'unet_256_l1/'
 
 if test_existing_model: 
-    name_setting = 'resnet18_multi_label_64_random_10epochs_bs256'
+    name_setting = 'resnet18_multi_label_64_zone_60epochs_bs4096'
     #laod all variables from csv best_epoch_to_test
     best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
     #remov the space before alla values and name columns
@@ -31,9 +31,12 @@ if test_existing_model:
     random_seed = int(random_seed)
     bs = int(bs)
     in_channels = int(in_channels)
-    if pre_trained == True:
+    print('pre_trained', pre_trained)
+    if pre_trained == 'imagenet': # Imagenet or IGN
         if model_name == 'UNet':
-            encoder_weights = 'imagenet'
+            encoder_weights = pre_trained
+        else:
+            encoder_weights = None
     else: 
         encoder_weights = None
 
@@ -49,24 +52,30 @@ if test_existing_model:
     plot_re_assemble = True
     tune_alpha1 = False
     tune_alpha2 = False
+    post_processing = True
+    nb_output_heads = 1
 
 # ---------------------------------------
 
 else:
-    stratified = 'zone' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet18_multi_label_64_zone_60epochs_bs4096' # 
+    stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
+    name_setting = 'resnet64_multi_label_64_random_60epochs_bs4096' # 
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
     random_seed = 1
     data_augmentation = False
-    pre_trained = False
+    pre_trained = None # 'IGN' or 'imagenet'
     year = 'all'# '2023' or 'all'
     in_channels = 4
     training = True
     testing = True
+
     plot_test = True
-    plot_re_assemble = True
+    plot_re_assemble = False
+    post_processing = False
+
     tune_alpha1 = False
     tune_alpha2 = False
+
     bs = 4096
     nb_epochs = 60
     patience = 60
@@ -78,7 +87,8 @@ else:
     lr = 1e-3
     optimizer = 'Adam' # 'Adam' or 'AdamW'
     loss = 'BCEWithDigits' # 'Dice' or 'CrossEntropy' or 'BCEWithDigits'
-    classes = 7 # 6
+    classes = 7 # 6, 7 
+    nb_output_heads = 1
     if pre_trained == True:
         if model_name == 'UNet':
             encoder_weights = 'imagenet'
@@ -98,7 +108,7 @@ elif stratified == 'acquisition':
 elif stratified == 'zone2023':
     parent = 'stratified_shuffling_zone2023/'
 
-if model_name == 'Resnet18':
+if model_name in ['Resnet18', 'Resnet34']:
     heterogeneity_path = heterogeneity + '/'
 else:
     heterogeneity_path = ''
@@ -148,12 +158,12 @@ data_loading_settings = {
 }
 
 model_settings = {
-    'model': model_name, # UNet, Resnet18
+    'model': model_name, # UNet, Resnet18, Resnet34
     'encoder_name': "efficientnet-b7",
     'pre_trained': pre_trained, # True
     'encoder_weights': encoder_weights,
     'in_channels': in_channels,
-    'classes': classes if patch_level_param['level'] == 1 else 113, # 113 to be checked
+    'classes': classes, # 113 to be checked
     'path_to_intermed_model': f'../../{config_name}/models/unet_intermed',
     'path_to_intermed_optim': f'../../{config_name}/models/optim_intermed',
     'path_to_last_model': f'../../{config_name}/models/unet_last.pt',
@@ -161,6 +171,8 @@ model_settings = {
     'path_to_best_model': f'../../{config_name}/models/unet_intermed_epoch{best_epoch}.pt',#f'../../{config_name}/models/unet_intermed_epoch34.pt',#f'../../{config_name}/models/unet_intermed_epoch10.pt',#f'../../{config_name}/models/unet_intermed_epoch3.pt',#f'../../{config_name}/models/unet_intermed_epoch63.pt',#f'../../{config_name}/models/unet_intermed_epoch35.pt',
     'task': task, # image_classif, pixel_classif
     'labels': labels, # multi, single
+    'nb_output_heads': nb_output_heads, # 1 or 2
+    'weights_ign_path': '../../pre_trained_model_ign/FLAIR-INC_rgbi_15cl_resnet34-unet_weights.pth', 
     }
 
 training_settings = {
@@ -176,23 +188,44 @@ training_settings = {
     'losses_metric_path': f'../../{config_name}/metrics_train_val/losses_metric.csv',
     'tune_alpha1': tune_alpha1,
     'tune_alpha2': tune_alpha2,
-    'alpha1': 0.6, 
-    'alpha2': 0.4,
+    'alpha1': 0.5, 
+    'alpha2': 0.5,
+    'beta': 0.5,
 }
 
 plotting_settings = {
+    'post_processing': post_processing, # 'True' or 'False
     'plot_test': plot_test,
     'losses_path': f'../../{config_name}/metrics_train_val/losses.png',
     'metrics_path': f'../../{config_name}/metrics_train_val/metrics_train_val.png',
     'nb_plots': 16,
     #'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
-    'my_colors_map': {
+    ''''my_colors_map': {
         0: '#789262',  # Vert olive
         1: '#555555',  # Gris
         2: '#006400',  # Vert foncé
         3: '#00ff00',  # Vert vif
         4: '#ff4500',  # Rouge
         5: '#8a2be2',  # Violet
+    }, '''
+    'my_colors_map': {
+        0: '#789262',
+        1: '#91a267',
+        2: '#aab36c',
+        3: '#555555',
+        4: '#656565',
+        5: '#757575',
+        6: '#858585',
+        7: '#959595',
+        8: '#006400',
+        9: '#198c19',
+        10: '#32b432',
+        11: '#4bdc4b',
+        12: '#00ff00',
+        13: '#ff4500',
+        14: '#ff6e19',
+        15: '#ff9732',
+        16: '#8a2be2'
     }, 
     'habitats_dict' : {
         0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",

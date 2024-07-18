@@ -19,8 +19,9 @@ from datetime import datetime
 from utils.data_utils import *
 from utils.plotting_utils import *
 from utils.train_val_test_utils import *
+from utils.resnet_model import *
 from settings import *
-
+from utils.post_processing import *
 import warnings
 warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
@@ -86,6 +87,8 @@ img, msk = next(iter(train_dl))
 print(f'Image: min: {img.min()}, max: {img.max()}')
 # print unique values of the mask
 print(f'Mask unique values: {np.unique(msk[0])}')
+# nb of dimensions of the mask
+print(f'Mask nb of dimensions: {msk[0].shape}')
 '''
 train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], task = model_settings['task'])
 plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
@@ -114,26 +117,10 @@ if model_settings['model'] == 'UNet':
         classes=model_settings['classes'], 
     )
 
-elif model_settings['model'] == 'Resnet18':
-    print('The model is Resnet18')
-    model = models.resnet18(weights=model_settings['pre_trained'])
-    num_channels = model_settings['in_channels']
-    # Extract the first conv layer's parameters
-    num_filters = model.conv1.out_channels
-    kernel_size = model.conv1.kernel_size
-    stride = model.conv1.stride
-    padding = model.conv1.padding
-    # Replace the first conv layer with a new one
-    conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
-    if model_settings['pre_trained']:
-        # take the mean of all 3 channels wigths
-        mean_weights = model.conv1.weight.data.mean(dim=1, keepdim=True)
-        # initiliaze the last channel of the pre trained weights with the mean of the 3 channels
-        conv1.weight.data = torch.cat([model.conv1.weight.data, mean_weights], dim=1)
-        print('Pretrained weights loaded')
-    model.conv1 = conv1
-    # Replace the classifier head
-    model.fc = nn.Linear(512, model_settings['classes'])    
+elif model_settings['model'] in ['Resnet18', 'Resnet34']:
+    print('The model is: ', model_settings['model'])
+    model = Ecomed_ResNet(model_settings)
+      
 if training_settings['restart_training'] is not None:
     model.load_state_dict(torch.load(model_settings['path_to_last_model']))
     print('Model from last epoch', training_settings['restart_training'], ' loaded')
@@ -142,7 +129,7 @@ model.to(device)
 # METRIC
 if model_settings['model'] == 'UNet':
     metric = 'mIoU'
-elif model_settings['model'] == 'Resnet18':
+elif model_settings['model'] in ['Resnet18', 'Resnet34']:
     metric = 'mF1'
 
 # OPTIMIZER
@@ -217,7 +204,7 @@ if training_settings['training']:
         model.to(device)
         model.train()
         
-        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'], model_settings['model'], model_settings['labels'], training_settings['alpha1'], training_settings['alpha2'])
+        train_loss, tr_metric = train(model, train_dl, criterion, optimizer, device, model_settings['classes'], model_settings['model'], model_settings['labels'], training_settings['alpha1'], training_settings['alpha2'], model_settings['nb_output_heads'])
         training_losses.append(train_loss)
         training_metric.append(tr_metric)
         model.eval()
@@ -229,6 +216,7 @@ if training_settings['training']:
 
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train loss {train_loss:.4f}, val loss {val_loss:.4f}')
         print(f'Epoch {epoch+1}/{training_settings["nb_epochs"]}: train {metric} {tr_metric:.4f}, val {metric} {val_metric:.4f}')
+        
         if val_loss <= best_val_loss or val_metric >= best_val_metric:
             count = 0
             if val_loss <= best_val_loss:
@@ -523,9 +511,14 @@ if plotting_settings['plot_re_assemble']:
     model.to('cpu')
 
     new_colors_maps = {k: v for k, v in plotting_settings['my_colors_map'].items()}
-    new_colors_maps[6] = '#000000'  # Noir
-    new_colors_maps[7] = '#c7c7c7'  # Gris
-    new_colors_maps[8] = '#ffffff'  # Blanc
+    if patch_level_param['level'] == 1:
+        new_colors_maps[6] = '#000000'  # Noir
+        new_colors_maps[7] = '#c7c7c7'  # Gris
+        new_colors_maps[8] = '#ffffff'  # Blanc
+    elif patch_level_param['level'] == 2:
+        new_colors_maps[17] = '#000000'
+        new_colors_maps[18] = '#c7c7c7'
+        new_colors_maps[19] = '#ffffff'
 
     customs_color = list(new_colors_maps.values())
     bounds = list(new_colors_maps.keys())
@@ -539,3 +532,37 @@ if plotting_settings['plot_re_assemble']:
 
         dataset = EcomedDataset(msk_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'], path_mask_name = True)
         plot_reassembled_patches(zone, model, dataset, patch_level_param['patch_size'], training_settings['alpha1'], my_cmap, my_norm, plotting_settings['re_assemble_patches_path'][:-4])
+        if plotting_settings['post_processing']:
+            i_indices, j_indices, true_classes, true_heterogenity, predicted_classes, predicted_heterogenity, probability_vectors = plot_reassembled_patches(zone, model, dataset, patch_level_param['patch_size'], training_settings['alpha1'], None, None, plotting_settings['re_assemble_patches_path'][:-4], post_processing = True) 
+            # FIRST STEP: 
+            # BUILD A DATAFRAME WITH COLUMN I, J, TRUE CLASS, TRUE HETEROGENITY, CLASS PREDICTED, HETEROGENITY PREDICTED
+            df = pd.DataFrame({'i': i_indices, 'j': j_indices, 'true_class': true_classes, 'true_heterogenity': true_heterogenity, 'predicted_class': predicted_classes, 'predicted_heterogenity': predicted_heterogenity, 'probability_vector': probability_vectors})
+            # probability vector must have only 6 items. Keep only the 6 first items
+            df['probability_vector'] = df['probability_vector'].apply(lambda x: [float(t.item()) for t in x[0][:6]])
+            # print item with i = 0 and j = 36
+            # FILTER TO KEEP ONLY PATCHES PREDICTED AS HOMOGENOUS WHEN PREDICTED_HETEROGENITY IS 0
+            homogenous_df = df[df['predicted_heterogenity'] == 0]
+            true_classes = homogenous_df['true_class'].tolist()
+            predicted_classes = homogenous_df['predicted_class'].tolist()
+            f1_by_class = f1_score(true_classes, predicted_classes, average=None)
+            print('f1_by_class: ', f1_by_class)
+
+            # SECOND STEP
+            # LOOP ON DATAFRAME,
+            # for i, j in homogenous_df: 
+            for i, j in zip(homogenous_df['i'], homogenous_df['j']):
+                old_class = homogenous_df[(homogenous_df['i'] == i) & (homogenous_df['j'] == j)]['predicted_class'].values[0]
+                energies = energie(i, j, homogenous_df, training_settings['beta'])
+                # select the index of the vector with minimum energy
+                new_class = np.argmin(energies) # return the index of the minimum value
+                # update predicted class from homogenous_df with index i and j with new_class
+                homogenous_df.loc[(homogenous_df['i'] == i) & (homogenous_df['j'] == j), 'predicted_class'] = new_class
+
+            post_predicted_classes = homogenous_df['predicted_class'].tolist()
+            post_f1_by_class = f1_score(true_classes, post_predicted_classes, average=None)
+
+            print('post_f1_by_class', post_f1_by_class)
+
+            # check homogenous_df i = 0 and j = 36 ? 
+            # reassamble the image with the new predicted classes
+            plot_reassembled_patches(zone, model, dataset, patch_level_param['patch_size'], training_settings['alpha1'], my_cmap, my_norm, plotting_settings['re_assemble_patches_path'][:-4], False, True, homogenous_df)

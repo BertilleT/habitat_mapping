@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 # SETTINGS
-msk_folder = Path(f'../../data/patch256/msk/')
+msk_folder = Path(f'../../data/patch64/msk/')
 msk_paths = list(msk_folder.rglob('*.tif'))
 print(f'Number of unique masks: {len(set(msk_paths))}')
 
@@ -18,7 +18,7 @@ heterogen_masks = []
 for msk_path in msk_paths:
     print(f'Processing mask {i+1}/{len(msk_paths)}')
     with rasterio.open(msk_path) as src:
-        msk = src.read(1)
+        msk = src.read(2)
     print(np.unique(msk))
     if len(np.unique(msk)) == 1:
         print(f'{msk_path} has only one class, we do not want to include it')
@@ -29,4 +29,4 @@ print(f'Number of unique masks after removing single class masks: {len(set(heter
 
 # save to csv the list of masks without masks single class msk_paths
 df = pd.DataFrame(heterogen_masks)
-df.to_csv(f'../../csv/heterogen_masks.csv', index=False)
+df.to_csv(f'../../csv/heterogen_masks_l2.csv', index=False)
