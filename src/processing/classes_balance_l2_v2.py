@@ -31,7 +31,8 @@ warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarni
 
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
-
+import matplotlib.patches as mpatches
+'''
 print('----------------------- UNet -----------------------')
 print(f'Patch size: {patch_level_param["patch_size"]}')
 print(f'Classification level: {patch_level_param["level"]}')
@@ -109,27 +110,10 @@ for col in balance_classes.columns:
 #drop rows when values from total are 0
 balance_classes = balance_classes[balance_classes['total'] != 0]
 balance_classes_total = balance_classes['total']
-# drop rows with 0 values
-# get the classes unique in ascending order bt key 0, 1, 2, 3, 4? 5
-#balance_classes_total = balance_classes_total.sort_values(ascending=True)
-print(balance_classes_total)
 
-print(balance_classes)
-# barplot of classes balance
-fig, ax = plt.subplots()
-ax.grid(axis='y')
-x = np.arange(len(balance_classes))
-width = 0.2
-colors = {'train': 'red', 'val': 'blue', 'test': 'green', 'total': 'black'}
-for i, col in enumerate(balance_classes.columns):
-    ax.bar(x + i*width, balance_classes[col], width, label=col, color=colors[col])
-# add grid
-
-ax.set_xticks(x + width)
-ax.set_xticklabels(balance_classes.index)
-ax.legend()
-plt.savefig(f'classes_balance_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
-
+print(plotting_settings)
+print(plotting_settings['my_colors_map'])
+print(balance_classes_total.index)
 
 fig, ax = plt.subplots()
 x = np.arange(len(balance_classes_total))
@@ -140,3 +124,28 @@ for i, v in enumerate(balance_classes_total):
 ax.set_xticks(x)
 ax.set_xticklabels(balance_classes_total.index)
 plt.savefig(f'classes_balance_total_{data_loading_settings["stratified"]}_seed{data_loading_settings["random_seed"]}.png')
+
+# create a legend with patch, '''
+
+# Load the CSV file
+df = pd.read_csv('../../csv/l2_dict.csv')
+print(df.head())
+
+# Create the legend
+legend = []
+for key, value in plotting_settings['my_colors_map'].items():
+    if key != 16: 
+        label = df[df['int_grouped'] == key]['name'].values[0]
+    else:
+        label = 'Autre'
+    legend.append(mpatches.Patch(color=value, label=label))
+
+# Create the plot
+plt.figure(figsize=(14, 7))  # Adjust the figure size as needed
+#increase space between rows
+plt.subplots_adjust(hspace=0.5)
+plt.axis('off')
+plt.legend(handles=legend, frameon=False, fontsize=12)  # Adjust the font size as needed
+
+# Save the plot
+plt.savefig('l2_legend.png')

@@ -1,0 +1,12 @@
+pre_trained False
+Starting to extract features for test data...
+Labels shape: (109467, 6)
+[[0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0.]
+ ...
+ [0. 1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0.]]
+Features shape: (109467, 512)
+Running t-SNE on features...

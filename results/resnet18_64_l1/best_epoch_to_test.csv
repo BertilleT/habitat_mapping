@@ -1,5 +1,6 @@
 stratified, name_setting, random_seed, data_augmentation, pre_trained, in_channels, training, plot_test, bs, nb_epochs, patience, best_epoch, normalisation, year, location
 random, resnet18_multi_label_64_random_10epochs_bs256, 1, False, False, 4, False, True, 256, 10, 10, 1, channel_by_channel, all, all
-random, resnet18_multi_label_64_random_60epochs_bs4096, 1, False, False, 4, False, True, 4096, 60, 60, 5, channel_by_channel, all, all
+random, resnet18_multi_label_64_random_60epochs_bs4096, 1, False, False, 4, False, True, 4096, 60, 60, 35, channel_by_channel, all, all
 random, resnet18_multi_label_64_random_60epochs_bs4096_pre_trained, 1, False, True, 4, False, True, 4096, 60, 60, 4, channel_by_channel, all, all
-zone, resnet18_multi_label_64_zone_60epochs_bs4096, 1, False, False, 4, False, True, 4096, 60, 60, 8, channel_by_channel, all, all
+zone, resnet18_multi_label_64_zone_60epochs_bs4096, 1, False, False, 4, False, True, 4096, 60, 60, 30, channel_by_channel, all, all
+random, resnet18_multi_label_64_random_60epochs_bs4096_augmented, 1, True, False, 4, False, True, 4096, 120, 120, 80, channel_by_channel, all, all

@@ -469,6 +469,10 @@ if training_settings['testing']:
             plt.ylabel('True labels')
             plt.title(f'Normalized confusion matrix for class {i}')
             plt.savefig(plotting_settings['confusion_matrix_path'].replace('.png', f'_class_{i}.png'))
+        
+        confusion_matrix_homo = metrics['confusion_matrix_homo']
+        #plot it
+        
 
 # PLOTTING TEST PREDICTIONS
 if plotting_settings['plot_test']:

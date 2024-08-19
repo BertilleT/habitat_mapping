@@ -200,14 +200,14 @@ plotting_settings = {
     'metrics_path': f'../../{config_name}/metrics_train_val/metrics_train_val.png',
     'nb_plots': 16,
     #'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
-    ''''my_colors_map': {
-        0: '#789262',  # Vert olive
-        1: '#555555',  # Gris
-        2: '#006400',  # Vert foncé
-        3: '#00ff00',  # Vert vif
-        4: '#ff4500',  # Rouge
-        5: '#8a2be2',  # Violet
-    }, '''
+    #my_colors_map': {
+    #    0: '#789262',  # Vert olive
+    #    1: '#555555',  # Gris
+    #    2: '#006400',  # Vert foncé
+    #    3: '#00ff00',  # Vert vif
+    #    4: '#ff4500',  # Rouge
+    #    5: '#8a2be2',  # Violet
+    #}, '''
     'my_colors_map': {
         0: '#789262',
         1: '#91a267',
