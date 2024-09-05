@@ -248,11 +248,11 @@ def load_data_paths(img_folder, msk_folder, stratified, random_seed, split, **kw
         print('The data are from 2023')
 
     zones_to_plot = []
-    for msk_path in msk_paths:
-        if 'zone1_0_0' in str(msk_path) or 'zone100_0_0' in str(msk_path) or 'zone133_0_0' in str(msk_path):
-            zones_to_plot.append(msk_path)
+    #for msk_path in msk_paths:
+    #    if 'zone1_0_0' in str(msk_path) or 'zone100_0_0' in str(msk_path) or 'zone133_0_0' in str(msk_path):
+    #        zones_to_plot.append(msk_path)
     # drop the paths from msk_paths
-    msk_paths = [msk_path for msk_path in msk_paths if msk_path not in zones_to_plot]
+   # msk_paths = [msk_path for msk_path in msk_paths if msk_path not in zones_to_plot]
     if stratified == 'random':
         # Shuffle with random_seed fixed and split in 60 20 20
         np.random.seed(random_seed)

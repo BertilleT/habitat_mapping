@@ -28,11 +28,22 @@ not_mediterranean_zones = ['zone65', 'zone66', 'zone67', 'zone68', 'zone69','zon
 def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_dict, task, labels):
     if task == 'pixel_classif':
         classes_msk = np.unique(msk)
-        legend_colors_msk = [my_colors_map[c] for c in classes_msk]
-        custom_cmap_msk = mcolors.ListedColormap(legend_colors_msk)
+        #legend_colors_msk = [my_colors_map[c] for c in classes_msk]
+        #custom_cmap_msk = mcolors.ListedColormap(legend_colors_msk)
+
         classes_out = np.unique(out)
-        legend_colors_out = [my_colors_map[c] for c in classes_out]
-        custom_cmap_out = mcolors.ListedColormap(legend_colors_out)
+        #legend_colors_out = [my_colors_map[c] for c in classes_out]
+        #custom_cmap_out = mcolors.ListedColormap(legend_colors_out)
+
+        bounds_msk = list(classes_msk)
+        customs_color_msk = list([my_colors_map[c] for c in classes_msk])
+        my_cmap_msk = plt.cm.colors.ListedColormap(customs_color_msk)
+        my_norm_msk = plt.cm.colors.BoundaryNorm(bounds_msk, my_cmap_msk.N)
+
+        bounds_out = list(classes_out)
+        customs_color_out = list([my_colors_map[c] for c in classes_out])
+        my_cmap_out = plt.cm.colors.ListedColormap(customs_color_out)
+        my_norm_out = plt.cm.colors.BoundaryNorm(bounds_out, my_cmap_out.N) 
 
         fig, axs = plt.subplots(nb_imgs, 3, figsize=(15, 5*nb_imgs))
         # conatenate classes from classes_out and classes_msk
@@ -57,9 +68,9 @@ def plot_pred(img, msk, out, pred_plot_path, my_colors_map, nb_imgs, habitats_di
 
             axs[i, 0].imshow(rgb_img)
             axs[i, 0].set_title('Image')
-            axs[i, 1].imshow(msk[i], cmap=custom_cmap_msk)
+            axs[i, 1].imshow(msk[i], cmap=my_cmap_msk, norm=my_norm_msk)
             axs[i, 1].set_title('Mask')
-            axs[i, 2].imshow(out[i], cmap=custom_cmap_out)
+            axs[i, 2].imshow(out[i], cmap=my_cmap_out, norm=my_norm_out)
             axs[i, 2].set_title('Prediction')
 
         fig.legend(handles=legend_elements, loc='upper center', fontsize=18)

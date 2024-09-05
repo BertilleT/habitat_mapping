@@ -251,7 +251,7 @@ if training_settings['training']:
         param.to(device)
 
 else: 
-    plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
+    #plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
     model.to(device)
     model.load_state_dict(torch.load(model_settings['path_to_best_model']))
     print('Model ', model_settings['path_to_best_model'], ' loaded')
@@ -480,7 +480,9 @@ if plotting_settings['plot_test']:
     alpha2 = training_settings['alpha2']
     # plot img, original mask and prediction
     model.eval()
-    img, msk = next(iter(test_dl))
+    test_dl_iter = iter(test_dl)
+    first_batch = next(test_dl_iter)
+    img, msk = next(test_dl_iter)
     img, msk = img.to(device), msk.to(device)
     out = model(img)
     if model_settings['labels'] == 'single':

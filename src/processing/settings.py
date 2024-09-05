@@ -5,16 +5,17 @@ import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
-model_name = 'Resnet18' # 'UNet', 'Resnet18', 'Resnet34'
+model_name = 'UNet' # 'UNet', 'Resnet18', 'Resnet34'
 test_existing_model = True
-patch_size = 64
-model_type = f'resnet18_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
+patch_size = 256
+model_type = f'unet_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 #model_type = 'unet_256_l1/'
 
 if test_existing_model: 
-    name_setting = 'resnet18_multi_label_64_zone_60epochs_bs4096'
+    name_setting = '0_random_shuffling_seed1'
     #laod all variables from csv best_epoch_to_test
     best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
+    print(best_epoch_to_test)
     #remov the space before alla values and name columns
     best_epoch_to_test.columns = best_epoch_to_test.columns.str.strip()
     best_epoch_to_test = best_epoch_to_test.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
@@ -40,20 +41,22 @@ if test_existing_model:
     else: 
         encoder_weights = None
 
-    task = "image_classif"
+    task = "pixel_classif"
     heterogeneity = 'all'
     lr = 1e-3
     optimizer = 'Adam'
-    labels = "multi"
-    loss = 'BCEWithDigits'
-    classes = 7 # 6
-    testing = True
+    labels = "single"
+    loss = 'Dice'
+    classes = 6 # 6
+    testing = False
     plot_test = True
-    plot_re_assemble = True
+    plot_re_assemble = False
     tune_alpha1 = False
     tune_alpha2 = False
-    post_processing = True
+    post_processing = False
     nb_output_heads = 1
+    location = "all"
+    normalisation = "channel_by_channel"
 
 # ---------------------------------------
 
@@ -200,33 +203,33 @@ plotting_settings = {
     'metrics_path': f'../../{config_name}/metrics_train_val/metrics_train_val.png',
     'nb_plots': 16,
     #'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
-    #my_colors_map': {
-    #    0: '#789262',  # Vert olive
-    #    1: '#555555',  # Gris
-    #    2: '#006400',  # Vert foncé
-    #    3: '#00ff00',  # Vert vif
-    #    4: '#ff4500',  # Rouge
-    #    5: '#8a2be2',  # Violet
-    #}, '''
     'my_colors_map': {
-        0: '#789262',
-        1: '#91a267',
-        2: '#aab36c',
-        3: '#555555',
-        4: '#656565',
-        5: '#757575',
-        6: '#858585',
-        7: '#959595',
-        8: '#006400',
-        9: '#198c19',
-        10: '#32b432',
-        11: '#4bdc4b',
-        12: '#00ff00',
-        13: '#ff4500',
-        14: '#ff6e19',
-        15: '#ff9732',
-        16: '#8a2be2'
+        0: '#789262',  # Vert olive
+        1: '#555555',  # Gris
+        2: '#006400',  # Vert foncé
+        3: '#00ff00',  # Vert vif
+        4: '#ff4500',  # Rouge
+        5: '#8a2be2',  # Violet
     }, 
+    #'my_colors_map': {
+    #    0: '#789262',
+    #    1: '#91a267',
+    #    2: '#aab36c',
+    #    3: '#555555',
+    #    4: '#656565',
+    #    5: '#757575',
+    #    6: '#858585',
+    #    7: '#959595',
+    #    8: '#006400',
+    #    9: '#198c19',
+    #    10: '#32b432',
+    #    11: '#4bdc4b',
+    #    12: '#00ff00',
+    #    13: '#ff4500',
+    #    14: '#ff6e19',
+    #    15: '#ff9732',
+    #    16: '#8a2be2'
+    #}, 
     'habitats_dict' : {
         0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",
         1: "Landes fourres et toundras",
