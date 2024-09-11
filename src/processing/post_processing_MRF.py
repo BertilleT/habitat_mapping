@@ -1,6 +1,40 @@
-## PSEUDO-CODE
-## IMPROVE HOMOGENOUS PATCHES
-## F1 ONLY ON HOMOGENOUS PATCHES
+"""
+This script performs post-processing on habitat mapping predictions using a Markov Random Field (MRF) approach.
+Modules:
+    - pandas as pd
+    - sklearn.metrics.f1_score
+    - numpy as np
+    - settings: data_loading_settings, model_settings, patch_level_param, training_settings, plotting_settings
+    - utils.data_utils: EcomedDataset
+    - utils.plotting_utils: plot_reassembled_patches
+    - pathlib.Path
+    - torch
+    - torchvision.models as models
+    - torch.nn as nn
+    - matplotlib.pyplot as plt
+    - matplotlib.colors as mcolors
+Functions:
+    - energie(i, j): Computes the energy of a patch at position (i, j) based on its neighbors and probability vector.
+Global Variables:
+    - new_colors_maps: Dictionary mapping class indices to color codes.
+    - customs_color: List of custom color codes.
+    - bounds: List of class indices.
+    - my_cmap: Custom colormap for plotting.
+    - my_norm: Normalization for the custom colormap.
+    - beta: Weight parameter for energy computation.
+    - zone: Zone identifier for selecting specific mask paths.
+    - msk_paths: List of mask file paths for the specified zone.
+    - dataset: EcomedDataset object for loading image patches.
+    - model: Pre-trained ResNet18 model adapted for the specific task.
+    - homogenous_df: DataFrame containing patches predicted as homogenous.
+Workflow:
+    1. Load and preprocess data.
+    2. Load and adapt the pre-trained model.
+    3. Predict and reassemble patches.
+    4. Filter homogenous patches and compute F1 scores.
+    5. Perform MRF-based post-processing to update predicted classes.
+    6. Recompute F1 scores and reassemble the image with updated predictions.
+"""
 
 import pandas as pd
 from sklearn.metrics import f1_score

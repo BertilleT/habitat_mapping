@@ -1,4 +1,46 @@
 import numpy as np
+"""
+Main script for habitat mapping using deep learning models.
+This script performs the following tasks:
+1. Data Loading and Preprocessing
+2. Model Creation and Initialization
+3. Training and Validation
+4. Hyperparameter Tuning
+5. Testing and Evaluation
+6. Plotting Results
+Modules and Libraries:
+- numpy
+- pathlib
+- pandas
+- rasterio
+- matplotlib
+- torch
+- segmentation_models_pytorch
+- albumentations
+- datetime
+- utils (custom utility functions)
+- settings (configuration settings)
+Functions:
+- load_data_paths: Load paths for training, validation, and test datasets.
+- EcomedDataset: Custom dataset class for loading and transforming data.
+- train: Function to train the model.
+- valid_test: Function to validate or test the model.
+- tune_alpha1_valid: Function to tune alpha1 for multi-label classification.
+- tune_alpha2_valid: Function to tune alpha2 for multi-label classification.
+- plot_losses_metrics: Function to plot training and validation losses and metrics.
+- plot_pred: Function to plot predictions.
+- plot_reassembled_patches: Function to reassemble and plot patches.
+Settings:
+- patch_level_param: Parameters related to patch size and classification level.
+- data_loading_settings: Settings for data loading and augmentation.
+- model_settings: Settings for model architecture and parameters.
+- training_settings: Settings for training, validation, and testing.
+- plotting_settings: Settings for plotting results.
+Usage:
+Run this script to train, validate, and test the habitat mapping model. Adjust the settings in the settings module as needed.
+"""
+
+
 from pathlib import Path
 import pandas as pd
 import rasterio
@@ -31,7 +73,7 @@ from albumentations.pytorch import ToTensorV2
 print('----------------------- UNet -----------------------')
 print(f'Patch size: {patch_level_param["patch_size"]}')
 print(f'Classification level: {patch_level_param["level"]}')
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') #
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f'Using device: {device}')
 torch.cuda.empty_cache()
 gc.collect()
@@ -81,22 +123,6 @@ val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=Fals
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'])
 test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 
-#laod one img and msk
-img, msk = next(iter(train_dl))
-# print img high and low values
-print(f'Image: min: {img.min()}, max: {img.max()}')
-# print unique values of the mask
-print(f'Mask unique values: {np.unique(msk[0])}')
-# nb of dimensions of the mask
-print(f'Mask nb of dimensions: {msk[0].shape}')
-'''
-train_ds_plot = EcomedDataset_to_plot(train_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], transform = [transform_rgb, transform_all_channels], task = model_settings['task'])
-plot_patch_class_by_class(train_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'training set')
-val_ds_plot = EcomedDataset_to_plot(val_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
-plot_patch_class_by_class(val_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'validation set')
-test_ds_plot = EcomedDataset_to_plot(test_paths, data_loading_settings['img_folder'], channels = model_settings['in_channels'], task = model_settings['task'])
-plot_patch_class_by_class(test_ds_plot, 20, plotting_settings['habitats_dict'], plotting_settings['l2_habitats_dict'], 'test set')
-'''
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
@@ -122,7 +148,7 @@ elif model_settings['model'] in ['Resnet18', 'Resnet34']:
     model = Ecomed_ResNet(model_settings)
       
 if training_settings['restart_training'] is not None:
-    model.load_state_dict(torch.load(model_settings['path_to_last_model']))
+    model.load_state_dict(torch.load(model_settings['path_to_last_model'], map_location=device))
     print('Model from last epoch', training_settings['restart_training'], ' loaded')
 model.to(device)
 
@@ -160,7 +186,7 @@ if training_settings['optimizer'] == 'SGD':
 
 if training_settings['restart_training'] is not None:
     torch.cuda.empty_cache()
-    optimizer.load_state_dict(torch.load(model_settings['path_to_last_optim']))
+    optimizer.load_state_dict(torch.load(model_settings['path_to_last_optim'], map_location=device))
 
 ## METRIC
 
@@ -353,7 +379,7 @@ if training_settings['tune_alpha2']:
     plt.plot(recalls_3, precisions_3, color='#00ff00')
     plt.plot(recalls_4, precisions_4, color='#ff4500')
     plt.plot(recalls_5, precisions_5, color='#8a2be2')
-    plt.plot
+
     plt.xlabel('Recall')
     plt.ylabel('Precision')
     plt.title('Precision against Recall by class')
@@ -510,7 +536,7 @@ if plotting_settings['plot_test']:
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
-    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])'])
 
 if plotting_settings['plot_re_assemble']:
     model.eval()
@@ -546,7 +572,8 @@ if plotting_settings['plot_re_assemble']:
             # probability vector must have only 6 items. Keep only the 6 first items
             df['probability_vector'] = df['probability_vector'].apply(lambda x: [float(t.item()) for t in x[0][:6]])
             # print item with i = 0 and j = 36
-            # FILTER TO KEEP ONLY PATCHES PREDICTED AS HOMOGENOUS WHEN PREDICTED_HETEROGENITY IS 0
+            # Filter the dataframe to keep only the patches that are predicted as homogeneous, 
+            # i.e., where the predicted heterogeneity value is 0.
             homogenous_df = df[df['predicted_heterogenity'] == 0]
             true_classes = homogenous_df['true_class'].tolist()
             predicted_classes = homogenous_df['predicted_class'].tolist()
@@ -559,7 +586,7 @@ if plotting_settings['plot_re_assemble']:
             for i, j in zip(homogenous_df['i'], homogenous_df['j']):
                 old_class = homogenous_df[(homogenous_df['i'] == i) & (homogenous_df['j'] == j)]['predicted_class'].values[0]
                 energies = energie(i, j, homogenous_df, training_settings['beta'])
-                # select the index of the vector with minimum energy
+                new_class = np.argmin(energies) # Select the class with the minimum energy value, indicating the most likely new class for the patch
                 new_class = np.argmin(energies) # return the index of the minimum value
                 # update predicted class from homogenous_df with index i and j with new_class
                 homogenous_df.loc[(homogenous_df['i'] == i) & (homogenous_df['j'] == j), 'predicted_class'] = new_class
@@ -569,6 +596,6 @@ if plotting_settings['plot_re_assemble']:
 
             print('post_f1_by_class', post_f1_by_class)
 
-            # check homogenous_df i = 0 and j = 36 ? 
+            # Check the predicted and true class values in homogenous_df where i = 0 and j = 36 to ensure the correct class prediction after post-processing= 36 to ensure the correct class prediction
             # reassamble the image with the new predicted classes
             plot_reassembled_patches(zone, model, dataset, patch_level_param['patch_size'], training_settings['alpha1'], my_cmap, my_norm, plotting_settings['re_assemble_patches_path'][:-4], False, True, homogenous_df)

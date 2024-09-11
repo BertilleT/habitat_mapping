@@ -1,7 +1,7 @@
+import pandas as pd
+from pathlib import Path
 import torch.nn as nn
 import torch.optim as optim
-from pathlib import Path
-import pandas as pd
 
 ## SETTINGS
 # -------------------------------------------------------------------------------------------
@@ -13,10 +13,14 @@ model_type = f'unet_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
 
 if test_existing_model: 
     name_setting = '0_random_shuffling_seed1'
-    #laod all variables from csv best_epoch_to_test
-    best_epoch_to_test = pd.read_csv(f'../../results/{model_type}best_epoch_to_test.csv')
+    # load all variables from csv best_epoch_to_test
+    csv_path = f'../../results/{model_type}best_epoch_to_test.csv'
+    if Path(csv_path).exists():
+        best_epoch_to_test = pd.read_csv(csv_path)
+    else:
+        raise FileNotFoundError(f"CSV file not found: {csv_path}")
     print(best_epoch_to_test)
-    #remov the space before alla values and name columns
+    # remove the space before all values and name columns
     best_epoch_to_test.columns = best_epoch_to_test.columns.str.strip()
     best_epoch_to_test = best_epoch_to_test.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
     # take the row with same name_setting
@@ -32,8 +36,8 @@ if test_existing_model:
     random_seed = int(random_seed)
     bs = int(bs)
     in_channels = int(in_channels)
-    print('pre_trained', pre_trained)
-    if pre_trained == 'imagenet': # Imagenet or IGN
+    print(f'pre_trained: {pre_trained}')
+    if pre_trained.lower() == 'imagenet': # Imagenet or IGN
         if model_name == 'UNet':
             encoder_weights = pre_trained
         else:
@@ -92,7 +96,8 @@ else:
     loss = 'BCEWithDigits' # 'Dice' or 'CrossEntropy' or 'BCEWithDigits'
     classes = 7 # 6, 7 
     nb_output_heads = 1
-    if pre_trained == True:
+
+    if pre_trained:
         if model_name == 'UNet':
             encoder_weights = 'imagenet'
         else:
@@ -187,7 +192,7 @@ training_settings = {
     'nb_epochs': nb_epochs,
     'early_stopping': True,
     'patience': patience, 
-    'restart_training': None, # 42 if you want to restart training from a certain epoch, put the epoch number here, else put None
+    'restart_training': None, # if you want to restart training from a certain epoch, put the epoch number here, else put None
     'losses_metric_path': f'../../{config_name}/metrics_train_val/losses_metric.csv',
     'tune_alpha1': tune_alpha1,
     'tune_alpha2': tune_alpha2,
@@ -202,7 +207,6 @@ plotting_settings = {
     'losses_path': f'../../{config_name}/metrics_train_val/losses.png',
     'metrics_path': f'../../{config_name}/metrics_train_val/metrics_train_val.png',
     'nb_plots': 16,
-    #'my_colors_map': {0: '#87edc1', 1: '#789262', 2: '#006400', 3: '#00ff00', 4: '#ff4500', 5: '#555555'},
     'my_colors_map': {
         0: '#789262',  # Vert olive
         1: '#555555',  # Gris
@@ -230,7 +234,7 @@ plotting_settings = {
     #    15: '#ff9732',
     #    16: '#8a2be2'
     #}, 
-    'habitats_dict' : {
+    'l1_habitats_dict' : {
         0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",
         1: "Landes fourres et toundras",
         2: "Bois forets et autres habitats boises",
@@ -288,8 +292,8 @@ plotting_settings = {
     'plot_re_assemble': plot_re_assemble,
 }
 
-# Save important settings in a csv file: 
-'patch_size', 'level', 'stratified', 'random_seed', 'split' 'bs' 'encoder_name' 'encoder_weights' 'in_channels' 'classes' 'training' 'lr' 'criterion' 'optimizer' 'nb_epochs' 'early_stopping' 'patience'
+# Save important settings in a csv file if not already done
+
 settings = {
     'patch_size': patch_level_param['patch_size'],
     'level': patch_level_param['level'],
@@ -310,10 +314,9 @@ settings = {
     'patience': training_settings['patience'],
 }
 
-# save settings to csv if not already done
-
 for key in settings.keys():
     settings[key] = str(settings[key])
 settings_df = pd.DataFrame(settings, index=[0])
+
 if not Path(f'../../{config_name}/settings.csv').exists():
     settings_df.to_csv(f'../../{config_name}/settings.csv', index=False)

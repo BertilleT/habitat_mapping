@@ -1,7 +1,0 @@
-INFO:albumentations.check_version:A new version of Albumentations is available: 1.4.9 (you have 1.4.8). Upgrade using: pip install --upgrade albumentations
-Traceback (most recent call last):
-  File "main.py", line 20, in <module>
-    from settings import *
-  File "/home/bertille/WORKING_DIR/habitat_mapping/src/processing/settings.py", line 89, in <module>
-    splitting = seeds_splitting[zoneseed]
-KeyError: 'random1'
