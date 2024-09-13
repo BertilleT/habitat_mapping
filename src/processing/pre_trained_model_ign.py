@@ -1,5 +1,5 @@
-# study pre_trained model from IGN
-# load FLAIR-INC_rgb_12cl_resnet34-unet_weights.pth from ../../pre_trained_model_ign
+# load IGN weights FLAIR-INC_rgb_12cl_resnet34-unet_weights.pth from:  
+# https://huggingface.co/collections/IGNF/flair-models-landcover-semantic-segmentation-65bb67415a5dbabc819a95de
 
 import torch
 import torch.nn as nn

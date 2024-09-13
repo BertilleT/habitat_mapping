@@ -52,7 +52,7 @@ import matplotlib.colors as mcolors
 # remove limit on df display size of the largeur of a column with head()
 pd.set_option('display.max_colwidth', None)
 
-new_colors_maps = {k: v for k, v in plotting_settings['my_colors_map'].items()}
+new_colors_maps = {k: v for k, v in plotting_settings['colors_map'].items()}
 new_colors_maps[6] = '#000000'  # Noir
 new_colors_maps[7] = '#c7c7c7'  # Gris
 new_colors_maps[8] = '#ffffff'  # Blanc

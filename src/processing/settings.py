@@ -1,25 +1,61 @@
+'''
+This script contains all the settings to configure the model training and testing process.
+Global Variables:
+    - level: Level of the classification (1, 2)
+    - model_name: Name of the model (UNet, Resnet18, Resnet34)
+    - patch_size: Size of the image patches (256, 128, 64)
+    - test_existing_model: Boolean indicating whether to test an existing model
+    - model_type: Type of model based on the model name and patch size
+    - name_setting: Name of the folder where the model is saved and results are stored
+    - normalisation: Type of normalisation for the data (channel_by_channel, all_channels_together)
+    - random_seed: Seed for the random number generator
+    - data_augmentation: Boolean indicating whether to use data augmentation
+    - pre_trained: Type of pre-trained model (IGN, imagenet)
+    - year: Year of the data (2023, all)
+    - in_channels: Number of input channels (3, 4)
+    - training: Boolean indicating whether to train the model
+    - testing: Boolean indicating whether to test the model
+    - plot_test: Boolean indicating whether to plot the test results
+    - plot_re_assemble: Boolean indicating whether to plot the reassembled patches
+    - tune_alpha1: Boolean indicating whether to tune alpha1
+    - tune_alpha2: Boolean indicating whether to tune alpha2
+    - post_processing: Boolean indicating whether to use post-processing
+    - nb_output_heads: Number of output heads (1, 2)
+    - location: Location of the data (mediteranean, all)
+    - seeds_splitting: Dictionary containing the seeds for different stratified cases
+    - zoneseed: Seed for the stratified case
+    - splitting: Splitting values for the stratified case
+    - config_name: Path to the results based on the model type, parent, heterogeneity, and name setting
+    - parent: Parent of the stratified case
+    - heterogeneity_path: Path to the heterogeneity based on the heterogeneity value
+'''
+
 import pandas as pd
 from pathlib import Path
 import torch.nn as nn
 import torch.optim as optim
 
-## SETTINGS
-# -------------------------------------------------------------------------------------------
-model_name = 'UNet' # 'UNet', 'Resnet18', 'Resnet34'
-test_existing_model = True
-patch_size = 256
-model_type = f'unet_{patch_size}_l1/' # resnet18_256_l1/ or  unet_256_l1/
-#model_type = 'unet_256_l1/'
+## ----------------------------------------------------------------------- SETTINGS ----------------------------------------------------------------------- ##
+level = 1
+model_name = 'Resnet18' # 'UNet', 'Resnet18', 'Resnet34'
+patch_size = 256 # 256, 128 or 64
+test_existing_model = True # True or False
 
-if test_existing_model: 
-    name_setting = '0_random_shuffling_seed1'
+
+# -------------------------------------------------------------------------------------------
+model_type = f'{model_name.lower()}_{patch_size}_l{level}/'
+
+# -------------------------------------------------------------------------------------------
+# If you want to test an existing model
+# -------------------------------------------------------------------------------------------
+if test_existing_model: # if you want to test an existing model
+    name_setting = '0_random_shuffling_seed1' # choose a name for the folder where the model is saved and where the results will be saved
     # load all variables from csv best_epoch_to_test
-    csv_path = f'../../results/{model_type}best_epoch_to_test.csv'
+    csv_path = f'../../results/{model_type}best_epoch_to_test.csv' # look for epoch to test in this csv
     if Path(csv_path).exists():
         best_epoch_to_test = pd.read_csv(csv_path)
     else:
         raise FileNotFoundError(f"CSV file not found: {csv_path}")
-    print(best_epoch_to_test)
     # remove the space before all values and name columns
     best_epoch_to_test.columns = best_epoch_to_test.columns.str.strip()
     best_epoch_to_test = best_epoch_to_test.apply(lambda x: x.str.strip() if x.dtype == "object" else x) 
@@ -45,35 +81,37 @@ if test_existing_model:
     else: 
         encoder_weights = None
 
-    task = "pixel_classif"
-    heterogeneity = 'all'
-    lr = 1e-3
-    optimizer = 'Adam'
-    labels = "single"
-    loss = 'Dice'
+    task = "pixel_classif" # 'image_classif', 'pixel_classif'
+    heterogeneity = 'all' # 'homogeneous', 'heterogeneous', 'all'
+    lr = 1e-3 
+    optimizer = 'Adam' # 'Adam', 'AdamW'
+    labels = "single" # 'multi', 'single'
+    loss = 'Dice' # 'Dice', 'CrossEntropy', 'BCEWithDigits'
     classes = 6 # 6
-    testing = False
-    plot_test = True
-    plot_re_assemble = False
-    tune_alpha1 = False
-    tune_alpha2 = False
-    post_processing = False
-    nb_output_heads = 1
-    location = "all"
-    normalisation = "channel_by_channel"
+    testing = False # True, False
+    plot_test = True 
+    plot_re_assemble = False 
+    tune_alpha1 = False 
+    tune_alpha2 = False 
+    post_processing = False 
+    nb_output_heads = 1 # 1, 2
+    location = "all" # 'mediteranean', 'all'
+    normalisation = "channel_by_channel" # 'all_channels_together', 'channel_by_channel'
 
-# ---------------------------------------
 
+# -------------------------------------------------------------------------------------------
+# If you want to train a new model
+# -------------------------------------------------------------------------------------------
 else:
     stratified = 'random' # 'random', 'zone', 'image', 'acquisition', 'zone_mediteranean', 'zone2023'
-    name_setting = 'resnet64_multi_label_64_random_60epochs_bs4096' # 
+    name_setting = 'resnet64_multi_label_64_random_60epochs_bs4096' # choose a name for the folder where the model is saved and where the results will be saved
     normalisation = "channel_by_channel" # "all_channels_together" or "channel_by_channel"
-    random_seed = 1
+    random_seed = 1 
     data_augmentation = False
     pre_trained = None # 'IGN' or 'imagenet'
     year = 'all'# '2023' or 'all'
-    in_channels = 4
-    training = True
+    in_channels = 4 # 3 or 4
+    training = True 
     testing = True
 
     plot_test = True
@@ -83,12 +121,12 @@ else:
     tune_alpha1 = False
     tune_alpha2 = False
 
-    bs = 4096
-    nb_epochs = 60
-    patience = 60
+    bs = 4096 
+    nb_epochs = 60 
+    patience = 60 # early stopping
     best_epoch = 1
     task = "image_classif" # 'image_classif' or 'pixel_classif'
-    labels = "multi" # 'multi_label' or 'single_label'
+    labels = "multi" # 'multi' or 'single'
     heterogeneity = 'all' # 'homogeneous' or 'heterogeneous', 'all'
     location ='all' # 'mediteranean' or 'all'
     lr = 1e-3
@@ -105,16 +143,12 @@ else:
     else: 
         encoder_weights = None
 
-if stratified == 'random':
-    parent = 'random_shuffling/'
-elif stratified == 'zone':
-    parent = 'stratified_shuffling_by_zone/'
-elif stratified == 'image':
-    parent = 'stratified_shuffling_by_image/'
-elif stratified == 'acquisition':
-    parent = 'stratified_shuffling_acquisition/'
-elif stratified == 'zone2023':
-    parent = 'stratified_shuffling_zone2023/'
+
+# -------------------------------------------------------------------------------------------
+# The path to the results is defined according to the following structure:
+#   - results/model_type/parent/heterogeneity/name_setting
+# -------------------------------------------------------------------------------------------
+parent = stratified
 
 if model_name in ['Resnet18', 'Resnet34']:
     heterogeneity_path = heterogeneity + '/'
@@ -123,6 +157,9 @@ else:
 
 config_name = 'results/'  + model_type + parent + heterogeneity_path + name_setting
 
+
+# -------------------------------------------------------------------------------------------
+# Splitting the seeds for the different stratified cases
 # -------------------------------------------------------------------------------------------
 if heterogeneity != 'homogeneous':
     seeds_splitting = {'zone1': [0.68, 0.2], 'image1': [0.55, 0.24], 'random1': [0.6, 0.2], 'zone3': [0.68, 0.14], 'image3': [0.55, 0.24], 'acquisition1': [0.6, 0.2], 'zone_mediteranean1': [0.63, 0.18], 'zone_mediteranean2': [0.5, 0.34], 'zone20231': [0.63, 0.14] }
@@ -142,9 +179,28 @@ Path(f'../../{config_name}/metrics_test').mkdir(exist_ok=True)
 Path(f'../../{config_name}/metrics_train_val').mkdir(exist_ok=True)
 Path(f'../../results/{model_type}{parent}/seed{random_seed}').mkdir(exist_ok=True)
 
+# Load the JSON file
+with open(f'habitat_dict_l{level}.json', 'r') as file:
+    data = json.load(file)
+habitats_dict = {int(k): v for k, v in data.items()}
+
+with open(f'colors_map_l{level}.json', 'r') as file:
+    data = json.load(file)
+colors_map = {int(k): v for k, v in data.items()}
+
+# -------------------------------------------------------------------------------------------
+# The settings are stored in dictionaries named according to the following structure: 
+#   - patch_level_param: contains the patch size and the level
+#   - data_loading_settings: contains the settings for the data loading
+#   - model_settings: contains the settings for the model
+#   - training_settings: contains the settings for the training
+#   - plotting_settings: contains the settings for the plotting
+#   - settings: contains the most important settings
+# -------------------------------------------------------------------------------------------
+
 patch_level_param = {
     'patch_size': patch_size, 
-    'level': 1, 
+    'level': level, 
 }
 
 data_loading_settings = {
@@ -207,82 +263,8 @@ plotting_settings = {
     'losses_path': f'../../{config_name}/metrics_train_val/losses.png',
     'metrics_path': f'../../{config_name}/metrics_train_val/metrics_train_val.png',
     'nb_plots': 16,
-    'my_colors_map': {
-        0: '#789262',  # Vert olive
-        1: '#555555',  # Gris
-        2: '#006400',  # Vert foncé
-        3: '#00ff00',  # Vert vif
-        4: '#ff4500',  # Rouge
-        5: '#8a2be2',  # Violet
-    }, 
-    #'my_colors_map': {
-    #    0: '#789262',
-    #    1: '#91a267',
-    #    2: '#aab36c',
-    #    3: '#555555',
-    #    4: '#656565',
-    #    5: '#757575',
-    #    6: '#858585',
-    #    7: '#959595',
-    #    8: '#006400',
-    #    9: '#198c19',
-    #    10: '#32b432',
-    #    11: '#4bdc4b',
-    #    12: '#00ff00',
-    #    13: '#ff4500',
-    #    14: '#ff6e19',
-    #    15: '#ff9732',
-    #    16: '#8a2be2'
-    #}, 
-    'l1_habitats_dict' : {
-        0: "Prairies terrains domines par des especes non graminoides \n des mousses ou des lichens",
-        1: "Landes fourres et toundras",
-        2: "Bois forets et autres habitats boises",
-        3: "Habitats agricoles horticoles et domestiques régulierement \n ou recemment cultives",
-        4: "Zones baties sites industriels et autres habitats artificiels",
-        5: "Autre: Habitats marins, Habitats cotiers, Eaux de surfaces continentales, \n Habitats continentaux sans vegetation ou à vegetation clairsemee, Autres", 
-        6: "Patch héterogène"
-    }, 
-    'l2_habitats_dict' : {
-        0: "sédiment intertidal",
-        1: "habitats pélagiques",
-        2: "dunes côtières et rivages sableux",
-        3: "galets côtiers",
-        4: "falaises corniches et rivages \nrocheux incluant le supralittoral",
-        5: "eaux dormantes de surface",
-        6: "eaux courantes de surface",
-        7: "zones littorales des eaux de \nsurface continentales",
-        8: "pelouses sèches",
-        9: "prairies mésiques",
-        10: "prairies humides et prairies \nhumides saisonnières",
-        11: "ourlets clairières forestières \n et peuplements de grandes herbacées non graminées",
-        12: "steppes salées continentales",
-        13: "fourrés tempérés et \nméditerranéo-montagnards",
-        14: "landes arbustives tempérées",
-        15: "maquis matorrals arborescents \net fourrés \nthermo-méditerranéens",
-        16: "garrigues",
-        17: "fourrés ripicoles et des \nbas-marais",
-        18: "haies",
-        19: "plantations d'arbustes",
-        20: "forêts de feuillus caducifoliés",
-        21: "forêts de feuillus sempervirents",
-        22: "forêts de conifères",
-        23: "formations mixtes d’espèces \ncaducifoliées et de conifères",
-        24: "alignements d’arbres petits \nbois anthropiques boisements  récemment abattus stades initiaux de boisements et taillis",
-        25: "éboulis",
-        26: "falaises continentales pavements \nrocheux et affleurements rocheux",
-        27: "habitats continentaux divers sans\n végétation ou à végétation clairsemée",
-        28: "cultures et jardins maraîchers",
-        29: "zones cultivées des jardins \net des parcs",
-        30: "bâtiments des villes et des \nvillages",
-        31: "constructions à faible densité",
-        32: "sites industriels d’extraction",
-        33: "réseaux de transport et autres \nzones de construction à surface dure",
-        34: "plans d’eau construits très \nartificiels et structures connexes",
-        35: "dépôts de déchets",
-        255: "unknown"
-    },
-
+    'colors_map': colors_map,
+    'habitats_dict' : habitats_dict,
     'confusion_matrix_path': f'../../{config_name}/metrics_test/confusion_matrix.png',
     'IoU_path': f'../../{config_name}/metrics_test/IoUs.csv',
     'F1_path': f'../../{config_name}/metrics_test/F1s.csv',

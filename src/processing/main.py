@@ -1,46 +1,19 @@
+'''
+This script is the backbone of the habitat mapping pipeline. It loads the data, creates the model, trains and validates the model, and tests the model. 
+It also includes functions for tuning alpha values for multi-label classification and post-processing using a Markov Random Field (MRF) approach.
+
+The script is divided into several sections:
+    1. Data loading: Load the data for training, validation, and testing.
+    2. Model creation: Create the UNet or ResNet model for habitat mapping.
+    3. Training and validation: Train and validate the model using the specified settings from the configuration file called settings.py.
+    4. Alpha tuning: Tune alpha values for multi-label classification.
+    5. Testing: Test the model on the test dataset and compute evaluation metrics.
+    6. Plotting test predictions: Plot the test predictions for visual inspection.
+    7. Plotting reassembled patches: Plot the reassembled patches after post-processing using MRF.
+
+'''
+
 import numpy as np
-"""
-Main script for habitat mapping using deep learning models.
-This script performs the following tasks:
-1. Data Loading and Preprocessing
-2. Model Creation and Initialization
-3. Training and Validation
-4. Hyperparameter Tuning
-5. Testing and Evaluation
-6. Plotting Results
-Modules and Libraries:
-- numpy
-- pathlib
-- pandas
-- rasterio
-- matplotlib
-- torch
-- segmentation_models_pytorch
-- albumentations
-- datetime
-- utils (custom utility functions)
-- settings (configuration settings)
-Functions:
-- load_data_paths: Load paths for training, validation, and test datasets.
-- EcomedDataset: Custom dataset class for loading and transforming data.
-- train: Function to train the model.
-- valid_test: Function to validate or test the model.
-- tune_alpha1_valid: Function to tune alpha1 for multi-label classification.
-- tune_alpha2_valid: Function to tune alpha2 for multi-label classification.
-- plot_losses_metrics: Function to plot training and validation losses and metrics.
-- plot_pred: Function to plot predictions.
-- plot_reassembled_patches: Function to reassemble and plot patches.
-Settings:
-- patch_level_param: Parameters related to patch size and classification level.
-- data_loading_settings: Settings for data loading and augmentation.
-- model_settings: Settings for model architecture and parameters.
-- training_settings: Settings for training, validation, and testing.
-- plotting_settings: Settings for plotting results.
-Usage:
-Run this script to train, validate, and test the habitat mapping model. Adjust the settings in the settings module as needed.
-"""
-
-
 from pathlib import Path
 import pandas as pd
 import rasterio
@@ -62,6 +35,7 @@ from utils.data_utils import *
 from utils.plotting_utils import *
 from utils.train_val_test_utils import *
 from utils.resnet_model import *
+from utils.alphas_tuning import *
 from settings import *
 from utils.post_processing import *
 import warnings
@@ -70,7 +44,7 @@ warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarni
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
-print('----------------------- UNet -----------------------')
+print('----------------------- UNet/ResNet -----------------------')
 print(f'Patch size: {patch_level_param["patch_size"]}')
 print(f'Classification level: {patch_level_param["level"]}')
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -79,7 +53,7 @@ torch.cuda.empty_cache()
 gc.collect()
 
 
-## DATA
+## ----------------------------------------------------------------------- DATA ----------------------------------------------------------------------- ##
 print('Loading data...')
 print('Data loading settings:')
 print(f'Splitting data: {data_loading_settings["split"]}')
@@ -113,11 +87,8 @@ else:
 
 
 train_paths, val_paths, test_paths = load_data_paths(**data_loading_settings)
-#print(f'Train: {len(train_paths)} images, Val: {len(val_paths)} images, Test: {len(test_paths)} images')
 train_ds = EcomedDataset(train_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], transform = transform, normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "train", labels = model_settings['labels'])
 train_dl = DataLoader(train_ds, batch_size=data_loading_settings['bs'], shuffle=True)
-# check size of one img and masks, and value of masks at level 1
-img, msk = next(iter(train_dl))
 val_ds = EcomedDataset(val_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "val", labels = model_settings['labels'])
 val_dl = DataLoader(val_ds, batch_size=data_loading_settings['bs'], shuffle=False)
 test_ds = EcomedDataset(test_paths, data_loading_settings['img_folder'], level=patch_level_param['level'], channels = model_settings['in_channels'], normalisation = data_loading_settings['normalisation'], task = model_settings['task'], my_set = "test", labels = model_settings['labels'])
@@ -126,9 +97,10 @@ test_dl = DataLoader(test_ds, batch_size=data_loading_settings['bs'], shuffle=Fa
 # print size of train, val and test and proportion it rperesents compared to the total size of the dataset
 print(f'Train: {len(train_ds)} images, Val: {len(val_ds)} images, Test: {len(test_ds)} images')
 print(f'Train: {len(train_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Val: {len(val_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%, Test: {len(test_ds)/len(train_ds+val_ds+test_ds)*100:.2f}%')
-
 sys.stdout.flush()
-## MODEL
+
+
+## ----------------------------------------------------------------------- MODEL ----------------------------------------------------------------------- ##
 print('Creating model...')
 print('Model settings:')
 print(f'Pretrained: {model_settings["pre_trained"]}')
@@ -188,9 +160,10 @@ if training_settings['restart_training'] is not None:
     torch.cuda.empty_cache()
     optimizer.load_state_dict(torch.load(model_settings['path_to_last_optim'], map_location=device))
 
-## METRIC
 
-## TRAINING AND VALIDATION
+## ----------------------------------------------------------------------- TRAINING AND VALIDATION ----------------------------------------------------------------------- ##
+
+
 if training_settings['training']:
     print('Training...')
     training_losses = []
@@ -275,8 +248,8 @@ if training_settings['training']:
     model.load_state_dict(torch.load(model_settings['path_to_intermed_model'] + f'_epoch{np.argmin(validation_losses)+1}.pt'))
     for param in model.parameters():
         param.to(device)
-
 else: 
+    # if testing, load best model
     #plot_losses_metrics(training_settings['losses_metric_path'], plotting_settings['losses_path'], plotting_settings['metrics_path'], metric)
     model.to(device)
     model.load_state_dict(torch.load(model_settings['path_to_best_model']))
@@ -286,162 +259,17 @@ else:
         param.to(device)
 
 # TUNING ALPHA1 FOR MULTI LABEL CLASSIFICATION
+alpha1_values = np.linspace(0, 1, 11).tolist()
+alpha2_values = np.linspace(0, 1, 11).tolist()
 if training_settings['tune_alpha1']:
-    model.eval()
-    print('Tuning alpha1')
-    alpha1_values = [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.]
-    print(alpha1_values)
-    precisions = []
-    recalls = []
-    f1s = []
-    for alpha1 in alpha1_values:
-        print(f'Alpha1: {alpha1}')
-        with torch.no_grad():
-            print('Tuning alpha1 on validation set')
-            precision, recall, f1 = tune_alpha1_valid(model, val_dl, device, alpha1)
-        precisions.append(precision)
-        recalls.append(recall)
-        f1s.append(f1)
-        print(f'Precision: {precision}, Recall: {recall}, F1: {f1}')
-    # close last fig
-    plt.close()
-    #plot precision against recall. Precision in y axis, recall in x axis. Add the index of each point
-
-    plt.plot(recalls, precisions)
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
-    for i, txt in enumerate(alpha1_values):
-        plt.annotate(txt, (recalls[i], precisions[i]))
-    # add a red line horizontal line at 1 from 0 yo 1 x axis
-    plt.axhline(y=1, color='r', linestyle='--')
-    # add a red line vertical line at 1 from 0 yo 1 y axis
-    plt.axvline(x=1, color='r', linestyle='--')
-        
-    plt.title('Precision against Recall')
-    plt.savefig('precision_recall.png')
-    #close
-    plt.close()
-
-    print(np.argmax(f1s))
-    best_alpha1 = alpha1_values[np.argmax(f1s)]
-    #plot f1s against alpha1
-    plt.plot(alpha1_values, f1s)
-    plt.xlabel('Alpha1')
-    plt.ylabel('F1')
-    plt.title('F1 against Alpha1')
-    # set in red the best alpha1
-    plt.axvline(x=best_alpha1, color='r', linestyle='--')
-    plt.savefig('f1_alpha1.png')
-    print(f'Best alpha1: {best_alpha1}')
-
-
-# TUNING ALPHA2 FOR MULTI LABEL CLASSIFICATION
+    best_alpha1, precisions, recalls, f1s = tune_alpha1(model, val_dl, device, alpha1_values)
 if training_settings['tune_alpha2']:
-    alpha1 = 0.6
-    model.eval()
-    alpha2_values = [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.]
-    precisions = []
-    recalls = []
-    f1s = []
-    for alpha2 in alpha2_values:
-        print(f'Alpha2: {alpha2}')
-        with torch.no_grad():
-            print('Tuning alpha2 on validation set')
-            precision, recall, f1 = tune_alpha2_valid(model, val_dl, device, alpha1, alpha2)
-            mean_precision = np.mean(precision)
-            mean_recall = np.mean(recall)
-            mean_f1 = np.mean(f1)
-            precisions.append(precision)
-            recalls.append(recall)
-            f1s.append(f1)
-            print(f'Precision: {precision}, Recall: {recall}, F1: {f1}')
-            print(f'MEAN Precision: {mean_precision}, Recall: {mean_recall}, F1: {mean_f1}')
-            # mean precision, recall and f1
-    print(np.argmax(f1s))
+    best_alpha2, precisions, recalls, f1s = tune_alpha2(model, val_dl, device, best_alpha1, alpha2_values)
 
-    # select only precision and recall of the class 0
-    precisions_0 = [precision[0] for precision in precisions]
-    recalls_0 = [recall[0] for recall in recalls]
-    precision_1 = [precision[1] for precision in precisions]
-    recall_1 = [recall[1] for recall in recalls]
-    precisions_2 = [precision[2] for precision in precisions]
-    recalls_2 = [recall[2] for recall in recalls]
-    precisions_3 = [precision[3] for precision in precisions]
-    recalls_3 = [recall[3] for recall in recalls]
-    precisions_4 = [precision[4] for precision in precisions]
-    recalls_4 = [recall[4] for recall in recalls]
-    precisions_5 = [precision[5] for precision in precisions]
-    recalls_5 = [recall[5] for recall in recalls]
 
-    plt.plot(recalls_0, precisions_0, color='#789262')
-    plt.plot(recall_1, precision_1, color='#555555')
-    plt.plot(recalls_2, precisions_2, color='#006400')
-    plt.plot(recalls_3, precisions_3, color='#00ff00')
-    plt.plot(recalls_4, precisions_4, color='#ff4500')
-    plt.plot(recalls_5, precisions_5, color='#8a2be2')
+# ----------------------------------------------------------------------- TESTING ----------------------------------------------------------------------- ##
 
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
-    plt.title('Precision against Recall by class')
-    plt.savefig('precision_recall_by_class.png')
-    #close
-    plt.close()
 
-    # drop the 5th for each precision and recall
-    precisions = [precision[:5] for precision in precisions]
-    recalls = [recall[:5] for recall in recalls]
-    # mean precision and recall
-    mean_precisions = [np.mean(precision) for precision in precisions]
-    mean_recalls = [np.mean(recall) for recall in recalls]
-
-    # plot mean precision against mean recall
-    plt.plot(mean_recalls, mean_precisions)
-    for i, txt in enumerate(alpha2_values):
-        plt.annotate(txt, (mean_recalls[i], mean_precisions[i]))
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
-    plt.axhline(y=1, color='r', linestyle='--')
-    plt.axvline(x=1, color='r', linestyle='--')
-    plt.title('Mean Precision against Mean Recall')
-    plt.savefig('mean_precision_recall.png')    
-    #close
-    plt.close()
-
-    #plot F1 against alpha2 by color
-    f1s_0 = [f1[0] for f1 in f1s]
-    f1s_1 = [f1[1] for f1 in f1s]
-    f1s_2 = [f1[2] for f1 in f1s]
-    f1s_3 = [f1[3] for f1 in f1s]
-    f1s_4 = [f1[4] for f1 in f1s]
-    f1s_5 = [f1[5] for f1 in f1s]
-
-    plt.plot(alpha2_values, f1s_0, color='#789262')
-    plt.plot(alpha2_values, f1s_1, color='#555555')
-    plt.plot(alpha2_values, f1s_2, color='#006400')
-    plt.plot(alpha2_values, f1s_3, color='#00ff00')
-    plt.plot(alpha2_values, f1s_4, color='#ff4500')
-    plt.plot(alpha2_values, f1s_5, color='#8a2be2')
-    plt.xlabel('Alpha2')
-    plt.ylabel('F1')
-    plt.title('F1 against Alpha2 by class')
-    plt.savefig('f1_alpha2_by_class.png')
-    #close
-    plt.close()
-
-    # remove F1 of the 5th class
-    f1s = [f1[:5] for f1 in f1s]
-    #plot mean f1 against alpha2
-    mean_f1s = [np.mean(f1) for f1 in f1s]
-    plt.plot(alpha2_values, mean_f1s)
-    plt.xlabel('Alpha2')
-    plt.ylabel('F1')
-    plt.title('Mean F1 against Alpha2')
-    plt.axvline(x=alpha2_values[np.argmax(mean_f1s)], color='r', linestyle='--')
-    plt.savefig('mean_f1_alpha2.png')
-    #close
-    plt.close()
-
-# TESTING
 if training_settings['testing']:
     model.eval()
     with torch.no_grad():
@@ -468,11 +296,9 @@ if training_settings['testing']:
         #plot confusion matrix and save it
         confusion_matrix = metrics['confusion_matrix']
         confusion_matrix_normalized = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
-        #sns.set(font_scale=0.8)
         plt.figure(figsize=(10, 10))
 
-        ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
-        #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+        ax = sns.heatmap(confusion_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)
         plt.xlabel('Predicted labels')
         plt.ylabel('True labels')
         plt.title('Normalized confusion matrix')
@@ -489,9 +315,7 @@ if training_settings['testing']:
         #plot each conf matrixes 
         for i, conf_matrix_normalized in enumerate(confusion_matrices_normalized):
             plt.figure(figsize=(10, 10))
-            ax = sns.heatmap(conf_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)#, xticklabels=, yticklabels=)
-            #ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-            plt.xlabel('Predicted labels')
+            ax = sns.heatmap(conf_matrix_normalized, annot=True, fmt=".2f", cmap='Blues', cbar=False)
             plt.ylabel('True labels')
             plt.title(f'Normalized confusion matrix for class {i}')
             plt.savefig(plotting_settings['confusion_matrix_path'].replace('.png', f'_class_{i}.png'))
@@ -500,7 +324,9 @@ if training_settings['testing']:
         #plot it
         
 
-# PLOTTING TEST PREDICTIONS
+# ----------------------------------------------------------------------- PLOTTING TEST PREDICTIONS ----------------------------------------------------------------------- #
+
+
 if plotting_settings['plot_test']:
     alpha1 = training_settings['alpha1']
     alpha2 = training_settings['alpha2']
@@ -536,13 +362,13 @@ if plotting_settings['plot_test']:
     img = img.cpu().numpy()
     msk = msk.cpu().numpy()
     out = out.cpu().numpy()
-    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['my_colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])'])
+    plot_pred(img, msk, out, plotting_settings['pred_plot_path'], plotting_settings['colors_map'], plotting_settings['nb_plots'], plotting_settings['habitats_dict'], model_settings['task'], model_settings['labels'])'])
 
 if plotting_settings['plot_re_assemble']:
     model.eval()
     model.to('cpu')
 
-    new_colors_maps = {k: v for k, v in plotting_settings['my_colors_map'].items()}
+    new_colors_maps = {k: v for k, v in plotting_settings['colors_map'].items()}
     if patch_level_param['level'] == 1:
         new_colors_maps[6] = '#000000'  # Noir
         new_colors_maps[7] = '#c7c7c7'  # Gris
