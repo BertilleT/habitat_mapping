@@ -1,18 +1,5 @@
 """
 This script performs post-processing on habitat mapping predictions using a Markov Random Field (MRF) approach.
-Modules:
-    - pandas as pd
-    - sklearn.metrics.f1_score
-    - numpy as np
-    - settings: data_loading_settings, model_settings, patch_level_param, training_settings, plotting_settings
-    - utils.data_utils: EcomedDataset
-    - utils.plotting_utils: plot_reassembled_patches
-    - pathlib.Path
-    - torch
-    - torchvision.models as models
-    - torch.nn as nn
-    - matplotlib.pyplot as plt
-    - matplotlib.colors as mcolors
 Functions:
     - energie(i, j): Computes the energy of a patch at position (i, j) based on its neighbors and probability vector.
 Global Variables:
