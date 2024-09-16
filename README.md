@@ -10,31 +10,20 @@ This documentation is split into three main parts:
 
 
 ## 1.  Presentation of the Project
-### Goal
+- **Goal**: to classify natural habitats using Convolutional Neural Networks (CNNs) applied to Very High Resolution(VHR) aerial images. 
 
-The goal of this project is to classify natural habitats using Convolutional Neural Networks (CNNs) applied to Very High Resolution (15 cm per pixel) RGB-NIR images. 
+- **Data**: provided by the ecological consultancy firm ECO-MED. Please contact them directly to access it. 
+    - **Images**: Very High Resolution (15 cm per pixel) RGB-NIR raster images.
+    - **Labels**: Vector polygons in a shapefile, annotated by ecological experts according to the European Nature Information System(EUNIS) classification. 
+    Maps of the geographical split of the data can be found at: https://bertillet.github.io/habitat_mapping/
 
-### Data
-The data is provided by provided by the ecological consultancy firm ECO-MED. 
-- **Images**: Very High Resolution (15 cm per pixel) RGB-NIR raster images.
-- **Labels**: Vector polygons annotated by ecological experts according to the European Nature Information System(EUNIS) classification. 
+- **Method**: 2 approaches were evaluated:
+    1. Pixel-level classification: UNet model with an EfficientNet B7 encoder.
+    2. Patch-level classification: ResNet18 model in a stepwise design: habitat classification in patches without boundaries, and then boundary detection task is included in the model. 
 
-### Method
+    Also, a post-processing step inspired by Conditional Random Fields (CRFs) is applied to smooth the regions predicted by the Patch-level classification model. 
 
-Two approaches were evaluated:
-
-- **Pixel-level classification**: Utilizes a UNet model with an EfficientNet B7 encoder.
-- **Patch-level classification**: Employs a ResNet18 model in a two-step process:
-  1. Habitat classification in patches without boundaries
-  2. Boundary detection is included in the model
-
-Additionally, a post-processing step inspired by Conditional Random Fields (CRFs) is applied to smooth the regions predicted by the Patch-level classification model. 
-
-### Challenges
-
-- Dataset Inconsistencies and Missing Data
-- Geographical Data Shift
-- Missing Information about plant spcied names
+- **Challenges**: dataset inconsistencies and missing data, geographical data shift, missing information about plant spcies names
 
 
 ## 2.  Directory Structure
@@ -82,21 +71,15 @@ The data folder should be structured as follow:
 
 ## 3.  Folders Content
 
-- **csv**: Contains CSV files used for data storage and manipulation.
-- **html**: Contains HTML files for the project's web interface, dedicated to plot the maps of geographical distribution of samples across train, validation, and test sets.
-- **imgs**: Contains the images generated to view the data, and the results
-    - image_classification
-    - pixel_classification
-- **json**: Contains JSON dictionaries mapping legend items to integer classes in masks, along with associated colors for the plots. 
-- **notebooks**: Contains Jupyter notebooks including statistics made from the data. 
-- **results**: Contains output results from the project. The first part of the filename indicates the model used (e.g., `resnet18` or `unet`), the second part specifies the size of the patch used (e.g., `128`, `256`), and the third part represents the level of granularity of the EUNIS classification studied (e.g., `l1`, `l2`).
+- **csv**: CSV files used for data storage and manipulation.
+- **html**: HTML files for the project's web interface, dedicated to plot the maps of geographical distribution of samples across train, validation, and test sets.
+- **imgs**: images generated to view the data, and the results
+- **json**: JSON dictionaries mapping legend items to integer classes in masks, along with associated colors for the plots. 
+- **notebooks**: Jupyter notebooks including statistics made from the data. 
+- **results**: output results from the project. The first part of the filename indicates the model used (e.g., `resnet18` or `unet`), the second part specifies the size of the patch used (e.g., `128`, `256`), and the third part represents the level of granularity of the EUNIS classification studied (e.g., `l1`, `l2`).
     - resnet18_128_l1
     - resnet18_256_l1
-    - resnet18_64_l1
-    - resnet18_64_l2
-    - resnet34_256_l1
-    - resnet34_64_l1
-    - unet_256_l1
+    ...
 - **src**: Contains the source code for the project.
     - data_pre_processing: Scripts to pre_process the dataset from ECOMED. Key script is pipeline.py
     - get_information_data: Scripts to obtain various information about the data, such as class balance, list of heterogeneous patches, list of zones from annotated in 2023 dataset etc
@@ -105,5 +88,6 @@ The data folder should be structured as follow:
         - main.py: Key script to load the dataset, train, validate test the model and plot the results. 
         - post_processing_MRF.py: Script to implement the post-processing step inspired from MRF
         - settings.py: Configuration file with all the parameters and hyperparameters to be chosen before running main.py
-- **data**: Contains the pre-processed dataset. Please contact ECOMED directly to access it.
+- **data**: pre-processed dataset
 - **index.html**: The main HTML file for the project's web interface. 
+- **report.pdf**: The master thesis report. 
