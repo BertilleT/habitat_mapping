@@ -1,6 +1,6 @@
 # Project: Natural Habitats Mapping in the South of France with Deep Learning
 
-MVA Master thesis peoject made at Inria Evergreen, Montpellier (FRANCE). 
+MVA Master thesis project made at Inria Evergreen, Montpellier (FRANCE). 
 
 This documentation is split into three main parts:
 
